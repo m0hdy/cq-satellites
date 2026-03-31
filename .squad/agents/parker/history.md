@@ -17,7 +17,36 @@
 - **Key files**: `Propagator.swift` has `selectPropagator()` and `Propagable` protocol. `Geography.swift` has `topPosition()`, `LatLonAlt`, `AziEleDst`, coordinate converters. `Astronomy.swift` has sidereal time. `TimeUtility.swift` has `Date.julianDate`, `JD` epoch constants.
 - **SatelliteStore concurrency**: When using `Task.detached` from `@MainActor` context, capture `Sendable` properties into local variables before the closure to satisfy Swift 6 strict concurrency.
 
+### Frequency Database Architecture (2026-03-31)
+- **Built-in lookup over API**: No reliable free API for amateur satellite frequencies in machine-readable format. Used a static `FrequencyDatabase` enum keyed by NORAD catalog ID (String). This is stable data — AMSAT frequency assignments rarely change. Updates ship with app releases.
+- **Model shape**: `SatelliteFrequency` is `Sendable` + `Identifiable` (UUID-based `id` for SwiftUI `ForEach`). Fields: `uplink`, `downlink`, `beacon` (all optional Strings), `mode` (required), `description` (optional).
+- **One-to-many**: A satellite can have multiple frequency entries (e.g., ISS has FM repeater + APRS + voice downlink). `Satellite.frequencies` returns `[SatelliteFrequency]`.
+- **Lookup integration**: Added computed property `var frequencies: [SatelliteFrequency]` on `Satellite` — zero-cost for sats not in the database (returns `[]`).
+- **Database scope**: 30+ satellites covered including ISS, SO-50, AO-91, AO-92, RS-44, XW-2 series, CAS-4 series, TEVEL constellation (11 sats via range), FUNcube, NOAA weather sats, QO-100 (geostationary), and more.
+- **Dallas stub had bugs**: The original stub had ISS downlink wrong (437.800 → should be 145.800) and AO-91 uplink/downlink swapped. Fixed both.
+
+### Frequency Database Architecture (2026-03-31)
+- **Built-in lookup over API**: No reliable free API for amateur satellite frequencies in machine-readable format. Used a static `FrequencyDatabase` enum keyed by NORAD catalog ID (String). This is stable data — AMSAT frequency assignments rarely change. Updates ship with app releases.
+- **Model shape**: `SatelliteFrequency` is `Sendable` + `Identifiable` (UUID-based `id` for SwiftUI `ForEach`). Fields: `uplink`, `downlink`, `beacon` (all optional Strings), `mode` (required), `description` (optional).
+- **One-to-many**: A satellite can have multiple frequency entries (e.g., ISS has FM repeater + APRS + voice downlink). `Satellite.frequencies` returns `[SatelliteFrequency]`.
+- **Lookup integration**: Added computed property `var frequencies: [SatelliteFrequency]` on `Satellite` — zero-cost for sats not in the database (returns `[]`).
+- **Database scope**: 30+ satellites covered including ISS, SO-50, AO-91, AO-92, RS-44, XW-2 series, CAS-4 series, TEVEL constellation (11 sats via range), FUNcube, NOAA weather sats, QO-100 (geostationary), and more.
+- **Dallas stub had bugs**: The original stub had ISS downlink wrong (437.800 → should be 145.800) and AO-91 uplink/downlink swapped. Fixed both.
+
 ### Team Status (2026-03-31)
 - **Ripley (Architecture):** Designed MVVM + SatelliteKit architecture (6 ADRs merged). 21 source files, clean build.
 - **Dallas (iOS):** Built 4 core views (CountdownView, AzimuthView, PassRowView, PassDetailView), 9 formatters. TimelineView self-contained pattern.
 - **Lambert (Tester):** 83 tests passing across 7 suites. Discovered SatelliteKit crash on invalid TLE (mitigated).
+
+### 2026-03-31 — Feature Spawn Completion
+
+**Parker spawned:** Built production frequency database with 30+ amateur radio satellites  
+**Dallas spawned:** Elevation filter, Xcode project (XcodeGen), default London location, frequency display UI, loading progress screen
+
+**ADRs added to decisions.md:**
+- ADR-007: Elevation Filter UX — segmented picker matches ham radio operator thinking
+- ADR-008: Xcode Project via XcodeGen — proper iOS app bundle, declarative YAML
+- ADR-009: Built-in Frequency Database — zero API deps, stable frequency assignments
+- ADR-010: LoadingPhase Enum — single source of truth for loading state
+
+**Team coordination:** Decision inbox merged (4 files). Orchestration logs written. Cross-agent history updated (Dallas/Parker).
