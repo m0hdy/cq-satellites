@@ -16,3 +16,8 @@
 - **Time conversion**: `Date.julianDate` extension property (from SatelliteKit) converts Swift `Date` to Julian Days.
 - **Key files**: `Propagator.swift` has `selectPropagator()` and `Propagable` protocol. `Geography.swift` has `topPosition()`, `LatLonAlt`, `AziEleDst`, coordinate converters. `Astronomy.swift` has sidereal time. `TimeUtility.swift` has `Date.julianDate`, `JD` epoch constants.
 - **SatelliteStore concurrency**: When using `Task.detached` from `@MainActor` context, capture `Sendable` properties into local variables before the closure to satisfy Swift 6 strict concurrency.
+
+### Team Status (2026-03-31)
+- **Ripley (Architecture):** Designed MVVM + SatelliteKit architecture (6 ADRs merged). 21 source files, clean build.
+- **Dallas (iOS):** Built 4 core views (CountdownView, AzimuthView, PassRowView, PassDetailView), 9 formatters. TimelineView self-contained pattern.
+- **Lambert (Tester):** 83 tests passing across 7 suites. Discovered SatelliteKit crash on invalid TLE (mitigated).
