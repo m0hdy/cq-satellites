@@ -54,3 +54,17 @@
 - Bundle ID: `com.satpass.app` (set in project.yml build settings, Info.plist uses `$(PRODUCT_BUNDLE_IDENTIFIER)`).
 - To regenerate the project after editing `project.yml`: run `xcodegen generate`.
 - XcodeGen installed via `brew install xcodegen`.
+
+### 2026-03-31 — Elevation Filter for Pass List
+
+**Files touched:**
+- `SatPass/Utilities/Constants.swift` — Added `Constants.ElevationFilter` with UserDefaults key, default minimum (10°), and preset values.
+- `SatPass/ViewModels/PassListViewModel.swift` — Added `minimumElevation` property (persisted via `UserDefaults` `didSet`), `elevationFilterLabel` computed property, and updated `filteredPasses()` to apply elevation threshold alongside existing time-based filter.
+- `SatPass/Views/PassListView.swift` — Added toolbar filter button, bottom bar elevation label, and `ElevationFilterSheet` with segmented picker (All, 10°, 20°, 30°, 45°).
+
+**Design decisions:**
+- Segmented picker over freeform slider — ham radio ops know exactly what elevation values matter; discrete presets are faster to use.
+- Default 10° — passes below 10° max elevation are barely usable (weak signal, atmospheric QRM). Matches common ham practice.
+- Persisted in `UserDefaults` — lightweight, appropriate for a single Double preference. No need for SwiftData/CoreData per ADR-005.
+- Used `@Bindable` on viewModel in the sheet to get two-way binding with `@Observable` — this is the iOS 17+ pattern (not `@ObservedObject`).
+- Filter label shown in both toolbar and bottom bar so it's always visible regardless of scroll position.
