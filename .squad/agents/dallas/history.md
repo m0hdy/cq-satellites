@@ -37,3 +37,20 @@
 - **Ripley (Architecture):** Designed MVVM + SatelliteKit architecture (6 ADRs merged). 21 source files, clean build.
 - **Parker (Backend):** Wired full ECI→topocentric SGP4 pipeline. Fixed SatelliteStore concurrency. Real pass data flowing.
 - **Lambert (Tester):** 83 tests passing across 7 suites. Discovered SatelliteKit crash on invalid TLE (mitigated).
+
+### 2026-03-31 — Converted to Xcode Project (XcodeGen)
+
+**Problem:** SPM `.executableTarget` in Package.swift does not create an iOS app bundle. Xcode showed "Cannot index window tabs due to missing main bundle identifier" — no simulator/device builds possible.
+
+**Solution:** Used XcodeGen (`project.yml`) to generate a proper `SatPass.xcodeproj` with an iOS app target.
+
+**Files touched:**
+- `project.yml` — XcodeGen spec: iOS app target "SatPass", test target "SatPassTests", SatelliteKit SPM dependency, iOS 17.0 deployment, Swift 6.0.
+- `Info.plist` — Added required Xcode build variable references: `CFBundleExecutable` (`$(EXECUTABLE_NAME)`), `CFBundlePackageType` (`$(PRODUCT_BUNDLE_PACKAGE_TYPE)`), `CFBundleIdentifier` (`$(PRODUCT_BUNDLE_IDENTIFIER)`), `UILaunchScreen`, `UISupportedInterfaceOrientations`.
+- `.gitignore` — Unignored `*.xcodeproj` so the generated project is tracked. Still ignoring xcuserdata/xcworkspace.
+
+**Key decisions:**
+- Kept `Package.swift` intact for `swift build` / `swift test` CLI compatibility.
+- Bundle ID: `com.satpass.app` (set in project.yml build settings, Info.plist uses `$(PRODUCT_BUNDLE_IDENTIFIER)`).
+- To regenerate the project after editing `project.yml`: run `xcodegen generate`.
+- XcodeGen installed via `brew install xcodegen`.

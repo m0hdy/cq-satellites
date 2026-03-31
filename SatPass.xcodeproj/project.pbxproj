@@ -1,0 +1,565 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		135739ADD03FFD6BBE0539E2 /* SatelliteKit in Frameworks */ = {isa = PBXBuildFile; productRef = B8908401E1174A58030DDF0A /* SatelliteKit */; };
+		1915AC95D75F443ADF3648B4 /* PassDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6D142B2F782821914A7D40 /* PassDetailView.swift */; };
+		1BD5854251342D6BB1F54E06 /* SatelliteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */; };
+		229805C955C8C1EC53DD371F /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */; };
+		30F8AFD8DAB6ABCF1CC7DE24 /* SatPassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */; };
+		31F787848FF691D54D334DCE /* SatPassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E24FFA81F89A96D77C527 /* SatPassTests.swift */; };
+		3EA093F2A31A7AF91F4D8C51 /* PassRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AC544178F8FA1B38B2C1FC /* PassRowView.swift */; };
+		6C1C8BE83B24097AF41A6BD7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB8E555C1C76DAC327AE09 /* Constants.swift */; };
+		746E71C1AAA4289D3E9565F5 /* AzimuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */; };
+		79C36C106DC23B5247011DDC /* PassListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7A354FAFA9946080AA6C49 /* PassListView.swift */; };
+		86E34132F7794595BA06735F /* GroundStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E756A6BB24836C7EED7AB /* GroundStation.swift */; };
+		92096F3DF8F25E0D09D63BD4 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9F7E31DDDC27D617E6240A /* Formatters.swift */; };
+		9463BB811824A737210F1844 /* PassPredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D356683796402F0E7F4D86A /* PassPredictionService.swift */; };
+		99C845390283196AB74EEE74 /* SatelliteARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D915D5E9047FF31D17053142 /* SatelliteARView.swift */; };
+		AD61B59C12C0B49D91DD542C /* SatelliteARViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */; };
+		C3BAE64895B13B16DC52363D /* Satellite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F130B60C79B15E75E3EAC45 /* Satellite.swift */; };
+		D41F689ECC53A6D67BF4532B /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17E6F13F2D1226CE676779 /* LocationService.swift */; };
+		DB39EBC741FA3F7B9F45FBBA /* TLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97D1F863479653FCD073C44 /* TLEService.swift */; };
+		DFC553F08BB2D3331B6C9438 /* PassListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BC774462194948ACFFCB3D /* PassListViewModel.swift */; };
+		EC6FE1447014AF6E5628939E /* PassDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840AA1683217FEB46BFC011 /* PassDetailViewModel.swift */; };
+		EDBD96A98910BEDF2CD9A460 /* SatellitePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121006598A0CB5EBCE61E4ED /* SatellitePass.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		89B1A05613C8A182E81CFFBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E6776C082758CD946D98C65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16090AE8C7BC00F70CA9A4A3;
+			remoteInfo = SatPass;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0C1E756A6BB24836C7EED7AB /* GroundStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundStation.swift; sourceTree = "<group>"; };
+		121006598A0CB5EBCE61E4ED /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
+		1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		1D7A354FAFA9946080AA6C49 /* PassListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListView.swift; sourceTree = "<group>"; };
+		33AC544178F8FA1B38B2C1FC /* PassRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassRowView.swift; sourceTree = "<group>"; };
+		35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteStore.swift; sourceTree = "<group>"; };
+		4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARViewModel.swift; sourceTree = "<group>"; };
+		5D356683796402F0E7F4D86A /* PassPredictionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPredictionService.swift; sourceTree = "<group>"; };
+		5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
+		6292975E2D4296A4FAD0BE78 /* SatPassTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SatPassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7840AA1683217FEB46BFC011 /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
+		7B17E6F13F2D1226CE676779 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassApp.swift; sourceTree = "<group>"; };
+		8D9F7E31DDDC27D617E6240A /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		9F130B60C79B15E75E3EAC45 /* Satellite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satellite.swift; sourceTree = "<group>"; };
+		A97D1F863479653FCD073C44 /* TLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLEService.swift; sourceTree = "<group>"; };
+		AE6D142B2F782821914A7D40 /* PassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailView.swift; sourceTree = "<group>"; };
+		C2FB8E555C1C76DAC327AE09 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C5172AD43D7B900D4050AC5F /* SatPass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SatPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D915D5E9047FF31D17053142 /* SatelliteARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARView.swift; sourceTree = "<group>"; };
+		F86E24FFA81F89A96D77C527 /* SatPassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassTests.swift; sourceTree = "<group>"; };
+		F9BC774462194948ACFFCB3D /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AAE55DA1D9D14E74417F66FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				135739ADD03FFD6BBE0539E2 /* SatelliteKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04129511392D298CB921A344 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AE6D142B2F782821914A7D40 /* PassDetailView.swift */,
+				1D7A354FAFA9946080AA6C49 /* PassListView.swift */,
+				72B7A6AD4C5687F41BD0A8D3 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		090325D78673E7729C819474 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C2FB8E555C1C76DAC327AE09 /* Constants.swift */,
+				8D9F7E31DDDC27D617E6240A /* Formatters.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		3B3BE1B4BB83360370BF367E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0C1E756A6BB24836C7EED7AB /* GroundStation.swift */,
+				9F130B60C79B15E75E3EAC45 /* Satellite.swift */,
+				121006598A0CB5EBCE61E4ED /* SatellitePass.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		60CE9352B1CBAC522DD49113 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C5172AD43D7B900D4050AC5F /* SatPass.app */,
+				6292975E2D4296A4FAD0BE78 /* SatPassTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72B7A6AD4C5687F41BD0A8D3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */,
+				1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */,
+				33AC544178F8FA1B38B2C1FC /* PassRowView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		7AB1639830C63547CCC5CCCF /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7840AA1683217FEB46BFC011 /* PassDetailViewModel.swift */,
+				F9BC774462194948ACFFCB3D /* PassListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8122F150A1CD89F28EAD4651 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7B17E6F13F2D1226CE676779 /* LocationService.swift */,
+				5D356683796402F0E7F4D86A /* PassPredictionService.swift */,
+				35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */,
+				A97D1F863479653FCD073C44 /* TLEService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A7AE1C1AAF26B75072B33B91 /* SatPassTests */ = {
+			isa = PBXGroup;
+			children = (
+				F86E24FFA81F89A96D77C527 /* SatPassTests.swift */,
+			);
+			path = SatPassTests;
+			sourceTree = "<group>";
+		};
+		ABA09E9955FF17B4A4A178A9 = {
+			isa = PBXGroup;
+			children = (
+				AE9F1E3BC98C5CD9C800462E /* SatPass */,
+				A7AE1C1AAF26B75072B33B91 /* SatPassTests */,
+				60CE9352B1CBAC522DD49113 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AE9F1E3BC98C5CD9C800462E /* SatPass */ = {
+			isa = PBXGroup;
+			children = (
+				CEE95F6F42C7DD7FFF789806 /* App */,
+				EC693CFD35ABA259CEB8EA68 /* AR */,
+				3B3BE1B4BB83360370BF367E /* Models */,
+				BC2F0A8B3B894EEFC60D62A1 /* Resources */,
+				8122F150A1CD89F28EAD4651 /* Services */,
+				090325D78673E7729C819474 /* Utilities */,
+				7AB1639830C63547CCC5CCCF /* ViewModels */,
+				04129511392D298CB921A344 /* Views */,
+			);
+			path = SatPass;
+			sourceTree = "<group>";
+		};
+		BC2F0A8B3B894EEFC60D62A1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CEE95F6F42C7DD7FFF789806 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		EC693CFD35ABA259CEB8EA68 /* AR */ = {
+			isa = PBXGroup;
+			children = (
+				D915D5E9047FF31D17053142 /* SatelliteARView.swift */,
+				4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */,
+			);
+			path = AR;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		16090AE8C7BC00F70CA9A4A3 /* SatPass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43B663815425E5B0EA334E40 /* Build configuration list for PBXNativeTarget "SatPass" */;
+			buildPhases = (
+				214C98A7C10C3A64B60966EF /* Sources */,
+				AAE55DA1D9D14E74417F66FF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SatPass;
+			packageProductDependencies = (
+				B8908401E1174A58030DDF0A /* SatelliteKit */,
+			);
+			productName = SatPass;
+			productReference = C5172AD43D7B900D4050AC5F /* SatPass.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1E045DA801F426E44FE14C82 /* SatPassTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C02B2EDFB0853A386421E35E /* Build configuration list for PBXNativeTarget "SatPassTests" */;
+			buildPhases = (
+				D42B511C4B8CC9AA2C84D6F7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5D3D55AB1A05246507810AE8 /* PBXTargetDependency */,
+			);
+			name = SatPassTests;
+			packageProductDependencies = (
+			);
+			productName = SatPassTests;
+			productReference = 6292975E2D4296A4FAD0BE78 /* SatPassTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E6776C082758CD946D98C65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = C2853BBF27E0CFC2A5DBDFFE /* Build configuration list for PBXProject "SatPass" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = ABA09E9955FF17B4A4A178A9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8AD3A22F044A98C28E7C20CC /* XCRemoteSwiftPackageReference "SatelliteKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 60CE9352B1CBAC522DD49113 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				16090AE8C7BC00F70CA9A4A3 /* SatPass */,
+				1E045DA801F426E44FE14C82 /* SatPassTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		214C98A7C10C3A64B60966EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				746E71C1AAA4289D3E9565F5 /* AzimuthView.swift in Sources */,
+				6C1C8BE83B24097AF41A6BD7 /* Constants.swift in Sources */,
+				229805C955C8C1EC53DD371F /* CountdownView.swift in Sources */,
+				92096F3DF8F25E0D09D63BD4 /* Formatters.swift in Sources */,
+				86E34132F7794595BA06735F /* GroundStation.swift in Sources */,
+				D41F689ECC53A6D67BF4532B /* LocationService.swift in Sources */,
+				1915AC95D75F443ADF3648B4 /* PassDetailView.swift in Sources */,
+				EC6FE1447014AF6E5628939E /* PassDetailViewModel.swift in Sources */,
+				79C36C106DC23B5247011DDC /* PassListView.swift in Sources */,
+				DFC553F08BB2D3331B6C9438 /* PassListViewModel.swift in Sources */,
+				9463BB811824A737210F1844 /* PassPredictionService.swift in Sources */,
+				3EA093F2A31A7AF91F4D8C51 /* PassRowView.swift in Sources */,
+				30F8AFD8DAB6ABCF1CC7DE24 /* SatPassApp.swift in Sources */,
+				C3BAE64895B13B16DC52363D /* Satellite.swift in Sources */,
+				99C845390283196AB74EEE74 /* SatelliteARView.swift in Sources */,
+				AD61B59C12C0B49D91DD542C /* SatelliteARViewModel.swift in Sources */,
+				EDBD96A98910BEDF2CD9A460 /* SatellitePass.swift in Sources */,
+				1BD5854251342D6BB1F54E06 /* SatelliteStore.swift in Sources */,
+				DB39EBC741FA3F7B9F45FBBA /* TLEService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D42B511C4B8CC9AA2C84D6F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31F787848FF691D54D334DCE /* SatPassTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5D3D55AB1A05246507810AE8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16090AE8C7BC00F70CA9A4A3 /* SatPass */;
+			targetProxy = 89B1A05613C8A182E81CFFBC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		336212A6FCE7A468A664C8F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.satpass.SatPassTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SatPass.app/SatPass";
+			};
+			name = Debug;
+		};
+		4806F91FBE4D7858A3BEE02E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.satpass.SatPassTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SatPass.app/SatPass";
+			};
+			name = Release;
+		};
+		4EF6DAF998F588CB7E0429CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		62A4D5B208AA217B2BF802A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.satpass.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B280EC5637F10DC16EF4B70E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.satpass.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FADA42473F1FF5FA47BFF52C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43B663815425E5B0EA334E40 /* Build configuration list for PBXNativeTarget "SatPass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B280EC5637F10DC16EF4B70E /* Debug */,
+				62A4D5B208AA217B2BF802A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C02B2EDFB0853A386421E35E /* Build configuration list for PBXNativeTarget "SatPassTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				336212A6FCE7A468A664C8F8 /* Debug */,
+				4806F91FBE4D7858A3BEE02E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C2853BBF27E0CFC2A5DBDFFE /* Build configuration list for PBXProject "SatPass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4EF6DAF998F588CB7E0429CF /* Debug */,
+				FADA42473F1FF5FA47BFF52C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8AD3A22F044A98C28E7C20CC /* XCRemoteSwiftPackageReference "SatelliteKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gavineadie/SatelliteKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B8908401E1174A58030DDF0A /* SatelliteKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8AD3A22F044A98C28E7C20CC /* XCRemoteSwiftPackageReference "SatelliteKit" */;
+			productName = SatelliteKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4E6776C082758CD946D98C65 /* Project object */;
+}
