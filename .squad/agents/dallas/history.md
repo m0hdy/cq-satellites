@@ -233,3 +233,30 @@
 - **Entity hierarchy:** Parent at `arDirection * markerDistance`, sphere child, billboarded text label.
 - **Performance optimization:** Text mesh regeneration only when rounded elevation changes (~1×/sec per satellite, not 10×/sec).
 - **Test status:** All 83 tests pass, clean build.
+
+### 2026-04-24 — Landscape-to-AR Trigger with Multi-Satellite Support
+
+**Context:** Damien requested AR activation via landscape rotation instead of a toolbar button. Two modes: list view shows next 5 satellites, detail view shows just the selected one.
+
+**Files touched:**
+- `SatPass/AR/SatelliteARViewModel.swift` — `targetPass` → `targetPasses: [SatellitePass]` array. `targetPosition` → `targetPositions` array of (pass, position) tuples. Visible satellites now exclude all target IDs.
+- `SatPass/AR/SatelliteARView.swift` — Accepts `passes: [SatellitePass]`. Removed dismiss button (rotation dismisses). Coordinator renders all targets as green markers. TargetInfoPanel adapts: single target shows full telemetry, multi-target shows compact list with elevation.
+- `SatPass/Views/PassDetailView.swift` — Removed `showARView` state, toolbar ARKit button, and fullScreenCover. Added `verticalSizeClass` environment. Compact size class shows `SatelliteARView(passes: [pass])` with hidden nav bar.
+- `SatPass/Views/PassListView.swift` — Added `verticalSizeClass` and `NavigationPath` tracking. Overlay shows `SatelliteARView` with first 5 filtered passes when landscape + at root (not pushed to detail).
+- `SatPass/Utilities/Constants.swift` — Added `Constants.AR.maxListTargets = 5`.
+
+**Key patterns:**
+- `@Environment(\.verticalSizeClass)` detects landscape (`.compact`) — SwiftUI-native, no NotificationCenter.
+- `NavigationPath.isEmpty` prevents list-level AR from overlaying when a detail view is pushed (detail handles its own AR).
+- `if/else` swap in body vs `.overlay` — used `if/else` in PassDetailView (replaces content), `.overlay` in PassListView (preserves NavigationStack state).
+- Multi-target TargetInfoPanel uses `targets.max(by:)` for primary satellite selection by elevation.
+
+**Test status:** All 83 tests pass, clean build.
+
+### 2026-04-23T16:49:19Z — Session Logged & Decision Merged
+
+Scribe tasks completed:
+- **Orchestration log:** `.squad/orchestration-log/2026-04-23T16:49:19Z-dallas.md`
+- **Session log:** `.squad/log/2026-04-23T16:49:19Z-ar-landscape-trigger.md`
+- **Decision merged:** ADR-018 appended to `.squad/decisions.md` (deduplicated inbox)
+- **Build status:** 9f1fea3 clean, 83 tests pass

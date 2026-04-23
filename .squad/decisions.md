@@ -298,3 +298,33 @@ enum LoadingPhase: Sendable, Equatable {
 - All meaningful changes require team consensus
 - Document architectural decisions here
 - Keep history focused on work, decisions focused on direction
+
+### ADR-018: Landscape Rotation Triggers AR View
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-23  
+
+**Context:** Previously, AR was launched via a toolbar button in PassDetailView. Damien requested that rotating the phone to landscape automatically shows the AR view, and rotating back to portrait dismisses it.
+
+**Decision:** AR is now triggered by `@Environment(\.verticalSizeClass) == .compact` (landscape) in both PassListView and PassDetailView. No toolbar button, no fullScreenCover, no dismiss button.
+
+**Two AR modes:**
+1. **From list view (landscape at root):** Shows next 5 upcoming satellites as targets (all green markers). Uses `.overlay` on NavigationStack, gated by `navigationPath.isEmpty` to avoid conflicting with detail-level AR.
+2. **From detail view (landscape while viewing a satellite):** Shows only that satellite as target. Uses `if/else` body swap with `.toolbar(.hidden, for: .navigationBar)`.
+
+**Multi-target support:**
+- `SatelliteARViewModel` now accepts `targetPasses: [SatellitePass]` array
+- All targets rendered as green markers; other visible satellites stay blue
+- `TargetInfoPanel` adapts: single target = full telemetry, multi-target = compact elevation list
+
+**Rationale:**
+- `verticalSizeClass` is the SwiftUI-native way to detect orientation — no NotificationCenter or UIDevice observation needed
+- If the user has orientation lock on, `verticalSizeClass` stays `.regular` and AR never activates (correct behavior)
+- Rotation-to-dismiss is zero-friction — no button to find, just rotate back
+
+**Impact:**
+- **SatelliteARView API changed:** `passes: [SatellitePass]` instead of `pass: SatellitePass`
+- **PassDetailView:** No more AR toolbar button — any code referencing `showARView` is gone
+- **PassListView:** Now uses `NavigationPath` for path tracking
+- **Constants:** New `Constants.AR.maxListTargets = 5`
