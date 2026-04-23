@@ -168,3 +168,26 @@
 - ADR-010: LoadingPhase Enum — single source of truth for loading state, progress granularity
 
 **Team coordination:** Orchestration logs written. Decision inbox merged (4 files). Team history updated across Dallas and Parker.
+
+### 2026-04-23 — Landscape Orientation Support
+
+**Files touched:**
+- `Info.plist` — Added `UIInterfaceOrientationLandscapeLeft` and `UIInterfaceOrientationLandscapeRight` to `UISupportedInterfaceOrientations` (was portrait-only).
+- `SatPass/Views/Components/AzimuthView.swift` — Made `compassSize` dynamic via `@Environment(\.verticalSizeClass)`: 150pt in landscape (compact height), 200pt in portrait. Reduced vertical padding in landscape.
+- `SatPass/Views/Components/CountdownView.swift` — Added `verticalSizeClass` environment. Countdown font: 40pt landscape, 56pt portrait. Reduced vertical padding in compact height.
+- `SatPass/Views/Components/LoadingView.swift` — Split layout: portrait keeps original VStack, landscape uses HStack (globe left, text right) with 0.85 scale orbital animation. Both share `.onAppear` animations.
+- `SatPass/Views/PassListView.swift` — Filter sheet detent changed from `.height(380)` only to `.medium` + `.height(380)` so the sheet works in landscape where screen height < 380pt.
+
+**SwiftUI patterns used:**
+- `@Environment(\.verticalSizeClass)` is the primary landscape detection: `.compact` = landscape on iPhone.
+- Conditional layout branching via `Group { if verticalSizeClass == .compact { ... } else { ... } }` for LoadingView.
+- Computed properties for dynamic sizing (`compassSize`, `countdownFontSize`) — cleaner than inline ternaries.
+- `.presentationDetents([.medium, .height(380)])` — SwiftUI picks the best-fit detent automatically.
+
+**Design decisions:**
+- Compass shrinks from 200→150pt in landscape — still large enough to read AOS/LOS/cardinals, but doesn't eat the entire viewport on a ~350pt-tall landscape screen.
+- Countdown font shrinks from 56→40pt — still hero-sized and instantly readable, but leaves room for the rest of the detail view.
+- LoadingView goes side-by-side in landscape — vertical stacking wastes horizontal space and clips vertically.
+- PassDetailView and PassListView didn't need layout changes — List scrolls naturally in both orientations.
+- PassRowView is fine as-is — HStack layout adapts to width automatically.
+- All portrait layouts are completely unchanged — landscape is purely additive.

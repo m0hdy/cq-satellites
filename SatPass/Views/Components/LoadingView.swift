@@ -4,19 +4,18 @@ import SwiftUI
 struct LoadingView: View {
     let phase: LoadingPhase
 
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     @State private var isOrbiting = false
     @State private var pulseScale: CGFloat = 1.0
 
     var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
-
-            orbitalAnimation
-
-            phaseInfo
-
-            Spacer()
-            Spacer()
+        Group {
+            if verticalSizeClass == .compact {
+                landscapeLayout
+            } else {
+                portraitLayout
+            }
         }
         .padding(.horizontal, 32)
         .onAppear {
@@ -27,6 +26,29 @@ struct LoadingView: View {
                 pulseScale = 1.12
             }
         }
+    }
+
+    /// Portrait: vertical stack with globe on top, text below.
+    private var portraitLayout: some View {
+        VStack(spacing: 32) {
+            Spacer()
+            orbitalAnimation
+            phaseInfo
+            Spacer()
+            Spacer()
+        }
+    }
+
+    /// Landscape: side-by-side — globe left, text right.
+    private var landscapeLayout: some View {
+        HStack(spacing: 32) {
+            Spacer()
+            orbitalAnimation
+                .scaleEffect(0.85)
+            phaseInfo
+            Spacer()
+        }
+        .frame(maxHeight: .infinity)
     }
 
     // MARK: - Orbital Animation
@@ -55,9 +77,9 @@ struct LoadingView: View {
         case .locating: "location.fill"
         case .downloading: "arrow.down.circle.fill"
         case .parsing: "doc.text.magnifyingglass"
-        case .predicting: "satellite.fill"
+        case .predicting: "antenna.radiowaves.left.and.right"
         case .error: "exclamationmark.triangle.fill"
-        default: "satellite.fill"
+        default: "antenna.radiowaves.left.and.right"
         }
     }
 

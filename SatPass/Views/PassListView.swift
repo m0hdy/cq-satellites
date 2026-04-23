@@ -51,7 +51,7 @@ struct PassListView: View {
             }
             .sheet(isPresented: $showFilterSheet) {
                 FilterSheet(viewModel: viewModel)
-                    .presentationDetents([.height(380)])
+                    .presentationDetents([.medium, .height(380)])
             }
             .safeAreaInset(edge: .bottom) {
                 bottomBar

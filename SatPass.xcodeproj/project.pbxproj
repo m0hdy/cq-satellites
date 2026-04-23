@@ -11,6 +11,8 @@
 		1915AC95D75F443ADF3648B4 /* PassDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6D142B2F782821914A7D40 /* PassDetailView.swift */; };
 		1BD5854251342D6BB1F54E06 /* SatelliteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */; };
 		229805C955C8C1EC53DD371F /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */; };
+		28C64B601D18FAA57C8444C4 /* AMSATStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C5E1486F182B4F4CB1B02F /* AMSATStatusService.swift */; };
+		2B1FB5F3F0A12F23EEF7E24C /* AMSATStatusReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A958582B3BF7634F7284DBC /* AMSATStatusReport.swift */; };
 		30F8AFD8DAB6ABCF1CC7DE24 /* SatPassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */; };
 		31F787848FF691D54D334DCE /* SatPassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E24FFA81F89A96D77C527 /* SatPassTests.swift */; };
 		3EA093F2A31A7AF91F4D8C51 /* PassRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AC544178F8FA1B38B2C1FC /* PassRowView.swift */; };
@@ -50,13 +52,15 @@
 		121006598A0CB5EBCE61E4ED /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
 		1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		1D7A354FAFA9946080AA6C49 /* PassListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListView.swift; sourceTree = "<group>"; };
+		31C5E1486F182B4F4CB1B02F /* AMSATStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMSATStatusService.swift; sourceTree = "<group>"; };
 		33AC544178F8FA1B38B2C1FC /* PassRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassRowView.swift; sourceTree = "<group>"; };
 		35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteStore.swift; sourceTree = "<group>"; };
 		4764809BDA677FC225DEABBF /* FrequencyDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyDatabase.swift; sourceTree = "<group>"; };
 		4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARViewModel.swift; sourceTree = "<group>"; };
+		4A958582B3BF7634F7284DBC /* AMSATStatusReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMSATStatusReport.swift; sourceTree = "<group>"; };
 		5D356683796402F0E7F4D86A /* PassPredictionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPredictionService.swift; sourceTree = "<group>"; };
 		5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
-		6292975E2D4296A4FAD0BE78 /* SatPassTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SatPassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6292975E2D4296A4FAD0BE78 /* SatPassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SatPassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7840AA1683217FEB46BFC011 /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
 		7B17E6F13F2D1226CE676779 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassApp.swift; sourceTree = "<group>"; };
@@ -66,7 +70,7 @@
 		A97D1F863479653FCD073C44 /* TLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLEService.swift; sourceTree = "<group>"; };
 		AE6D142B2F782821914A7D40 /* PassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailView.swift; sourceTree = "<group>"; };
 		C2FB8E555C1C76DAC327AE09 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		C5172AD43D7B900D4050AC5F /* SatPass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SatPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5172AD43D7B900D4050AC5F /* SatPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SatPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3CDF5DB782004A238BA0499 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D915D5E9047FF31D17053142 /* SatelliteARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARView.swift; sourceTree = "<group>"; };
 		F86E24FFA81F89A96D77C527 /* SatPassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassTests.swift; sourceTree = "<group>"; };
@@ -107,6 +111,7 @@
 		3B3BE1B4BB83360370BF367E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4A958582B3BF7634F7284DBC /* AMSATStatusReport.swift */,
 				0C1E756A6BB24836C7EED7AB /* GroundStation.swift */,
 				9F130B60C79B15E75E3EAC45 /* Satellite.swift */,
 				90A591EAEA14F7CFD002C572 /* SatelliteFrequency.swift */,
@@ -147,6 +152,7 @@
 		8122F150A1CD89F28EAD4651 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				31C5E1486F182B4F4CB1B02F /* AMSATStatusService.swift */,
 				4764809BDA677FC225DEABBF /* FrequencyDatabase.swift */,
 				10E32F2E28DB2E247EB1B230 /* HeadingService.swift */,
 				7B17E6F13F2D1226CE676779 /* LocationService.swift */,
@@ -180,20 +186,12 @@
 				CEE95F6F42C7DD7FFF789806 /* App */,
 				EC693CFD35ABA259CEB8EA68 /* AR */,
 				3B3BE1B4BB83360370BF367E /* Models */,
-				BC2F0A8B3B894EEFC60D62A1 /* Resources */,
 				8122F150A1CD89F28EAD4651 /* Services */,
 				090325D78673E7729C819474 /* Utilities */,
 				7AB1639830C63547CCC5CCCF /* ViewModels */,
 				04129511392D298CB921A344 /* Views */,
 			);
 			path = SatPass;
-			sourceTree = "<group>";
-		};
-		BC2F0A8B3B894EEFC60D62A1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		CEE95F6F42C7DD7FFF789806 /* App */ = {
@@ -260,9 +258,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
+				LastUpgradeCheck = 2640;
 			};
 			buildConfigurationList = C2853BBF27E0CFC2A5DBDFFE /* Build configuration list for PBXProject "SatPass" */;
 			developmentRegion = en;
@@ -292,6 +288,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B1FB5F3F0A12F23EEF7E24C /* AMSATStatusReport.swift in Sources */,
+				28C64B601D18FAA57C8444C4 /* AMSATStatusService.swift in Sources */,
 				746E71C1AAA4289D3E9565F5 /* AzimuthView.swift in Sources */,
 				6C1C8BE83B24097AF41A6BD7 /* Constants.swift in Sources */,
 				229805C955C8C1EC53DD371F /* CountdownView.swift in Sources */,
@@ -408,6 +406,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -428,6 +427,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -440,6 +440,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 67HWRVWPWT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -457,6 +458,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 67HWRVWPWT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -506,6 +508,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -519,6 +522,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;

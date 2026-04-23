@@ -17,6 +17,38 @@ final class PassDetailViewModel {
         FrequencyDatabase.frequencies(for: pass.noradID)
     }
 
+    // MARK: - AMSAT Status Reports
+
+    /// Community-reported satellite health status from AMSAT.
+    private(set) var statusReports: [AMSATStatusReport] = []
+    
+    /// Loading state for status reports.
+    private(set) var statusLoadingState: StatusLoadingState = .idle
+    
+    /// True if this satellite has AMSAT status data available.
+    var hasAMSATData: Bool {
+        AMSATStatusService.hasAMSATName(for: pass.noradID)
+    }
+    
+    enum StatusLoadingState: Equatable {
+        case idle, loading, loaded, error(String)
+    }
+    
+    /// Lazy load status reports from AMSAT.
+    /// Only fetches once per session — guards against repeated calls.
+    func loadStatusReports() async {
+        guard hasAMSATData else { return }
+        guard statusLoadingState == .idle else { return }
+        
+        statusLoadingState = .loading
+        let service = AMSATStatusService()
+        statusReports = await service.fetchReports(
+            forNoradID: pass.noradID,
+            hours: Constants.AMSAT.defaultHours
+        )
+        statusLoadingState = .loaded
+    }
+
     // MARK: - Formatted Properties
 
     var aosDescription: String {

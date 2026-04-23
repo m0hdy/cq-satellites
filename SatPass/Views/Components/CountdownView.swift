@@ -4,6 +4,12 @@ import SwiftUI
 /// Self-contained: uses TimelineView for 1-second updates.
 struct CountdownView: View {
     let pass: SatellitePass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    /// Slightly smaller countdown font in landscape to avoid dominating the short viewport.
+    private var countdownFontSize: CGFloat {
+        verticalSizeClass == .compact ? 40 : 56
+    }
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: Constants.Timing.countdownInterval)) { context in
@@ -21,7 +27,7 @@ struct CountdownView: View {
                     .foregroundStyle(.green)
 
                 Text(Formatters.timeRemaining(pass.timeRemaining(from: now)))
-                    .font(.system(size: 56, weight: .light, design: .monospaced))
+                    .font(.system(size: countdownFontSize, weight: .light, design: .monospaced))
                     .foregroundStyle(.green)
                     .contentTransition(.numericText())
 
@@ -36,7 +42,7 @@ struct CountdownView: View {
                     .foregroundStyle(.secondary)
 
                 Text(Formatters.tCountdown(pass.timeUntilAOS(from: now)))
-                    .font(.system(size: 56, weight: .light, design: .monospaced))
+                    .font(.system(size: countdownFontSize, weight: .light, design: .monospaced))
                     .contentTransition(.numericText())
 
                 Text(pass.aos.formatted(date: .abbreviated, time: .shortened))
@@ -51,6 +57,6 @@ struct CountdownView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
+        .padding(.vertical, verticalSizeClass == .compact ? 4 : 12)
     }
 }

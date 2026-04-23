@@ -89,6 +89,52 @@ struct PassDetailView: View {
                 }
             }
 
+            // MARK: - Satellite Status (AMSAT)
+            if viewModel.hasAMSATData {
+                Section {
+                    switch viewModel.statusLoadingState {
+                    case .idle, .loading:
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .listRowBackground(Color.clear)
+                        
+                    case .loaded:
+                        if viewModel.statusReports.isEmpty {
+                            Text("No recent reports")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .listRowBackground(Color.clear)
+                        } else {
+                            ForEach(viewModel.statusReports) { report in
+                                StatusReportRow(report: report)
+                            }
+                        }
+                        
+                    case .error(let message):
+                        VStack(alignment: .leading, spacing: 4) {
+                            Label("Failed to load status", systemImage: "exclamationmark.triangle")
+                                .font(.subheadline)
+                                .foregroundStyle(.orange)
+                            Text(message)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } header: {
+                    Text("Satellite Status")
+                } footer: {
+                    Link("Source: AMSAT Satellite Status", destination: URL(string: Constants.AMSAT.websiteURL)!)
+                        .font(.caption2)
+                }
+                .task {
+                    await viewModel.loadStatusReports()
+                }
+            }
+
             // MARK: - Timing
             Section("Timing") {
                 LabeledContent("AOS") {
@@ -232,6 +278,51 @@ private struct ModeBadge: View {
         case "SSB": .blue
         case _ where mode.lowercased().contains("linear"): .purple
         default: .indigo
+        }
+    }
+}
+
+// MARK: - Status Report Row
+
+/// A single AMSAT status report showing health status from a community reporter.
+private struct StatusReportRow: View {
+    let report: AMSATStatusReport
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            // Status text with indicator
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(statusColor)
+                    .frame(width: 8, height: 8)
+                Text(report.report)
+                    .font(.body)
+            }
+            
+            // Reporter info: callsign · grid · time
+            HStack(spacing: 4) {
+                Text("by \(report.callsign)")
+                Text("·")
+                Text(report.gridSquare)
+                Text("·")
+                Text(report.reportedTime)
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private var statusColor: Color {
+        let lowercased = report.report.lowercased()
+        if lowercased.contains("heard") && !lowercased.contains("not heard") {
+            return .green
+        } else if lowercased.contains("not heard") {
+            return .red
+        } else if lowercased.contains("telemetry") {
+            return .blue
+        } else {
+            return .gray
         }
     }
 }

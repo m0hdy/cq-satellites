@@ -40,4 +40,11 @@ enum Constants {
             GroundStation(latitude: londonLatitude, longitude: londonLongitude, altitude: londonAltitude)
         }
     }
+    
+    enum AMSAT {
+        static let statusAPIBase = "https://amsat.org/status/api/v1/sat_info.php"
+        static let websiteURL = "https://www.amsat.org/status/"
+        /// Default number of hours of status reports to fetch.
+        static let defaultHours = 24
+    }
 }

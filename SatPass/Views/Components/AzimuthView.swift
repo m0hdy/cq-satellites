@@ -9,7 +9,12 @@ struct AzimuthView: View {
     /// Device heading in degrees (0 = true north). Compass rotates by -heading.
     var heading: Double = 0
 
-    private let compassSize: CGFloat = 200
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    /// Smaller compass in landscape (compact height) so it doesn't dominate the short viewport.
+    private var compassSize: CGFloat {
+        verticalSizeClass == .compact ? 150 : 200
+    }
     private var radius: CGFloat { compassSize / 2 - 28 }
 
     private let directions: [(label: String, angle: Double)] = [
@@ -89,7 +94,7 @@ struct AzimuthView: View {
         .rotationEffect(.degrees(-heading))
         .animation(.easeOut(duration: 0.3), value: heading)
         .frame(width: compassSize, height: compassSize)
-        .padding(.vertical, 8)
+        .padding(.vertical, verticalSizeClass == .compact ? 2 : 8)
     }
 }
 
