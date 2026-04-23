@@ -61,6 +61,14 @@
 - **Key files:** `SatPass/Models/AMSATStatusReport.swift`, `SatPass/Services/AMSATStatusService.swift`, updated `Constants.swift`
 - **AMSAT valid names (reference):** AO-7[A], AO-7[B], AO-27, AO-73, AO-91, CAS-4A, CAS-4B, FO-29, FO-99, HO-113, IO-117, ISS-FM, ISS-DATA, ISS-SSTV, ISS-DATV, JO-97, LilacSat-2, PO-101[FM], QO-100_NB, QO-100_WB, RS-44, SO-50, TO-108, and 50+ others
 
+### AMSAT Satellite Name Format Update (2026-04-23)
+- **Name format standardization:** Updated all satellite name mappings in `AMSATStatusService.swift` to use AMSAT's live status page dropdown format with `_[mode]` suffixes
+- **Examples:** `SO-50` → `SO-50_[FM]`, `ISS-FM` → `ISS_[FM]`, `FO-29` → `FO-29_[FM]`
+- **Removals:** Deleted 6 satellites no longer in AMSAT's valid dropdown list
+- **Bug fix:** Corrected IO-86 NORAD ID in mapping dictionary
+- **Backward compatibility:** All 83 tests passing. Mapping ready for production
+- **Rationale:** AMSAT API requires exact names from their dropdown; standardized format ensures reliable API calls
+
 **Cross-team coordination (Dallas):**
 - Dallas updated `PassDetailViewModel` with lazy-loaded AMSAT status reports (StatusLoadingState enum, loadStatusReports method)
 - Dallas updated `PassDetailView` with new "Satellite Status" section between Radio and Timing
