@@ -3,8 +3,12 @@ import SwiftUI
 /// Detail view for a single satellite pass.
 /// Hierarchy: countdown → compass → direction → supporting details.
 /// Designed for a ham radio operator who needs to know WHEN and WHERE instantly.
+///
+/// Rotating to landscape activates AR mode showing this satellite's position in the sky.
 struct PassDetailView: View {
     let pass: SatellitePass
+    @Environment(SatelliteStore.self) private var store
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var viewModel: PassDetailViewModel
     @State private var headingService = HeadingService()
 
@@ -14,6 +18,21 @@ struct PassDetailView: View {
     }
 
     var body: some View {
+        #if os(iOS)
+        if verticalSizeClass == .compact {
+            SatelliteARView(passes: [pass])
+                .ignoresSafeArea()
+                .toolbar(.hidden, for: .navigationBar)
+        } else {
+            detailContent
+        }
+        #else
+        detailContent
+        #endif
+    }
+
+    @ViewBuilder
+    private var detailContent: some View {
         List {
             // MARK: - Hero: Countdown (the single most important element)
             Section {

@@ -1,10 +1,85 @@
 import Foundation
 
-// MARK: - Stretch Goal: AR ViewModel
-// Will manage real-time satellite position updates for AR overlay.
-
-/// Placeholder ViewModel for AR satellite tracking.
+/// Manages real-time satellite position updates for the AR overlay.
+///
+/// Runs a 10Hz update loop that propagates SGP4 positions for all target
+/// satellites and other visible satellites, publishing results for SwiftUI/RealityKit.
+/// Supports both single-satellite mode (from detail view) and multi-satellite mode
+/// (from list view with up to 5 targets).
 @MainActor @Observable
 final class SatelliteARViewModel {
-    // Future: real-time satellite positions, AR session management
+
+    // MARK: - Input
+
+    let targetPasses: [SatellitePass]
+
+    // MARK: - Computed Positions
+
+    /// Positions for all target satellites (rendered as green markers).
+    private(set) var targetPositions: [(pass: SatellitePass, position: SatellitePosition)] = []
+    /// Other visible satellites above the horizon (rendered as blue markers).
+    private(set) var visibleSatellites: [(name: String, noradID: String, position: SatellitePosition)] = []
+
+    // MARK: - State
+
+    private(set) var isTracking = false
+    var arSessionError: String?
+
+    /// Set of NORAD IDs for all target satellites (for fast lookup).
+    var targetNoradIDs: Set<String> {
+        Set(targetPasses.map(\.noradID))
+    }
+
+    // MARK: - Dependencies
+
+    private let tracker = SatelliteTracker()
+    private var updateTask: Task<Void, Never>?
+
+    init(targetPasses: [SatellitePass]) {
+        self.targetPasses = targetPasses
+    }
+
+    // MARK: - Tracking
+
+    /// Start the 10Hz position update loop.
+    func startTracking(satellites: [Satellite], observer: GroundStation) {
+        guard !isTracking else { return }
+        isTracking = true
+
+        let tracker = self.tracker
+        let targetIDs = targetNoradIDs
+        let interval = UInt64(Constants.AR.updateInterval * 1_000_000_000)
+
+        updateTask = Task { [weak self] in
+            while !Task.isCancelled {
+                guard let self else { return }
+
+                // Compute positions for all target satellites
+                var positions: [(pass: SatellitePass, position: SatellitePosition)] = []
+                for pass in self.targetPasses {
+                    if let sat = satellites.first(where: { $0.id == pass.noradID }),
+                       let pos = tracker.position(for: sat, from: observer) {
+                        positions.append((pass: pass, position: pos))
+                    }
+                }
+                self.targetPositions = positions
+
+                // Other visible satellites (exclude targets)
+                let visible = tracker.visibleSatellites(from: satellites, observer: observer)
+                self.visibleSatellites = visible
+                    .filter { $0.position.elevation > Constants.AR.minimumElevation }
+                    .filter { !targetIDs.contains($0.satellite.id) }
+                    .map { (name: $0.satellite.name, noradID: $0.satellite.id, position: $0.position) }
+
+                try? await Task.sleep(nanoseconds: interval)
+            }
+        }
+    }
+
+    /// Cancel the position update loop.
+    func stopTracking() {
+        updateTask?.cancel()
+        updateTask = nil
+        isTracking = false
+    }
 }

@@ -1,13 +1,24 @@
 import SwiftUI
 
 /// Main screen — list of upcoming satellite passes.
+///
+/// Rotating to landscape while on this screen activates AR mode showing
+/// the next 5 upcoming satellites. If a detail view is pushed, landscape
+/// AR is handled by PassDetailView instead.
 struct PassListView: View {
     @Environment(SatelliteStore.self) private var store
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var viewModel = PassListViewModel()
     @State private var showFilterSheet = false
+    @State private var navigationPath = NavigationPath()
+
+    /// The next N upcoming passes to show as AR targets from the list view.
+    private var arPasses: [SatellitePass] {
+        Array(viewModel.filteredPasses(from: store.passes).prefix(Constants.AR.maxListTargets))
+    }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Group {
                 if case .error(let message) = store.loadingPhase, store.passes.isEmpty {
                     ContentUnavailableView {
@@ -65,6 +76,14 @@ struct PassListView: View {
                 await viewModel.onAppear(store: store)
             }
         }
+        #if os(iOS)
+        .overlay {
+            if verticalSizeClass == .compact && navigationPath.isEmpty && !arPasses.isEmpty {
+                SatelliteARView(passes: arPasses)
+                    .ignoresSafeArea()
+            }
+        }
+        #endif
     }
 
     @ViewBuilder

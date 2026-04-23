@@ -41,6 +41,17 @@ enum Constants {
         }
     }
     
+    enum AR {
+        /// Position update frequency for the AR overlay (10 Hz).
+        static let updateInterval: TimeInterval = 0.1
+        /// Distance in meters to place AR markers from the camera.
+        static let markerDistance: Float = 50.0
+        /// Minimum elevation (degrees) to display a satellite in AR.
+        static let minimumElevation: Double = 0.0
+        /// Maximum number of target satellites shown when launching AR from the list view.
+        static let maxListTargets = 5
+    }
+
     enum AMSAT {
         static let statusAPIBase = "https://amsat.org/status/api/v1/sat_info.php"
         static let websiteURL = "https://www.amsat.org/status/"
