@@ -24,6 +24,12 @@ enum Constants {
         static let presets: [Double] = [0, 10, 20, 30, 45]
     }
 
+    enum FrequencyFilter {
+        static let userDefaultsKey = "showOnlyWithFrequencies"
+        /// Default: only show satellites that have amateur radio frequencies.
+        static let defaultValue = true
+    }
+
     /// Default fallback values when GPS is unavailable.
     enum Defaults {
         static let londonLatitude = 51.5074

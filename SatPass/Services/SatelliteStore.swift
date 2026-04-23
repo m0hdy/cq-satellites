@@ -1,36 +1,59 @@
 import Foundation
 
+/// Loading phase for progress reporting during startup.
+enum LoadingPhase: Sendable, Equatable {
+    case idle
+    case locating
+    case downloading
+    case parsing(count: Int)
+    case predicting(current: Int, total: Int)
+    case complete
+    case error(String)
+
+    var isActive: Bool {
+        switch self {
+        case .locating, .downloading, .parsing, .predicting:
+            return true
+        case .idle, .complete, .error:
+            return false
+        }
+    }
+}
+
 /// Central store for satellite data and computed passes.
 @MainActor @Observable
 final class SatelliteStore {
     private(set) var satellites: [Satellite] = []
     private(set) var passes: [SatellitePass] = []
-    private(set) var isLoading = false
-    private(set) var error: Error?
+    private(set) var loadingPhase: LoadingPhase = .idle
     private(set) var lastTLEFetch: Date?
 
     private let tleService = TLEService()
     private let predictionService = PassPredictionService(minimumElevation: 5)
 
+    /// Signal that location resolution is starting.
+    func beginLocating() {
+        loadingPhase = .locating
+    }
+
     /// Load satellites and compute passes for the given location.
     func loadPasses(from station: GroundStation) async {
-        isLoading = true
-        error = nil
+        loadingPhase = .downloading
 
         do {
             let amateur = try await tleService.fetchAmateurSatellites()
             satellites = amateur
             lastTLEFetch = .now
 
-            passes = await computePasses(for: amateur, from: station)
+            loadingPhase = .parsing(count: amateur.count)
+            passes = await computePassesWithProgress(for: amateur, from: station)
+            loadingPhase = .complete
         } catch {
-            self.error = error
+            loadingPhase = .error(error.localizedDescription)
         }
-
-        isLoading = false
     }
 
-    /// Recompute passes with current satellite data.
+    /// Recompute passes with current satellite data (no progress reporting).
     func refreshPasses(from station: GroundStation) async {
         passes = await computePasses(for: satellites, from: station)
     }
@@ -41,6 +64,26 @@ final class SatelliteStore {
         return Date.now.timeIntervalSince(last) > Constants.Timing.tleRefreshInterval
     }
 
+    /// Process satellites one at a time, reporting progress after each.
+    private func computePassesWithProgress(for satellites: [Satellite], from station: GroundStation) async -> [SatellitePass] {
+        let service = self.predictionService
+        let total = satellites.count
+        var allPasses: [SatellitePass] = []
+
+        for (index, satellite) in satellites.enumerated() {
+            loadingPhase = .predicting(current: index + 1, total: total)
+
+            let satellitePasses = await Task.detached(priority: .userInitiated) {
+                service.predictPasses(for: satellite, from: station)
+            }.value
+
+            allPasses.append(contentsOf: satellitePasses)
+        }
+
+        return allPasses.sorted()
+    }
+
+    /// Batch computation without progress (used for refresh).
     private func computePasses(for satellites: [Satellite], from station: GroundStation) async -> [SatellitePass] {
         let service = self.predictionService
         return await Task.detached(priority: .userInitiated) {

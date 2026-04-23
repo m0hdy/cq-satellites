@@ -14,9 +14,11 @@
 		30F8AFD8DAB6ABCF1CC7DE24 /* SatPassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */; };
 		31F787848FF691D54D334DCE /* SatPassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E24FFA81F89A96D77C527 /* SatPassTests.swift */; };
 		3EA093F2A31A7AF91F4D8C51 /* PassRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AC544178F8FA1B38B2C1FC /* PassRowView.swift */; };
+		6642A5291201ACC872AC7EA7 /* FrequencyDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764809BDA677FC225DEABBF /* FrequencyDatabase.swift */; };
 		6C1C8BE83B24097AF41A6BD7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB8E555C1C76DAC327AE09 /* Constants.swift */; };
 		746E71C1AAA4289D3E9565F5 /* AzimuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */; };
 		79C36C106DC23B5247011DDC /* PassListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7A354FAFA9946080AA6C49 /* PassListView.swift */; };
+		817C9C319179886E83516898 /* HeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E32F2E28DB2E247EB1B230 /* HeadingService.swift */; };
 		86E34132F7794595BA06735F /* GroundStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1E756A6BB24836C7EED7AB /* GroundStation.swift */; };
 		92096F3DF8F25E0D09D63BD4 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9F7E31DDDC27D617E6240A /* Formatters.swift */; };
 		9463BB811824A737210F1844 /* PassPredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D356683796402F0E7F4D86A /* PassPredictionService.swift */; };
@@ -24,7 +26,9 @@
 		AD61B59C12C0B49D91DD542C /* SatelliteARViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */; };
 		C3BAE64895B13B16DC52363D /* Satellite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F130B60C79B15E75E3EAC45 /* Satellite.swift */; };
 		D41F689ECC53A6D67BF4532B /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17E6F13F2D1226CE676779 /* LocationService.swift */; };
+		D9469525BB833244D349C300 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF5DB782004A238BA0499 /* LoadingView.swift */; };
 		DB39EBC741FA3F7B9F45FBBA /* TLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97D1F863479653FCD073C44 /* TLEService.swift */; };
+		DB676692B73981BD8A30938D /* SatelliteFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A591EAEA14F7CFD002C572 /* SatelliteFrequency.swift */; };
 		DFC553F08BB2D3331B6C9438 /* PassListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BC774462194948ACFFCB3D /* PassListViewModel.swift */; };
 		EC6FE1447014AF6E5628939E /* PassDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840AA1683217FEB46BFC011 /* PassDetailViewModel.swift */; };
 		EDBD96A98910BEDF2CD9A460 /* SatellitePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121006598A0CB5EBCE61E4ED /* SatellitePass.swift */; };
@@ -42,11 +46,13 @@
 
 /* Begin PBXFileReference section */
 		0C1E756A6BB24836C7EED7AB /* GroundStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundStation.swift; sourceTree = "<group>"; };
+		10E32F2E28DB2E247EB1B230 /* HeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingService.swift; sourceTree = "<group>"; };
 		121006598A0CB5EBCE61E4ED /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
 		1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		1D7A354FAFA9946080AA6C49 /* PassListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListView.swift; sourceTree = "<group>"; };
 		33AC544178F8FA1B38B2C1FC /* PassRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassRowView.swift; sourceTree = "<group>"; };
 		35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteStore.swift; sourceTree = "<group>"; };
+		4764809BDA677FC225DEABBF /* FrequencyDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyDatabase.swift; sourceTree = "<group>"; };
 		4874A64EBEADA089963F4234 /* SatelliteARViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARViewModel.swift; sourceTree = "<group>"; };
 		5D356683796402F0E7F4D86A /* PassPredictionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPredictionService.swift; sourceTree = "<group>"; };
 		5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
@@ -55,11 +61,13 @@
 		7B17E6F13F2D1226CE676779 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		7F6CB303E22E3DE4B316BAD1 /* SatPassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassApp.swift; sourceTree = "<group>"; };
 		8D9F7E31DDDC27D617E6240A /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		90A591EAEA14F7CFD002C572 /* SatelliteFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteFrequency.swift; sourceTree = "<group>"; };
 		9F130B60C79B15E75E3EAC45 /* Satellite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satellite.swift; sourceTree = "<group>"; };
 		A97D1F863479653FCD073C44 /* TLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLEService.swift; sourceTree = "<group>"; };
 		AE6D142B2F782821914A7D40 /* PassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailView.swift; sourceTree = "<group>"; };
 		C2FB8E555C1C76DAC327AE09 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C5172AD43D7B900D4050AC5F /* SatPass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SatPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3CDF5DB782004A238BA0499 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D915D5E9047FF31D17053142 /* SatelliteARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARView.swift; sourceTree = "<group>"; };
 		F86E24FFA81F89A96D77C527 /* SatPassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatPassTests.swift; sourceTree = "<group>"; };
 		F9BC774462194948ACFFCB3D /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
@@ -101,6 +109,7 @@
 			children = (
 				0C1E756A6BB24836C7EED7AB /* GroundStation.swift */,
 				9F130B60C79B15E75E3EAC45 /* Satellite.swift */,
+				90A591EAEA14F7CFD002C572 /* SatelliteFrequency.swift */,
 				121006598A0CB5EBCE61E4ED /* SatellitePass.swift */,
 			);
 			path = Models;
@@ -120,6 +129,7 @@
 			children = (
 				5F4B443E3E7EA83DFD7CE632 /* AzimuthView.swift */,
 				1C5AF5E3B7B933B3C3243CF2 /* CountdownView.swift */,
+				D3CDF5DB782004A238BA0499 /* LoadingView.swift */,
 				33AC544178F8FA1B38B2C1FC /* PassRowView.swift */,
 			);
 			path = Components;
@@ -137,6 +147,8 @@
 		8122F150A1CD89F28EAD4651 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4764809BDA677FC225DEABBF /* FrequencyDatabase.swift */,
+				10E32F2E28DB2E247EB1B230 /* HeadingService.swift */,
 				7B17E6F13F2D1226CE676779 /* LocationService.swift */,
 				5D356683796402F0E7F4D86A /* PassPredictionService.swift */,
 				35518FE38A0410A6E88A3DAB /* SatelliteStore.swift */,
@@ -284,7 +296,10 @@
 				6C1C8BE83B24097AF41A6BD7 /* Constants.swift in Sources */,
 				229805C955C8C1EC53DD371F /* CountdownView.swift in Sources */,
 				92096F3DF8F25E0D09D63BD4 /* Formatters.swift in Sources */,
+				6642A5291201ACC872AC7EA7 /* FrequencyDatabase.swift in Sources */,
 				86E34132F7794595BA06735F /* GroundStation.swift in Sources */,
+				817C9C319179886E83516898 /* HeadingService.swift in Sources */,
+				D9469525BB833244D349C300 /* LoadingView.swift in Sources */,
 				D41F689ECC53A6D67BF4532B /* LocationService.swift in Sources */,
 				1915AC95D75F443ADF3648B4 /* PassDetailView.swift in Sources */,
 				EC6FE1447014AF6E5628939E /* PassDetailViewModel.swift in Sources */,
@@ -296,6 +311,7 @@
 				C3BAE64895B13B16DC52363D /* Satellite.swift in Sources */,
 				99C845390283196AB74EEE74 /* SatelliteARView.swift in Sources */,
 				AD61B59C12C0B49D91DD542C /* SatelliteARViewModel.swift in Sources */,
+				DB676692B73981BD8A30938D /* SatelliteFrequency.swift in Sources */,
 				EDBD96A98910BEDF2CD9A460 /* SatellitePass.swift in Sources */,
 				1BD5854251342D6BB1F54E06 /* SatelliteStore.swift in Sources */,
 				DB39EBC741FA3F7B9F45FBBA /* TLEService.swift in Sources */,

@@ -31,6 +31,13 @@ final class PassListViewModel {
         }
     }
 
+    /// When true, only show passes for satellites with known amateur radio frequencies.
+    var showOnlyWithFrequencies: Bool {
+        didSet {
+            UserDefaults.standard.set(showOnlyWithFrequencies, forKey: Constants.FrequencyFilter.userDefaultsKey)
+        }
+    }
+
     /// Human-readable summary of the active location, e.g. "📍 51.51°N, 0.13°W (GPS)".
     var locationDescription: String? {
         guard let station = currentStation, let source = locationSource else { return nil }
@@ -42,8 +49,14 @@ final class PassListViewModel {
     }
 
     init() {
-        let stored = UserDefaults.standard.object(forKey: Constants.ElevationFilter.userDefaultsKey) as? Double
-        self.minimumElevation = stored ?? Constants.ElevationFilter.defaultMinimum
+        let storedElevation = UserDefaults.standard.object(forKey: Constants.ElevationFilter.userDefaultsKey) as? Double
+        self.minimumElevation = storedElevation ?? Constants.ElevationFilter.defaultMinimum
+
+        if UserDefaults.standard.object(forKey: Constants.FrequencyFilter.userDefaultsKey) != nil {
+            self.showOnlyWithFrequencies = UserDefaults.standard.bool(forKey: Constants.FrequencyFilter.userDefaultsKey)
+        } else {
+            self.showOnlyWithFrequencies = Constants.FrequencyFilter.defaultValue
+        }
     }
 
     /// Label for the current elevation filter (e.g. "Min: 10°" or "All").
@@ -51,12 +64,19 @@ final class PassListViewModel {
         minimumElevation == 0 ? "All passes" : "Min: \(Int(minimumElevation))°"
     }
 
-    /// Filter passes to only upcoming + active that meet the minimum elevation.
+    /// Label for the satellite filter.
+    var satelliteFilterLabel: String {
+        showOnlyWithFrequencies ? "Amateur radio" : "All satellites"
+    }
+
+    /// Filter passes to only upcoming + active that meet the minimum elevation
+    /// and optionally only those with known amateur radio frequencies.
     func filteredPasses(from passes: [SatellitePass]) -> [SatellitePass] {
         let now = Date.now
         return passes.filter { pass in
             (pass.isActive(at: now) || pass.isUpcoming(at: now))
                 && pass.maxElevation >= minimumElevation
+                && (!showOnlyWithFrequencies || FrequencyDatabase.hasFrequencies(for: pass.noradID))
         }
     }
 
@@ -66,6 +86,7 @@ final class PassListViewModel {
         guard !hasLoaded else { return }
         hasLoaded = true
 
+        store.beginLocating()
         locationService.requestAuthorization()
 
         do {
@@ -80,6 +101,16 @@ final class PassListViewModel {
             locationSource = .defaultLocation(name: "London")
             await store.loadPasses(from: station)
         }
+    }
+
+    /// Retry after a failed load.
+    func retry(store: SatelliteStore) async {
+        guard let station = currentStation else {
+            hasLoaded = false
+            await onAppear(store: store)
+            return
+        }
+        await store.loadPasses(from: station)
     }
 
     /// Manual refresh — re-fetch TLE if stale, recompute passes.

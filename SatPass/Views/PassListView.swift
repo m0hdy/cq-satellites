@@ -4,13 +4,24 @@ import SwiftUI
 struct PassListView: View {
     @Environment(SatelliteStore.self) private var store
     @State private var viewModel = PassListViewModel()
-    @State private var showElevationPicker = false
+    @State private var showFilterSheet = false
 
     var body: some View {
         NavigationStack {
             Group {
-                if store.isLoading && store.passes.isEmpty {
-                    ProgressView("Computing passes…")
+                if case .error(let message) = store.loadingPhase, store.passes.isEmpty {
+                    ContentUnavailableView {
+                        Label("Download Failed", systemImage: "wifi.exclamationmark")
+                    } description: {
+                        Text(message)
+                    } actions: {
+                        Button("Retry") {
+                            Task { await viewModel.retry(store: store) }
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                } else if store.loadingPhase.isActive && store.passes.isEmpty {
+                    LoadingView(phase: store.loadingPhase)
                 } else if store.passes.isEmpty {
                     ContentUnavailableView(
                         "No Passes",
@@ -32,15 +43,15 @@ struct PassListView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        showElevationPicker.toggle()
+                        showFilterSheet.toggle()
                     } label: {
-                        Label(viewModel.elevationFilterLabel, systemImage: "line.3.horizontal.decrease.circle")
+                        Label("Filters", systemImage: "line.3.horizontal.decrease.circle")
                     }
                 }
             }
-            .sheet(isPresented: $showElevationPicker) {
-                ElevationFilterSheet(viewModel: viewModel)
-                    .presentationDetents([.height(260)])
+            .sheet(isPresented: $showFilterSheet) {
+                FilterSheet(viewModel: viewModel)
+                    .presentationDetents([.height(380)])
             }
             .safeAreaInset(edge: .bottom) {
                 bottomBar
@@ -65,7 +76,7 @@ struct PassListView: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Text(viewModel.elevationFilterLabel)
+            Text("\(viewModel.satelliteFilterLabel) · \(viewModel.elevationFilterLabel)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -76,32 +87,56 @@ struct PassListView: View {
     }
 }
 
-/// Bottom sheet for choosing minimum elevation.
-private struct ElevationFilterSheet: View {
+/// Bottom sheet for filtering passes by satellite type and minimum elevation.
+private struct FilterSheet: View {
     @Bindable var viewModel: PassListViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Minimum Max Elevation")
-                    .font(.headline)
+                // Satellite filter
+                VStack(spacing: 8) {
+                    Text("Satellites")
+                        .font(.headline)
 
-                Text("Hide passes below this peak elevation. Higher passes give stronger signals and less atmospheric interference.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                    Text("Show only satellites with known amateur radio frequencies, or show all satellites in the catalog.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
+                    Picker("Satellites", selection: $viewModel.showOnlyWithFrequencies) {
+                        Text("Amateur Radio").tag(true)
+                        Text("Show All").tag(false)
+                    }
+                    .pickerStyle(.segmented)
                     .padding(.horizontal)
-
-                Picker("Minimum Elevation", selection: $viewModel.minimumElevation) {
-                    Text("All").tag(0.0)
-                    Text("10°").tag(10.0)
-                    Text("20°").tag(20.0)
-                    Text("30°").tag(30.0)
-                    Text("45°").tag(45.0)
                 }
-                .pickerStyle(.segmented)
-                .padding(.horizontal)
+
+                Divider()
+
+                // Elevation filter
+                VStack(spacing: 8) {
+                    Text("Minimum Max Elevation")
+                        .font(.headline)
+
+                    Text("Hide passes below this peak elevation. Higher passes give stronger signals and less atmospheric interference.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
+                    Picker("Minimum Elevation", selection: $viewModel.minimumElevation) {
+                        Text("All").tag(0.0)
+                        Text("10°").tag(10.0)
+                        Text("20°").tag(20.0)
+                        Text("30°").tag(30.0)
+                        Text("45°").tag(45.0)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
+                }
 
                 Spacer()
             }
