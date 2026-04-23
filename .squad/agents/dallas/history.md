@@ -191,3 +191,45 @@
 - PassDetailView and PassListView didn't need layout changes — List scrolls naturally in both orientations.
 - PassRowView is fine as-is — HStack layout adapts to width automatically.
 - All portrait layouts are completely unchanged — landscape is purely additive.
+
+### 2026-04-23 — AR Satellite Overlay Implementation
+
+**Files touched:**
+- `SatPass/AR/SatelliteARViewModel.swift` — Full replacement of placeholder. `@MainActor @Observable` class with 10Hz update loop using `SatelliteTracker`. Tracks target satellite position and all visible satellites. Uses `Task` with `Task.sleep(nanoseconds:)` for non-blocking update interval. `[weak self]` in Task closure to prevent retain cycles.
+- `SatPass/AR/SatelliteARView.swift` — Full replacement of placeholder. SwiftUI view wrapping ARKit/RealityKit. `ARViewContainer` (UIViewRepresentable) with Coordinator managing entity lifecycle. `#if os(iOS)` / `#else` guard for macOS fallback since ARKit is iOS-only.
+- `SatPass/Views/PassDetailView.swift` — Added `@Environment(SatelliteStore.self)`, `@State showARView`, toolbar ARKit button, `.fullScreenCover` for AR view. Explicitly passes `store` environment to fullScreenCover.
+- `Info.plist` — Added `NSCameraUsageDescription` for camera permission.
+
+**ARKit/RealityKit patterns:**
+- `ARWorldTrackingConfiguration` with `worldAlignment = .gravityAndHeading` — X=east, Y=up, Z=south, aligned with magnetic north. Matches `SatellitePosition.arDirection` coordinate system.
+- Entity hierarchy per satellite: parent Entity (positioned at `arDirection * markerDistance`) → sphere child (ModelEntity) + labelParent child (Entity, billboarded) → textEntity child (ModelEntity with generateText).
+- Billboard effect: `labelParent.look(at: cameraPos, from:, relativeTo: nil)` + 180° Y-axis rotation (text faces +Z, look orients -Z toward target).
+- Text mesh recreation throttled by tracking `lastRenderedElevations` per satellite — only regenerates text when rounded elevation changes by ≥1°.
+- Stale entity cleanup: tracks `activeIDs` set per frame, removes entities for satellites that left visibility.
+- `UnlitMaterial(color: .white)` for text labels — visible against any sky background without lighting artifacts.
+
+**Design decisions:**
+- Target satellite: green sphere (0.3 radius), larger text (0.15 font), placed 0.8 above sphere.
+- Other satellites: blue sphere (0.15 radius), smaller text (0.1 font), placed 0.5 above sphere.
+- Bottom info panel: `.ultraThinMaterial` background, shows compass direction (using `Formatters.compassDirection`), elevation, distance, above/below horizon status.
+- Close button top-left, visible satellite count top-right.
+- AR view works in both portrait and landscape (per ADR-006 discussion — camera feed rotates naturally with ARKit).
+- `LocationService` created locally in AR view — gets current position on appear, falls back to London default.
+- `SatelliteStore` passed explicitly via `.environment(store)` on fullScreenCover to guarantee propagation.
+
+**Platform guards:**
+- `#if os(iOS)` wraps entire AR view implementation. macOS gets `ContentUnavailableView` fallback.
+- PassDetailView AR button and fullScreenCover wrapped in `#if os(iOS)`.
+- ViewModel needs no platform guard (no ARKit/RealityKit imports).
+- `swift build` (macOS target) and `swift test` both pass cleanly (83 tests).
+
+## Session: AR Overlay Integration (2026-04-23T16:37:45Z)
+
+**Cross-team milestone:** SatelliteARView fully operational with Parker's SatelliteTracker.
+
+- **Implemented ADR-012–ADR-016:** Landscape orientation support, ARKit world alignment (X=east, Y=up, Z=south), entity hierarchy (parent/sphere/label), text mesh throttling, platform guards.
+- **Integration complete:** Wired SatelliteTracker into SatelliteARViewModel. Real-time position calculation at 10 Hz feeds RealityKit entity positioning.
+- **ARWorldTrackingConfiguration:** worldAlignment = .gravityAndHeading for magnetic north alignment.
+- **Entity hierarchy:** Parent at `arDirection * markerDistance`, sphere child, billboarded text label.
+- **Performance optimization:** Text mesh regeneration only when rounded elevation changes (~1×/sec per satellite, not 10×/sec).
+- **Test status:** All 83 tests pass, clean build.

@@ -244,6 +244,57 @@ enum LoadingPhase: Sendable, Equatable {
 
 ## Governance
 
+## View Implementation Decisions (Dallas) — Part 2
+
+### ADR-012: Landscape Orientation Support
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-23  
+
+**Context:** Damien requested landscape support. The app was portrait-locked.
+
+**Decision:** Enabled landscape left + right orientations with `@Environment(\.verticalSizeClass)` layouts.
+
+**Responsive Sizing:** `verticalSizeClass == .compact` for landscape. Compass 200pt→150pt, countdown 56pt→40pt, LoadingView VStack→HStack, filter sheet .medium detent.
+
+**Rationale:** Standard Apple approach. Portrait untouched, landscape additive.
+
+**Consequences:** App rotates to landscape. Smoother AR transition (ADR-006).
+
+## AR Implementation Decisions (Dallas)
+
+### ADR-013: ARKit World Alignment
+
+**Status:** Implemented  
+**Decision:** `worldAlignment = .gravityAndHeading`. RealityKit: X=east, Y=up, Z=south, magnetic north aligned.
+
+### ADR-014: Entity Hierarchy per Satellite
+
+**Status:** Implemented  
+**Decision:** Three-level hierarchy: Parent (positioned at `arDirection * markerDistance`), Sphere child, Label parent→Text child (billboarded separately).
+
+### ADR-015: Text Mesh Update Throttling
+
+**Status:** Implemented  
+**Decision:** Regenerate text mesh only when rounded elevation changes, not at 10 Hz. Reduces from 10×/sec to ~1×/sec.
+
+### ADR-016: Platform Guards for AR
+
+**Status:** Implemented  
+**Decision:** AR wrapped in `#if os(iOS)` with `ContentUnavailableView` fallback. Maintains `swift build` compatibility.
+
+## Backend Integration Decisions (Parker) — Part 2
+
+### ADR-017: SatelliteTracker as Stateless Struct
+
+**Status:** Implemented  
+**Decision:** `SatelliteTracker` is a stateless `Sendable` struct (not actor). Synchronous position calculation. Caller owns timer and state.
+
+**Rationale:** No I/O, no caching, no shared state. Matches `PassPredictionService` pattern. 10 Hz update loop stays simple.
+
+## Governance
+
 - All meaningful changes require team consensus
 - Document architectural decisions here
 - Keep history focused on work, decisions focused on direction

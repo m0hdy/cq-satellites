@@ -74,3 +74,20 @@
 - Dallas updated `PassDetailView` with new "Satellite Status" section between Radio and Timing
 - Section shows colored status indicators (green/red/blue/gray), reporter info, and AMSAT attribution link
 - Lazy loading via `.task` modifier — fetches only when section appears
+
+### SatelliteTracker for AR Real-Time Positioning (2026-04-23)
+- **Created `SatellitePosition` model:** Holds azimuth, elevation, distance, isVisible. Includes `arDirection` computed property returning a `SIMD3<Float>` unit vector for ARKit's `.gravityAndHeading` coordinate system (X=east, Y=up, Z=south negated).
+- **Created `SatelliteTracker` service:** Stateless `Sendable` struct, same pattern as `PassPredictionService`. Two methods: `position(for:from:at:)` for single satellite, `visibleSatellites(from:observer:at:)` for batch above-horizon lookup.
+- **Reuses SGP4 pipeline:** `selectPropagator(tle:)` → `getPVCoordinates` → meters-to-km → `topPosition()` → `AziEleDst`. Extended `computeTopocentric` to return distance (PassPredictionService omits it).
+- **AR constants added:** `Constants.AR.updateInterval` (0.1s / 10Hz), `markerDistance` (50m), `minimumElevation` (0°).
+- **Key files:** `SatPass/Models/SatellitePosition.swift`, `SatPass/Services/SatelliteTracker.swift`, `SatPass/Utilities/Constants.swift`
+- **Build/test:** Clean build, all 83 tests pass. Ready for Dallas to wire into AR overlay UI.
+
+## Session: AR Overlay Integration (2026-04-23T16:37:45Z)
+
+**Cross-team milestone:** SatelliteTracker + AR Integration complete.
+
+- **Implemented ADR-017:** SatelliteTracker confirmed as stateless struct, not actor. Synchronous position calculation. Dallas uses it at 10 Hz from AR update loop.
+- **Decisions merged:** ADR-012–ADR-017 now in squad/decisions.md (landscape support, ARKit alignment, entity hierarchy, text throttling, platform guards).
+- **AR module operational:** Dallas integrated SatelliteTracker into RealityKit overlay. Satellites render in real-time with azimuth/elevation positioning.
+- **Test status:** All 83 tests pass, clean build.
