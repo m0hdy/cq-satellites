@@ -118,6 +118,44 @@
 
 **Coordination note:** Parker is building the full frequency database simultaneously. The `FrequencyDatabase` stub I created has the same API shape Parker should use. When Parker's real database lands, it replaces the stub dictionary contents — no UI changes needed.
 
+### 2026-03-31 — AMSAT Satellite Status Integration
+
+**Files touched:**
+- `SatPass/ViewModels/PassDetailViewModel.swift` — Added `statusReports`, `statusLoadingState` enum (idle/loading/loaded/error), `hasAMSATData` computed property, and `loadStatusReports()` async method. Lazy loading pattern with guard against repeated fetches.
+- `SatPass/Views/PassDetailView.swift` — Added "Satellite Status" section between Radio and Timing. Conditional rendering (only if `hasAMSATData` is true). Shows loading spinner, report rows, empty state, or error. Uses `.task { await viewModel.loadStatusReports() }` for lazy loading on section appear. Added `StatusReportRow` component.
+
+**UI design for community status reports:**
+- Status indicator: colored circle based on report text — green for "Heard", red for "Not heard", blue for "Telemetry", gray for other.
+- Report text is the primary info (e.g., "Heard", "Active") — shown prominently.
+- Reporter metadata (callsign, Maidenhead grid square, time) shown as secondary caption.
+- AMSAT attribution footer with tappable link to https://www.amsat.org/status/.
+- Section only appears if satellite is in AMSAT database (`AMSATStatusService.hasAMSATName()`).
+
+**Lazy loading pattern:**
+- Uses `.task` modifier on the section — fetches only when section is rendered (user scrolls to detail page).
+- ViewModel guards with `statusLoadingState` to prevent duplicate fetches if section re-renders.
+- Loading state is separate from the main data load (doesn't block pass display).
+- Default time window: 24 hours of reports via `Constants.AMSAT.defaultHours`.
+
+**Coordination:** Parker is building `AMSATStatusReport` model, `AMSATStatusService` actor, and `Constants.AMSAT` simultaneously. I'm using the API shape specified in the task — if Parker changes the API, I'll adapt the ViewModel calls.
+
+### 2026-04-23 — AMSAT Status Report Integration
+
+**Dallas spawned:** Updated PassDetailViewModel and PassDetailView for AMSAT status display
+- Added `statusReports`, `statusLoadingState` enum (idle/loading/loaded/error), `hasAMSATData` computed property, and `loadStatusReports()` async method to ViewModel
+- Added "Satellite Status" section to PassDetailView between Radio and Timing with lazy loading
+- Status indicator circles: green for "Heard", red for "Not heard", blue for "Telemetry", gray for other
+- Reporter metadata: callsign, Maidenhead grid square, time
+- AMSAT attribution footer with link to https://www.amsat.org/status/
+- Section only appears if satellite has AMSAT data (via `AMSATStatusService.hasAMSATName()`)
+
+**Cross-team coordination (Parker):**
+- Parker created `AMSATStatusReport` model with UUID generation in `Decodable.init(from:)`
+- Parker created `AMSATStatusService` actor with non-throwing error handling (returns empty array on failure)
+- Parker added static NORAD→AMSAT mapping for 18 satellites (ISS-FM, AO-91, SO-50, etc.)
+- Parker updated `Constants.AMSAT` with API URL, website, default 24-hour report window
+- Key files: `SatPass/Models/AMSATStatusReport.swift`, `SatPass/Services/AMSATStatusService.swift`, updated `Constants.swift`
+
 ### 2026-03-31 — Feature Spawn Integration
 
 **Dallas spawned:** elevation filter, SF Symbol + bundle ID fix, Xcode project, default London location, frequency UI, loading screen  

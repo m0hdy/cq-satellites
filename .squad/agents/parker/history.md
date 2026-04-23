@@ -50,3 +50,19 @@
 - ADR-010: LoadingPhase Enum — single source of truth for loading state
 
 **Team coordination:** Decision inbox merged (4 files). Orchestration logs written. Cross-agent history updated (Dallas/Parker).
+
+### AMSAT Status Report Integration (2026-04-23)
+- **Data layer created:** `AMSATStatusReport` model and `AMSATStatusService` actor for fetching operator-reported satellite health status from https://amsat.org/status/api/v1/sat_info.php
+- **NORAD → AMSAT mapping:** Static dictionary maps 18 satellites with NORAD IDs to AMSAT names (ISS-FM, AO-91, SO-50, etc.). Conservative approach — only satellites present in both FrequencyDatabase and AMSAT's valid names list.
+- **Actor pattern:** `AMSATStatusService` follows TLEService pattern — actor isolation, URLSession-based, returns empty array on error (no throws).
+- **API integration:** `PassDetailViewModel` already had a stub calling `fetchReports(forNoradID:hours:)`. Service implements this signature.
+- **UUID generation:** AMSATStatusReport generates UUID locally in `init(from:)` since API JSON has no `id` field. Satisfies `Identifiable` for SwiftUI.
+- **Constants:** Added `Constants.AMSAT` enum with API base URL, website URL, and default hours (24).
+- **Key files:** `SatPass/Models/AMSATStatusReport.swift`, `SatPass/Services/AMSATStatusService.swift`, updated `Constants.swift`
+- **AMSAT valid names (reference):** AO-7[A], AO-7[B], AO-27, AO-73, AO-91, CAS-4A, CAS-4B, FO-29, FO-99, HO-113, IO-117, ISS-FM, ISS-DATA, ISS-SSTV, ISS-DATV, JO-97, LilacSat-2, PO-101[FM], QO-100_NB, QO-100_WB, RS-44, SO-50, TO-108, and 50+ others
+
+**Cross-team coordination (Dallas):**
+- Dallas updated `PassDetailViewModel` with lazy-loaded AMSAT status reports (StatusLoadingState enum, loadStatusReports method)
+- Dallas updated `PassDetailView` with new "Satellite Status" section between Radio and Timing
+- Section shows colored status indicators (green/red/blue/gray), reporter info, and AMSAT attribution link
+- Lazy loading via `.task` modifier — fetches only when section appears

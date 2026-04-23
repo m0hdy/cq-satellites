@@ -179,6 +179,69 @@ enum LoadingPhase: Sendable, Equatable {
 
 **Impact:** Low risk currently (guard is in place), but any future code path that creates Satellite objects from user input or untrusted data must go through parseTLEText or equivalent validation.
 
+## Data Layer Decisions (Parker)
+
+### ADR-011: AMSAT Status Report Integration
+
+**Status:** Implemented  
+**Author:** Parker  
+**Date:** 2026-04-23  
+
+**Context:** Amateur radio satellite operators report satellite health status to AMSAT's community page (https://www.amsat.org/status/). These reports include working/broken transponders, mode changes, and operational issues. The app needs a data layer to fetch and display these reports so users can see if a satellite is currently operational before planning QSO attempts.
+
+**Decision:** Implemented a non-throwing, actor-based service (`AMSATStatusService`) that:
+1. Maps NORAD IDs to AMSAT names using a static dictionary (18 satellites)
+2. Fetches reports via AMSAT API: `https://amsat.org/status/api/v1/sat_info.php?name=<name>&hours=<hours>`
+3. Returns empty array on any error (no throwing)
+4. Generates UUID locally in `AMSATStatusReport.init(from:)` for `Identifiable` compliance
+5. Matches existing stub in `PassDetailViewModel` with signature `fetchReports(forNoradID:hours:)`
+
+**Rationale:**
+- **Static mapping over API lookup:** No AMSAT API endpoint maps NORAD IDs to names. Static dictionary is maintainable and follows `FrequencyDatabase` pattern.
+- **Conservative mapping:** Only included satellites in both FrequencyDatabase and AMSAT's valid names list — avoids false positives.
+- **Actor isolation:** Consistent with `TLEService` pattern.
+- **No throws:** Returns `[]` on failure. ViewModel treats this as "no reports available." Simplifies UI.
+- **UUID in Decodable:** JSON lacks `id` field, but SwiftUI `ForEach` requires `Identifiable`.
+
+**API Details:**
+- Endpoint: `GET https://amsat.org/status/api/v1/sat_info.php`
+- Query params: `name` (AMSAT satellite name), `hours` (default 96, we use 24)
+- Response: JSON array of `{name, reported_time, callsign, report, grid_square}`
+
+**Files Created/Modified:**
+- `SatPass/Models/AMSATStatusReport.swift`
+- `SatPass/Services/AMSATStatusService.swift`
+- `SatPass/Utilities/Constants.swift` (added `Constants.AMSAT`)
+
+**NORAD → AMSAT Mappings (18 satellites):**
+| NORAD ID | AMSAT Name | Satellite |
+|----------|------------|-----------|
+| 25544 | ISS-FM | ISS |
+| 7530 | AO-7[A] | AMSAT-OSCAR 7 |
+| 22825 | AO-27 | AMSAT-OSCAR 27 |
+| 39444 | AO-73 | FUNcube-1 |
+| 43017 | AO-91 | Fox-1B |
+| 27607 | SO-50 | SaudiSat-1C |
+| 24278 | FO-29 | Fuji-OSCAR 29 |
+| 43937 | FO-99 | NEXUS |
+| 44909 | RS-44 | DOSAAF-85 |
+| 43803 | JO-97 | JY1Sat |
+| 42761 | CAS-4A | ZHUHAI-1 01 |
+| 42759 | CAS-4B | ZHUHAI-1 02 |
+| 53106 | IO-117 | GreenCube |
+| 45119 | HO-113 | HuskySat-1 |
+| 44881 | TO-108 | CAS-6 / TIANQIN-1 |
+| 43678 | PO-101[FM] | DIWATA-2 |
+| 43700 | QO-100_NB | Es'hail-2 |
+| 40908 | LilacSat-2 | CAS-3H |
+
+**Testing:** `swift build` clean, `swift test` all 83 tests pass.
+
+**Future Considerations:**
+- Add more satellite mappings as AMSAT database grows
+- Consider caching reports for a few minutes
+- UI implementation complete by Dallas (PassDetailView)
+
 ## Governance
 
 - All meaningful changes require team consensus
