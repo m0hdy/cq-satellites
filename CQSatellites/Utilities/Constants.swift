@@ -71,6 +71,15 @@ enum Constants {
 
         // MARK: - ISS custom icon
 
+        /// Font size for target satellite countdown text (~80% of label font).
+        static let targetCountdownFontSize: CGFloat = 1.8
+        /// Font size for non-target satellite countdown text (~80% of label font).
+        static let nonTargetCountdownFontSize: CGFloat = 1.12
+        /// Vertical offset below label for countdown text (negative = below).
+        static let targetCountdownOffset: Float = -2.5
+        /// Vertical offset below label for non-target countdown text.
+        static let nonTargetCountdownOffset: Float = -1.6
+
         /// NORAD catalog ID for the International Space Station.
         static let issNoradID = "25544"
         /// Width/height of the ISS icon plane in meters.

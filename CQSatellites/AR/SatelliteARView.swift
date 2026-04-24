@@ -91,7 +91,7 @@ struct SatelliteARView: View {
                     station = Constants.Defaults.londonStation
                 }
             }
-            viewModel.startTracking(satellites: store.satellites, observer: station)
+            viewModel.startTracking(satellites: store.satellites, observer: station, allPasses: store.passes)
         }
     }
 }
@@ -153,8 +153,12 @@ private struct ARViewContainer: UIViewRepresentable {
         private var labelParents: [String: Entity] = [:]
         /// Text mesh entity per satellite (for updating text).
         private var textEntities: [String: ModelEntity] = [:]
+        /// Countdown text entity per satellite (separate color from name).
+        private var countdownEntities: [String: ModelEntity] = [:]
         /// Last rendered elevation per satellite (avoids recreating text mesh every frame).
         private var lastRenderedElevations: [String: Int] = [:]
+        /// Last rendered countdown string per satellite (throttles to 1-sec granularity).
+        private var lastRenderedCountdowns: [String: String] = [:]
         /// ISS icon wrapper entities (for billboarding the icon plane).
         private var iconEntities: [String: Entity] = [:]
         /// Cached ISS texture resource (loaded once from bundle).
@@ -166,7 +170,7 @@ private struct ARViewContainer: UIViewRepresentable {
         func updateMarkers(
             targetIDs: Set<String>,
             targetPositions: [(pass: SatellitePass, position: SatellitePosition)],
-            visibleSatellites: [(name: String, noradID: String, position: SatellitePosition)]
+            visibleSatellites: [(name: String, noradID: String, position: SatellitePosition, pass: SatellitePass?)]
         ) {
             guard let anchor = rootAnchor else { return }
 
@@ -181,6 +185,7 @@ private struct ARViewContainer: UIViewRepresentable {
                     name: pass.satelliteName,
                     position: pos,
                     isTarget: true,
+                    pass: pass,
                     anchor: anchor
                 )
             }
@@ -194,6 +199,7 @@ private struct ARViewContainer: UIViewRepresentable {
                         name: sat.name,
                         position: sat.position,
                         isTarget: false,
+                        pass: sat.pass,
                         anchor: anchor
                     )
                 }
@@ -205,7 +211,9 @@ private struct ARViewContainer: UIViewRepresentable {
                 markerParents.removeValue(forKey: id)
                 labelParents.removeValue(forKey: id)
                 textEntities.removeValue(forKey: id)
+                countdownEntities.removeValue(forKey: id)
                 lastRenderedElevations.removeValue(forKey: id)
+                lastRenderedCountdowns.removeValue(forKey: id)
                 iconEntities.removeValue(forKey: id)
             }
 
@@ -219,6 +227,7 @@ private struct ARViewContainer: UIViewRepresentable {
             name: String,
             position: SatellitePosition,
             isTarget: Bool,
+            pass: SatellitePass?,
             anchor: AnchorEntity
         ) {
             let worldPos = position.arDirection * Constants.AR.markerDistance
@@ -248,6 +257,9 @@ private struct ARViewContainer: UIViewRepresentable {
                     textEntity.position.x = -bounds.extents.x / 2
                     lastRenderedElevations[id] = roundedElev
                 }
+
+                // Update countdown every cycle (throttled to 1-sec string changes)
+                updateCountdown(id: id, pass: pass, isTarget: isTarget)
             } else {
                 // Create new marker hierarchy
                 let parent = Entity()
@@ -308,13 +320,113 @@ private struct ARViewContainer: UIViewRepresentable {
                 textEntity.position.x = -bounds.extents.x / 2
 
                 labelParent.addChild(textEntity)
+
+                // Create countdown entity below the name text
+                let countdownOffset: Float = isTarget
+                    ? Constants.AR.targetCountdownOffset
+                    : Constants.AR.nonTargetCountdownOffset
+                let countdownFontSize: CGFloat = isTarget
+                    ? Constants.AR.targetCountdownFontSize
+                    : Constants.AR.nonTargetCountdownFontSize
+                let (countdownText, countdownColor) = Self.countdownInfo(for: pass)
+                let countdownMesh = MeshResource.generateText(
+                    countdownText,
+                    extrusionDepth: 0.001,
+                    font: .monospacedDigitSystemFont(ofSize: countdownFontSize, weight: .bold),
+                    containerFrame: .zero,
+                    alignment: .center,
+                    lineBreakMode: .byTruncatingTail
+                )
+                let countdownEntity = ModelEntity(
+                    mesh: countdownMesh,
+                    materials: [UnlitMaterial(color: countdownColor)]
+                )
+                let countdownBounds = countdownMesh.bounds
+                countdownEntity.position = [
+                    -countdownBounds.extents.x / 2,
+                    countdownOffset,
+                    0
+                ]
+                labelParent.addChild(countdownEntity)
+
                 parent.addChild(labelParent)
                 anchor.addChild(parent)
 
                 markerParents[id] = parent
                 labelParents[id] = labelParent
                 textEntities[id] = textEntity
+                countdownEntities[id] = countdownEntity
                 lastRenderedElevations[id] = roundedElev
+                lastRenderedCountdowns[id] = countdownText
+            }
+        }
+
+        // MARK: - Countdown Helpers
+
+        /// Update the countdown entity for a satellite, throttled to 1-second string changes.
+        @MainActor
+        private func updateCountdown(id: String, pass: SatellitePass?, isTarget: Bool) {
+            guard let countdownEntity = countdownEntities[id] else { return }
+
+            let (text, color) = Self.countdownInfo(for: pass)
+
+            // Only regenerate mesh when the string actually changes
+            guard lastRenderedCountdowns[id] != text else { return }
+            lastRenderedCountdowns[id] = text
+
+            let fontSize: CGFloat = isTarget
+                ? Constants.AR.targetCountdownFontSize
+                : Constants.AR.nonTargetCountdownFontSize
+            let newMesh = MeshResource.generateText(
+                text,
+                extrusionDepth: 0.001,
+                font: .monospacedDigitSystemFont(ofSize: fontSize, weight: .bold),
+                containerFrame: .zero,
+                alignment: .center,
+                lineBreakMode: .byTruncatingTail
+            )
+            countdownEntity.model?.mesh = newMesh
+            countdownEntity.model?.materials = [UnlitMaterial(color: color)]
+
+            let bounds = newMesh.bounds
+            let offset: Float = isTarget
+                ? Constants.AR.targetCountdownOffset
+                : Constants.AR.nonTargetCountdownOffset
+            countdownEntity.position = [
+                -bounds.extents.x / 2,
+                offset,
+                0
+            ]
+        }
+
+        /// Determine countdown text and color for a given pass.
+        private static func countdownInfo(for pass: SatellitePass?) -> (text: String, color: UIColor) {
+            guard let pass else { return ("—", .gray) }
+
+            let now = Date.now
+            if pass.isActive(at: now) {
+                let remaining = pass.timeRemaining(from: now)
+                return (formatCountdown(seconds: remaining, prefix: ""), .systemGreen)
+            } else if pass.isUpcoming(at: now) {
+                let until = pass.timeUntilAOS(from: now)
+                return (formatCountdown(seconds: until, prefix: "-"), .systemRed)
+            } else {
+                // Pass is over
+                return ("—", .gray)
+            }
+        }
+
+        /// Format a time interval as MM:SS or H:MM:SS.
+        private static func formatCountdown(seconds: TimeInterval, prefix: String) -> String {
+            let total = Int(seconds.rounded(.down))
+            guard total >= 0 else { return "—" }
+            let h = total / 3600
+            let m = (total % 3600) / 60
+            let s = total % 60
+            if h > 0 {
+                return "\(prefix)\(h):\(String(format: "%02d", m)):\(String(format: "%02d", s))"
+            } else {
+                return "\(prefix)\(String(format: "%02d", m)):\(String(format: "%02d", s))"
             }
         }
 

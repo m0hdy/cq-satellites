@@ -18,7 +18,7 @@ final class SatelliteARViewModel {
     /// Positions for all target satellites (rendered as green markers).
     private(set) var targetPositions: [(pass: SatellitePass, position: SatellitePosition)] = []
     /// Other visible satellites above the horizon (rendered as blue markers).
-    private(set) var visibleSatellites: [(name: String, noradID: String, position: SatellitePosition)] = []
+    private(set) var visibleSatellites: [(name: String, noradID: String, position: SatellitePosition, pass: SatellitePass?)] = []
 
     // MARK: - State
 
@@ -42,7 +42,7 @@ final class SatelliteARViewModel {
     // MARK: - Tracking
 
     /// Start the 10Hz position update loop.
-    func startTracking(satellites: [Satellite], observer: GroundStation) {
+    func startTracking(satellites: [Satellite], observer: GroundStation, allPasses: [SatellitePass]) {
         guard !isTracking else { return }
         isTracking = true
 
@@ -64,16 +64,41 @@ final class SatelliteARViewModel {
                 }
                 self.targetPositions = positions
 
-                // Other visible satellites (exclude targets)
+                // Other visible satellites (exclude targets), with pass lookup
                 let visible = tracker.visibleSatellites(from: satellites, observer: observer)
                 self.visibleSatellites = visible
                     .filter { $0.position.elevation > Constants.AR.minimumElevation }
                     .filter { !targetIDs.contains($0.satellite.id) }
-                    .map { (name: $0.satellite.name, noradID: $0.satellite.id, position: $0.position) }
+                    .map { vis in
+                        let pass = Self.findRelevantPass(
+                            forNoradID: vis.satellite.id, in: allPasses
+                        )
+                        return (
+                            name: vis.satellite.name,
+                            noradID: vis.satellite.id,
+                            position: vis.position,
+                            pass: pass
+                        )
+                    }
 
                 try? await Task.sleep(nanoseconds: interval)
             }
         }
+    }
+
+    /// Find the most relevant pass for a satellite — active or next upcoming.
+    private static func findRelevantPass(
+        forNoradID noradID: String,
+        in passes: [SatellitePass]
+    ) -> SatellitePass? {
+        let now = Date.now
+        let matching = passes.filter { $0.noradID == noradID }
+        // Prefer an active pass
+        if let active = matching.first(where: { $0.isActive(at: now) }) {
+            return active
+        }
+        // Otherwise next upcoming pass
+        return matching.filter { $0.isUpcoming(at: now) }.min(by: { $0.aos < $1.aos })
     }
 
     /// Cancel the position update loop.
