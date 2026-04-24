@@ -346,7 +346,9 @@ private struct ARViewContainer: UIViewRepresentable {
         @MainActor
         private func loadISSTexture() -> TextureResource? {
             if let cached = issTexture { return cached }
-            guard let url = Bundle.main.url(forResource: "iss_icon", withExtension: "png") else {
+            guard let url = Bundle.module.url(forResource: "iss_icon", withExtension: "png")
+                    ?? Bundle.main.url(forResource: "iss_icon", withExtension: "png") else {
+                print("[AR] iss_icon.png not found in any bundle")
                 return nil
             }
             do {
@@ -354,6 +356,7 @@ private struct ARViewContainer: UIViewRepresentable {
                 issTexture = texture
                 return texture
             } catch {
+                print("[AR] Failed to load ISS texture: \(error)")
                 return nil
             }
         }

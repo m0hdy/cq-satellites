@@ -21,6 +21,7 @@
 		5D92D0153DE3F00526EC4839 /* SatelliteARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55042480B9E111FDE3B44F37 /* SatelliteARView.swift */; };
 		5F1D5B615D04EDC35D516081 /* PassRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E001C152708BE802E41EA20A /* PassRowView.swift */; };
 		6F956BA7A746AB7880016A0D /* PassDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413E783A156F246A90B2B27B /* PassDetailView.swift */; };
+		7231A0099382DE09B01F3504 /* iss_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ABC693F598537A4E72C6E52F /* iss_icon.png */; };
 		74AEF3B79130F9D684BDC678 /* SatellitePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEBE4BAD566BAC3AAE74650 /* SatellitePosition.swift */; };
 		828F4E0962B04473EB83CC67 /* SatelliteFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */; };
 		89B641CBB6A5E5C360AA3F89 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9943E8D738B84F1762AAA99 /* LoadingView.swift */; };
@@ -65,6 +66,7 @@
 		77008E5629A868B679F82942 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
 		77AA059F64B1CD56BA815CF5 /* HeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingService.swift; sourceTree = "<group>"; };
 		8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
+		ABC693F598537A4E72C6E52F /* iss_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iss_icon.png; sourceTree = "<group>"; };
 		B09A25AC867376C8CF299A36 /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
 		B8A89AD189FC93405CA1C81A /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
 		C489F75B8837C86866438F64 /* CQSatellitesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CQSatellitesTests.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				F1B668A7842B91B833ACD26A /* Assets.xcassets */,
+				ABC693F598537A4E72C6E52F /* iss_icon.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				585BD6C6DF934BA7B51E8E6A /* Assets.xcassets in Resources */,
+				7231A0099382DE09B01F3504 /* iss_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
