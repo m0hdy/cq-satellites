@@ -28,6 +28,23 @@ Dallas built the entire **UI layer** for SatPass: pass countdown, azimuth compas
 
 <!-- Append new recent learnings below. -->
 
+### 2026-04-24 — AR Countdown Timer on Satellite Labels
+
+**Problem:** AR labels only showed "NAME ELEV°" — no timing info. Users couldn't tell when a pass starts or how long it lasts without leaving AR.
+
+**Files touched:**
+- `CQSatellites/Utilities/Constants.swift` — Added 4 constants: `targetCountdownFontSize` (1.8), `nonTargetCountdownFontSize` (1.12), `targetCountdownOffset` (-2.5), `nonTargetCountdownOffset` (-1.6).
+- `CQSatellites/AR/SatelliteARViewModel.swift` — Changed `visibleSatellites` tuple to include `pass: SatellitePass?`. Added `findRelevantPass(forNoradID:in:)` static helper (prefers active pass, then next upcoming). `startTracking()` now takes `allPasses: [SatellitePass]` parameter.
+- `CQSatellites/AR/SatelliteARView.swift` — Added `countdownEntities` and `lastRenderedCountdowns` dictionaries to Coordinator. Each satellite label now has a second `ModelEntity` for countdown text, positioned below the name via negative Y offset. Countdown mesh throttled to 1-second string changes. Added `countdownInfo(for:)` and `formatCountdown(seconds:prefix:)` static helpers. Colors: red for pre-AOS, green for active, gray "—" for post-LOS.
+
+**Key patterns:**
+- RealityKit `MeshResource.generateText()` only supports one color per mesh — separate entity required for colored countdown text.
+- Countdown updates every frame but mesh only regenerates when formatted string changes (1-sec granularity), same throttling philosophy as elevation text.
+- Used `monospacedDigitSystemFont` for countdown to prevent digit-width jitter during counting.
+- Pass lookup for visible satellites uses static method to find active or next upcoming pass by noradID.
+
+**Build:** `swift build` clean. **Tests:** 83 pass.
+
 ## Sessions
 
 ## Session: AR Overlay Integration (2026-04-23T16:37:45Z)
@@ -100,4 +117,29 @@ Scribe tasks completed:
 - **Orchestration log:** `.squad/orchestration-log/2026-04-24T07:08:00Z-dallas.md`
 - **Session log:** `.squad/log/2026-04-24T07:08:00Z-ar-marker-improvements.md`
 - **Decision merged:** ADR-019 appended to `.squad/decisions.md` (deduplicated & deleted inbox)
+- **Build status:** clean, 83 tests pass
+
+### 2026-04-24T08:04:00Z — AR Countdown Timer Labels on Satellite Markers
+
+**Context:** AR satellite markers had name + elevation but no timing info. Users need to see when passes start (AOS) and end (LOS) in real time.
+
+**Files touched:**
+- `CQSatellites/AR/SatelliteARViewModel.swift` — `startTracking()` now accepts `allPasses: [SatellitePass]`. Added `findRelevantPass(forNoradID:in:)` static helper (prefers active pass, then next upcoming).
+- `CQSatellites/AR/SatelliteARView.swift` — Added `countdownEntities` and `lastRenderedCountdowns` dictionaries. Each satellite label now has a second `ModelEntity` for countdown text, positioned below the name via negative Y offset. Countdown mesh throttled to 1-second string changes. Added `countdownInfo(for:)` and `formatCountdown(seconds:prefix:)` static helpers. Colors: red for pre-AOS (`"T— mm:ss"`), green for active (`"↓ mm:ss"`), gray for post-LOS (`"— —:—"`).
+- `CQSatellites/Utilities/Constants.swift` — Added 4 countdown sizing constants: `targetCountdownFontSize` (1.8), `nonTargetCountdownFontSize` (1.12), `targetCountdownOffset` (-2.5), `nonTargetCountdownOffset` (-1.6).
+
+**Key patterns:**
+- Dual-entity label system: RealityKit `MeshResource.generateText()` only supports one color, so separate entity required for colored countdown.
+- Countdown updates every frame but mesh only regenerates when formatted string changes (1-sec granularity).
+- Used `monospacedDigitSystemFont` for countdown to prevent digit-width jitter during counting.
+- Pass lookup for visible satellites uses static method to find active or next upcoming pass by noradID.
+
+**Build:** `swift build` clean. **Tests:** 83 pass.
+
+### 2026-04-24T08:04:00Z — Session Logged & Decision Merged
+
+Scribe tasks completed:
+- **Orchestration log:** `.squad/orchestration-log/2026-04-24T08:04:00Z-dallas.md`
+- **Session log:** `.squad/log/2026-04-24T08:04:00Z-ar-countdown-labels.md`
+- **Decision merged:** ADR-020 appended to `.squad/decisions.md` (no inbox files)
 - **Build status:** clean, 83 tests pass

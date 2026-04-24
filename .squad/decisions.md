@@ -349,3 +349,34 @@ enum LoadingPhase: Sendable, Equatable {
 - Any future AR marker work should use `Constants.AR` sizes, not hardcoded values.
 - ISS icon PNG lives at `CQSatellites/Resources/iss_icon.png` — to update, replace the file.
 - Package.swift now has `.process("Resources")` for SPM resource bundling.
+
+### ADR-020: AR Satellite Countdown Timers via Dual-Entity Labels
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-24  
+
+**Context:** AR labels only showed satellite name + elevation. Users couldn't see when a pass starts (AOS) or ends (LOS) without leaving AR. Real-time countdown timers are essential for amateur radio operators planning QSO windows.
+
+**Decision:** Each satellite gets two text mesh entities:
+1. **Primary label** (name + elevation, color = target green / non-target blue)
+2. **Secondary label** (countdown timer, color = red pre-AOS / green in-pass / gray post-LOS)
+
+Positioned vertically via Y offset (countdown below name). Pass data threaded through `SatelliteARViewModel.startTracking(allPasses:)`.
+
+**Implementation:**
+- `SatelliteARViewModel.findRelevantPass(forNoradID:in:)` — static helper that selects active pass (if in-window) or next upcoming pass by NORAD ID
+- Countdown formats: `"T— mm:ss"` (red, pre-AOS), `"↓ mm:ss"` (green, in-pass), `"— —:—"` (gray, post-LOS)
+- Mesh throttling: regenerate countdown text mesh only when formatted string changes (1-second granularity), not every frame — same pattern as elevation text
+- `monospacedDigitSystemFont` to prevent digit-width jitter during countdown
+- Four new `Constants.AR` entries: `targetCountdownFontSize`, `nonTargetCountdownFontSize`, `targetCountdownOffset`, `nonTargetCountdownOffset`
+
+**Rationale:**
+- **RealityKit limitation:** `MeshResource.generateText()` only supports one color per mesh. Dual entities work around this cleanly without complex material layering.
+- **Throttling:** Mesh regeneration is the performance bottleneck, not frame updates. Only regenerate when display string changes (once per second) not ten times per second.
+- **Pass lookup:** Static helper avoids circular dependency between ViewModel and View. Caller owns the all-passes array.
+
+**Impact:**
+- AR labels now carry real-time timing info — users see exact countdown to AOS/LOS without leaving AR
+- `SatelliteARViewModel.startTracking(allPasses:)` API changed — callers must pass full pass array
+- Any future AR countdown work should use the dual-entity + throttling pattern documented here
