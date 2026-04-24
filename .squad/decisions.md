@@ -328,3 +328,24 @@ enum LoadingPhase: Sendable, Equatable {
 - **PassDetailView:** No more AR toolbar button — any code referencing `showARView` is gone
 - **PassListView:** Now uses `NavigationPath` for path tracking
 - **Constants:** New `Constants.AR.maxListTargets = 5`
+
+### ADR-019: AR Marker Sizing Constants & ISS Custom Icon
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-24  
+
+**Context:** AR satellite markers were unreadable at 50m distance. Hardcoded sizes scattered through SatelliteARView.swift. ISS (the most popular satellite) had no special visual treatment.
+
+**Decision:**
+1. All AR marker sizes (sphere radii, label fonts, label offsets) are now named constants in `Constants.AR`.
+2. ISS (NORAD 25544) renders as a textured plane with its actual silhouette instead of a generic sphere.
+3. ISS icon is white-on-transparent PNG, tinted green/blue via `UnlitMaterial` color multiplication.
+4. Falls back to regular sphere if texture load fails.
+
+**Size changes:** Target sphere 0.3→0.9, non-target 0.15→0.5. Labels ~3× larger. Offsets increased proportionally.
+
+**Impact:**
+- Any future AR marker work should use `Constants.AR` sizes, not hardcoded values.
+- ISS icon PNG lives at `CQSatellites/Resources/iss_icon.png` — to update, replace the file.
+- Package.swift now has `.process("Resources")` for SPM resource bundling.

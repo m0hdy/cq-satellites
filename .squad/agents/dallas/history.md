@@ -284,3 +284,13 @@ Scribe tasks completed:
 **ISS icon approach:** `MeshResource.generatePlane(width:height:)` with `UnlitMaterial(tint × texture)` and `opacityThreshold: 0.05`. Icon wrapper entity billboarded alongside labels. Falls back to regular sphere if texture fails to load.
 
 **Build:** `swift build` clean.
+
+**Test status:** 83 tests pass.
+
+### 2026-04-24T07:08:00Z — Session Logged & Decision Merged
+
+Scribe tasks completed:
+- **Orchestration log:** `.squad/orchestration-log/2026-04-24T07:08:00Z-dallas.md`
+- **Session log:** `.squad/log/2026-04-24T07:08:00Z-ar-marker-improvements.md`
+- **Decision merged:** ADR-019 appended to `.squad/decisions.md` (deduplicated & deleted inbox)
+- **Build status:** clean, 83 tests pass
