@@ -61,13 +61,13 @@ enum Constants {
         // MARK: - Label sizes
 
         /// Font size for target satellite labels.
-        static let targetLabelFontSize: CGFloat = 0.45
+        static let targetLabelFontSize: CGFloat = 2.25
         /// Font size for non-target satellite labels.
-        static let nonTargetLabelFontSize: CGFloat = 0.28
+        static let nonTargetLabelFontSize: CGFloat = 1.4
         /// Label vertical offset above target marker center.
-        static let targetLabelOffset: Float = 1.5
+        static let targetLabelOffset: Float = 3.5
         /// Label vertical offset above non-target marker center.
-        static let nonTargetLabelOffset: Float = 1.0
+        static let nonTargetLabelOffset: Float = 2.5
 
         // MARK: - ISS custom icon
 
