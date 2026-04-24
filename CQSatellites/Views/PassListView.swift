@@ -50,7 +50,7 @@ struct PassListView: View {
                     }
                 }
             }
-            .navigationTitle("SatPass")
+            .navigationTitle("CQ Satellites")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

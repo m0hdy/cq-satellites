@@ -34,7 +34,7 @@ struct SatelliteARView: View {
 
             // MARK: - Overlay UI
             VStack {
-                // Top bar — visible satellite count
+                // Top bar - visible satellite count
                 HStack {
                     Spacer()
 
@@ -100,6 +100,7 @@ struct SatelliteARView: View {
 
 /// Wraps an `ARView` with world tracking aligned to gravity and magnetic heading.
 /// Manages RealityKit entities that represent satellite markers.
+@MainActor
 private struct ARViewContainer: UIViewRepresentable {
     let viewModel: SatelliteARViewModel
 
@@ -123,13 +124,24 @@ private struct ARViewContainer: UIViewRepresentable {
         if let error = context.coordinator.sessionError {
             viewModel.arSessionError = error
         }
-        context.coordinator.updateMarkers(viewModel: viewModel)
+
+        // Snapshot main-actor state before entering coordinator logic.
+        let targetIDs = viewModel.targetNoradIDs
+        let targetPositions = viewModel.targetPositions
+        let visibleSatellites = viewModel.visibleSatellites
+
+        context.coordinator.updateMarkers(
+            targetIDs: targetIDs,
+            targetPositions: targetPositions,
+            visibleSatellites: visibleSatellites
+        )
     }
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     // MARK: - Coordinator
 
+    @MainActor
     final class Coordinator: NSObject, ARSessionDelegate {
         var rootAnchor: AnchorEntity?
         var arView: ARView?
@@ -146,14 +158,18 @@ private struct ARViewContainer: UIViewRepresentable {
 
         // MARK: - Entity Management
 
-        func updateMarkers(viewModel: SatelliteARViewModel) {
+        @MainActor
+        func updateMarkers(
+            targetIDs: Set<String>,
+            targetPositions: [(pass: SatellitePass, position: SatellitePosition)],
+            visibleSatellites: [(name: String, noradID: String, position: SatellitePosition)]
+        ) {
             guard let anchor = rootAnchor else { return }
 
             var activeIDs = Set<String>()
-            let targetIDs = viewModel.targetNoradIDs
 
             // All target satellites (green markers)
-            for (pass, pos) in viewModel.targetPositions {
+            for (pass, pos) in targetPositions {
                 let id = pass.noradID
                 activeIDs.insert(id)
                 updateOrCreate(
@@ -166,7 +182,7 @@ private struct ARViewContainer: UIViewRepresentable {
             }
 
             // Other visible satellites (blue markers)
-            for sat in viewModel.visibleSatellites {
+            for sat in visibleSatellites {
                 activeIDs.insert(sat.noradID)
                 if !targetIDs.contains(sat.noradID) {
                     updateOrCreate(
@@ -192,6 +208,7 @@ private struct ARViewContainer: UIViewRepresentable {
             billboardAllLabels()
         }
 
+        @MainActor
         private func updateOrCreate(
             id: String,
             name: String,
@@ -211,18 +228,17 @@ private struct ARViewContainer: UIViewRepresentable {
                    let textEntity = textEntities[id] {
                     let labelText = "\(name) \(roundedElev)°"
                     let fontSize: CGFloat = isTarget ? 0.15 : 0.1
-                    if let newMesh = try? MeshResource.generateText(
+                    let newMesh = MeshResource.generateText(
                         labelText,
                         extrusionDepth: 0.001,
                         font: .systemFont(ofSize: fontSize),
                         containerFrame: .zero,
                         alignment: .center,
                         lineBreakMode: .byTruncatingTail
-                    ) {
-                        textEntity.model?.mesh = newMesh
-                        let bounds = newMesh.bounds
-                        textEntity.position.x = -bounds.extents.x / 2
-                    }
+                    )
+                    textEntity.model?.mesh = newMesh
+                    let bounds = newMesh.bounds
+                    textEntity.position.x = -bounds.extents.x / 2
                     lastRenderedElevations[id] = roundedElev
                 }
             } else {
@@ -273,6 +289,7 @@ private struct ARViewContainer: UIViewRepresentable {
             }
         }
 
+        @MainActor
         private func billboardAllLabels() {
             guard let arView,
                   let cameraTransform = arView.session.currentFrame?.camera.transform else { return }
@@ -284,23 +301,29 @@ private struct ARViewContainer: UIViewRepresentable {
             for (_, labelParent) in labelParents {
                 let worldPos = labelParent.position(relativeTo: nil)
                 labelParent.look(at: cameraPos, from: worldPos, relativeTo: nil)
-                // Flip 180° so text faces the camera (generateText faces +Z, look faces -Z)
+                // Flip 180 degrees so text faces the camera (generateText faces +Z, look faces -Z)
                 labelParent.orientation *= simd_quatf(angle: .pi, axis: [0, 1, 0])
             }
         }
 
         // MARK: - ARSessionDelegate
 
-        func session(_ session: ARSession, didFailWithError error: Error) {
-            sessionError = error.localizedDescription
+        nonisolated func session(_ session: ARSession, didFailWithError error: Error) {
+            Task { @MainActor [weak self] in
+                self?.sessionError = error.localizedDescription
+            }
         }
 
-        func sessionWasInterrupted(_ session: ARSession) {
-            sessionError = "AR session interrupted"
+        nonisolated func sessionWasInterrupted(_ session: ARSession) {
+            Task { @MainActor [weak self] in
+                self?.sessionError = "AR session interrupted"
+            }
         }
 
-        func sessionInterruptionEnded(_ session: ARSession) {
-            sessionError = nil
+        nonisolated func sessionInterruptionEnded(_ session: ARSession) {
+            Task { @MainActor [weak self] in
+                self?.sessionError = nil
+            }
         }
     }
 }
@@ -312,7 +335,7 @@ private struct ARViewContainer: UIViewRepresentable {
 private struct TargetInfoPanel: View {
     let targets: [(pass: SatellitePass, position: SatellitePosition)]
 
-    /// The primary target — highest elevation satellite for best visibility.
+    /// The primary target - highest elevation satellite for best visibility.
     private var primary: (pass: SatellitePass, position: SatellitePosition)? {
         targets.max(by: { $0.position.elevation < $1.position.elevation })
     }
@@ -398,7 +421,7 @@ private struct TargetInfoPanel: View {
 }
 
 #else
-// macOS fallback — ARKit is iOS-only
+// macOS fallback - ARKit is iOS-only
 import SwiftUI
 
 struct SatelliteARView: View {
