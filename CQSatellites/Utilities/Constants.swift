@@ -50,6 +50,31 @@ enum Constants {
         static let minimumElevation: Double = 0.0
         /// Maximum number of target satellites shown when launching AR from the list view.
         static let maxListTargets = 5
+
+        // MARK: - Marker sizes
+
+        /// Sphere radius for target (green) satellites.
+        static let targetSphereRadius: Float = 0.9
+        /// Sphere radius for non-target (blue) satellites.
+        static let nonTargetSphereRadius: Float = 0.5
+
+        // MARK: - Label sizes
+
+        /// Font size for target satellite labels.
+        static let targetLabelFontSize: CGFloat = 0.45
+        /// Font size for non-target satellite labels.
+        static let nonTargetLabelFontSize: CGFloat = 0.28
+        /// Label vertical offset above target marker center.
+        static let targetLabelOffset: Float = 1.5
+        /// Label vertical offset above non-target marker center.
+        static let nonTargetLabelOffset: Float = 1.0
+
+        // MARK: - ISS custom icon
+
+        /// NORAD catalog ID for the International Space Station.
+        static let issNoradID = "25544"
+        /// Width/height of the ISS icon plane in meters.
+        static let issIconPlaneSize: Float = 2.0
     }
 
     enum AMSAT {

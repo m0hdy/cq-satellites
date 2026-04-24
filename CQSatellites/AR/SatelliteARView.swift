@@ -155,6 +155,10 @@ private struct ARViewContainer: UIViewRepresentable {
         private var textEntities: [String: ModelEntity] = [:]
         /// Last rendered elevation per satellite (avoids recreating text mesh every frame).
         private var lastRenderedElevations: [String: Int] = [:]
+        /// ISS icon wrapper entities (for billboarding the icon plane).
+        private var iconEntities: [String: Entity] = [:]
+        /// Cached ISS texture resource (loaded once from bundle).
+        private var issTexture: TextureResource?
 
         // MARK: - Entity Management
 
@@ -202,6 +206,7 @@ private struct ARViewContainer: UIViewRepresentable {
                 labelParents.removeValue(forKey: id)
                 textEntities.removeValue(forKey: id)
                 lastRenderedElevations.removeValue(forKey: id)
+                iconEntities.removeValue(forKey: id)
             }
 
             // Billboard all labels toward camera
@@ -227,7 +232,9 @@ private struct ARViewContainer: UIViewRepresentable {
                 if lastRenderedElevations[id] != roundedElev,
                    let textEntity = textEntities[id] {
                     let labelText = "\(name) \(roundedElev)°"
-                    let fontSize: CGFloat = isTarget ? 0.15 : 0.1
+                    let fontSize: CGFloat = isTarget
+                        ? Constants.AR.targetLabelFontSize
+                        : Constants.AR.nonTargetLabelFontSize
                     let newMesh = MeshResource.generateText(
                         labelText,
                         extrusionDepth: 0.001,
@@ -246,22 +253,44 @@ private struct ARViewContainer: UIViewRepresentable {
                 let parent = Entity()
                 parent.position = SIMD3<Float>(worldPos.x, worldPos.y, worldPos.z)
 
-                // Sphere
-                let radius: Float = isTarget ? 0.3 : 0.15
                 let color: UIColor = isTarget ? .systemGreen : .systemBlue
-                let sphere = ModelEntity(
-                    mesh: .generateSphere(radius: radius),
-                    materials: [SimpleMaterial(color: color, isMetallic: false)]
-                )
-                parent.addChild(sphere)
 
-                // Label parent (offset above sphere, billboarded independently)
-                let labelOffset: Float = isTarget ? 0.8 : 0.5
+                // ISS gets a custom icon plane; all others get spheres
+                if id == Constants.AR.issNoradID, let texture = loadISSTexture() {
+                    let planeSize = Constants.AR.issIconPlaneSize
+                    var material = UnlitMaterial()
+                    material.color = .init(tint: color, texture: .init(texture))
+                    material.opacityThreshold = 0.05
+                    let iconWrapper = Entity()
+                    let plane = ModelEntity(
+                        mesh: .generatePlane(width: planeSize, height: planeSize),
+                        materials: [material]
+                    )
+                    iconWrapper.addChild(plane)
+                    parent.addChild(iconWrapper)
+                    iconEntities[id] = iconWrapper
+                } else {
+                    let radius: Float = isTarget
+                        ? Constants.AR.targetSphereRadius
+                        : Constants.AR.nonTargetSphereRadius
+                    let sphere = ModelEntity(
+                        mesh: .generateSphere(radius: radius),
+                        materials: [SimpleMaterial(color: color, isMetallic: false)]
+                    )
+                    parent.addChild(sphere)
+                }
+
+                // Label parent (offset above marker, billboarded independently)
+                let labelOffset: Float = isTarget
+                    ? Constants.AR.targetLabelOffset
+                    : Constants.AR.nonTargetLabelOffset
                 let labelParent = Entity()
                 labelParent.position = [0, labelOffset, 0]
 
                 let labelText = "\(name) \(roundedElev)°"
-                let fontSize: CGFloat = isTarget ? 0.15 : 0.1
+                let fontSize: CGFloat = isTarget
+                    ? Constants.AR.targetLabelFontSize
+                    : Constants.AR.nonTargetLabelFontSize
                 let textMesh = MeshResource.generateText(
                     labelText,
                     extrusionDepth: 0.001,
@@ -303,6 +332,29 @@ private struct ARViewContainer: UIViewRepresentable {
                 labelParent.look(at: cameraPos, from: worldPos, relativeTo: nil)
                 // Flip 180 degrees so text faces the camera (generateText faces +Z, look faces -Z)
                 labelParent.orientation *= simd_quatf(angle: .pi, axis: [0, 1, 0])
+            }
+            // Billboard ISS icon planes to always face the camera
+            for (_, icon) in iconEntities {
+                let worldPos = icon.position(relativeTo: nil)
+                icon.look(at: cameraPos, from: worldPos, relativeTo: nil)
+                icon.orientation *= simd_quatf(angle: .pi, axis: [0, 1, 0])
+            }
+        }
+
+        // MARK: - ISS Texture Loading
+
+        @MainActor
+        private func loadISSTexture() -> TextureResource? {
+            if let cached = issTexture { return cached }
+            guard let url = Bundle.main.url(forResource: "iss_icon", withExtension: "png") else {
+                return nil
+            }
+            do {
+                let texture = try TextureResource.load(contentsOf: url)
+                issTexture = texture
+                return texture
+            } catch {
+                return nil
             }
         }
 

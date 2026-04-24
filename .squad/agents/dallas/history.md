@@ -260,3 +260,27 @@ Scribe tasks completed:
 - **Session log:** `.squad/log/2026-04-23T16:49:19Z-ar-landscape-trigger.md`
 - **Decision merged:** ADR-018 appended to `.squad/decisions.md` (deduplicated inbox)
 - **Build status:** 9f1fea3 clean, 83 tests pass
+
+### 2026-04-24 — AR Marker Visibility Overhaul + ISS Custom Icon
+
+**Problem:** AR satellite markers (spheres + labels) were completely unreadable — too small at 50m distance. ISS had no special treatment.
+
+**Files touched:**
+- `CQSatellites/Utilities/Constants.swift` — Added 8 new `Constants.AR` entries: `targetSphereRadius` (0.9), `nonTargetSphereRadius` (0.5), `targetLabelFontSize` (0.45), `nonTargetLabelFontSize` (0.28), `targetLabelOffset` (1.5), `nonTargetLabelOffset` (1.0), `issNoradID` ("25544"), `issIconPlaneSize` (2.0)
+- `CQSatellites/AR/SatelliteARView.swift` — Replaced hardcoded sizes with constants. Added ISS detection (NORAD 25544) to render a textured `generatePlane` instead of `generateSphere`. Added `iconEntities` dictionary for ISS icon billboarding. Added `loadISSTexture()` for lazy-cached `TextureResource` loading from bundle. ISS icon uses `UnlitMaterial` with tint×texture for green/blue coloring, `opacityThreshold` for alpha cutout.
+- `CQSatellites/Resources/iss_icon.png` — White-on-transparent 512×512 ISS silhouette (converted from SVG via sips + PIL).
+- `Package.swift` — Added `.process("Resources")` so SPM picks up the PNG and xcassets.
+
+**Size changes (old → new):**
+| Property | Old | New |
+|---|---|---|
+| Target sphere radius | 0.3 | 0.9 |
+| Non-target sphere radius | 0.15 | 0.5 |
+| Target label font | 0.15 | 0.45 |
+| Non-target label font | 0.1 | 0.28 |
+| Target label offset | 0.8 | 1.5 |
+| Non-target label offset | 0.5 | 1.0 |
+
+**ISS icon approach:** `MeshResource.generatePlane(width:height:)` with `UnlitMaterial(tint × texture)` and `opacityThreshold: 0.05`. Icon wrapper entity billboarded alongside labels. Falls back to regular sphere if texture fails to load.
+
+**Build:** `swift build` clean.

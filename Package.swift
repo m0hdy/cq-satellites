@@ -15,7 +15,10 @@ let package = Package(
         .executableTarget(
             name: "CQSatellites",
             dependencies: ["SatelliteKit"],
-            path: "CQSatellites"
+            path: "CQSatellites",
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
             name: "CQSatellitesTests",
