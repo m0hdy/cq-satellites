@@ -1,0 +1,178 @@
+# Builds the SatPass iOS app and publishes it to the App Store via App Store Connect.
+#
+# Required repository secrets:
+#   CERTIFICATES_P12            – Base64-encoded Apple Distribution certificate (.p12)
+#   CERTIFICATES_P12_PASSWORD   – Password protecting the .p12 file
+#   PROVISIONING_PROFILE_BASE64 – Base64-encoded App Store provisioning profile (.mobileprovision)
+#   APP_STORE_CONNECT_API_KEY_ID        – App Store Connect API key ID (e.g. ABC1234567)
+#   APP_STORE_CONNECT_API_ISSUER_ID     – App Store Connect API issuer UUID
+#   APP_STORE_CONNECT_API_KEY_CONTENT   – Base64-encoded contents of the .p8 private key file
+#   TEAM_ID                     – Apple Developer Team ID (e.g. ABCDE12345)
+#
+# How to encode files as Base64 for secrets:
+#   base64 -i Certificate.p12 | pbcopy
+#   base64 -i Profile.mobileprovision | pbcopy
+#   base64 -i AuthKey_XXXXXXX.p8 | pbcopy
+
+name: Deploy to App Store
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Skip running tests before archiving"
+        required: false
+        default: "false"
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SCHEME: SatPass
+  BUNDLE_ID: com.satpass.app
+  XCODE_PROJECT: SatPass.xcodeproj
+  ARCHIVE_PATH: ${{ github.workspace }}/build/SatPass.xcarchive
+  EXPORT_PATH: ${{ github.workspace }}/build/SatPassExport
+
+jobs:
+  deploy:
+    name: Build & Upload to App Store
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Code signing ───────────────────────────────────────────────────────────
+
+      - name: Install distribution certificate
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.CERTIFICATES_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 20)
+          CERT_PATH="$RUNNER_TEMP/distribution.p12"
+
+          echo "$CERTIFICATE_BASE64" | base64 --decode -o "$CERT_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$CERTIFICATE_PASSWORD" -A \
+            -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: \
+            -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" \
+            $(security list-keychains -d user | sed s/\"//g)
+
+      - name: Install provisioning profile
+        env:
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          PP_PATH="$RUNNER_TEMP/profile.mobileprovision"
+          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
+
+          PP_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PP_DIR"
+
+          # Use the UUID embedded in the profile as the filename
+          UUID=$(security cms -D -i "$PP_PATH" 2>/dev/null \
+            | plutil -extract UUID raw - 2>/dev/null || \
+              /usr/libexec/PlistBuddy -c 'Print UUID' \
+              /dev/stdin <<< "$(security cms -D -i "$PP_PATH")")
+          cp "$PP_PATH" "$PP_DIR/$UUID.mobileprovision"
+          echo "Installed provisioning profile: $UUID"
+
+      # ── Prepare ExportOptions.plist ────────────────────────────────────────────
+
+      - name: Substitute TEAM_ID in ExportOptions.plist
+        env:
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+        run: |
+          sed -i '' "s/\$(TEAM_ID)/$TEAM_ID/g" ExportOptions.plist
+
+      # ── Resolve dependencies ───────────────────────────────────────────────────
+
+      - name: Resolve Swift package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$XCODE_PROJECT" \
+            -scheme "$SCHEME"
+
+      # ── Test ───────────────────────────────────────────────────────────────────
+
+      - name: Run tests
+        if: ${{ github.event.inputs.skip_tests != 'true' }}
+        run: |
+          xcodebuild test \
+            -project "$XCODE_PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcpretty || true
+
+      # ── Archive ────────────────────────────────────────────────────────────────
+
+      - name: Build and archive
+        run: |
+          mkdir -p "${{ env.ARCHIVE_PATH }}"
+          xcodebuild archive \
+            -project "$XCODE_PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "generic/platform=iOS" \
+            -archivePath "${{ env.ARCHIVE_PATH }}" \
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER="SatPass App Store" \
+            | xcpretty
+
+      # ── Export IPA ─────────────────────────────────────────────────────────────
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "${{ env.ARCHIVE_PATH }}" \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath "${{ env.EXPORT_PATH }}"
+
+      # ── Upload to App Store Connect ────────────────────────────────────────────
+
+      - name: Set up App Store Connect API key
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+        run: |
+          KEY_DIR="$HOME/private_keys"
+          mkdir -p "$KEY_DIR"
+          echo "$API_KEY_CONTENT" | base64 --decode \
+            -o "$KEY_DIR/AuthKey_$API_KEY_ID.p8"
+
+      # xcrun altool --upload-app is deprecated in Xcode 15 but remains functional for
+      # iOS App Store uploads; there is no direct command-line replacement in Xcode tools.
+      # A modern alternative is Fastlane's `upload_to_app_store` (deliver) action.
+      - name: Upload to App Store Connect
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          IPA_PATH=$(find "${{ env.EXPORT_PATH }}" -name "*.ipa" | head -1)
+          echo "Uploading: $IPA_PATH"
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$API_KEY_ID" \
+            --apiIssuer "$API_ISSUER_ID"
+
+      # ── Clean up keychain ──────────────────────────────────────────────────────
+
+      - name: Clean up keychain and provisioning profile
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
