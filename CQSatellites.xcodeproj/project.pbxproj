@@ -52,7 +52,7 @@
 
 /* Begin PBXFileReference section */
 		173DEB576C41E6B9D901ABF8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CQSatellites.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CQSatellites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteTracker.swift; sourceTree = "<group>"; };
 		23D2ADC952CABC89DEA0CAAF /* GroundStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundStation.swift; sourceTree = "<group>"; };
 		3FA483CAACA6EA95B33C79E4 /* CQSatellitesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CQSatellitesApp.swift; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		F238CFF3FD061B2DFCBD8000 /* AMSATStatusReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMSATStatusReport.swift; sourceTree = "<group>"; };
 		F5E51647FFBEDB477E9E53CB /* TLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLEService.swift; sourceTree = "<group>"; };
 		FD711A66A9113DB0BB46A7F3 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		FF6CA2E23586635DAC90AA27 /* CQSatellitesTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CQSatellitesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF6CA2E23586635DAC90AA27 /* CQSatellitesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CQSatellitesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,10 +279,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					396F4F45DD0D3B7210516988 = {
-						DevelopmentTeam = 67HWRVWPWT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -430,6 +429,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -450,6 +450,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -494,6 +495,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -507,6 +509,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -520,15 +523,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 67HWRVWPWT;
+				DEVELOPMENT_TEAM = 4AF64C8LK4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -556,15 +565,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 67HWRVWPWT;
+				DEVELOPMENT_TEAM = 4AF64C8LK4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
