@@ -164,7 +164,6 @@ jobs:
 
       - name: Build and archive
         run: |
-          set -o pipefail
           xcodebuild archive \
             -project "$XCODE_PROJECT" \
             -scheme "$SCHEME" \
@@ -176,8 +175,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="CQSatellites App Store" \
             DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
             MARKETING_VERSION="${{ steps.version.outputs.marketing_version }}" \
-            CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}" \
-            | xcpretty
+            CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}"
 
       # ── Export IPA ─────────────────────────────────────────────────────────────
 
