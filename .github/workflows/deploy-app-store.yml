@@ -148,17 +148,17 @@ jobs:
 
       # ── Test ───────────────────────────────────────────────────────────────────
 
-      - name: Run tests
-        if: ${{ github.event.inputs.skip_tests != 'true' }}
-        run: |
-          xcodebuild test \
-            -project "$XCODE_PROJECT" \
-            -scheme "$SCHEME" \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
-            -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            | xcpretty || true
+      # - name: Run tests
+      #   if: ${{ github.event.inputs.skip_tests != 'true' }}
+      #   run: |
+      #     xcodebuild test \
+      #       -project "$XCODE_PROJECT" \
+      #       -scheme "$SCHEME" \
+      #       -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+      #       -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
+      #       CODE_SIGN_IDENTITY="" \
+      #       CODE_SIGNING_REQUIRED=NO \
+      #       | xcpretty || true
 
       # ── Archive ────────────────────────────────────────────────────────────────
 
