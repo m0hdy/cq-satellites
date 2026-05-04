@@ -12,8 +12,8 @@
     <string>manual</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>com.satpass.app</key>
-        <string>SatPass App Store</string>
+        <key>com.digimangos.cqsatellites</key>
+        <string>CQSatellites App Store</string>
     </dict>
 </dict>
 </plist>

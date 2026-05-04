@@ -1,4 +1,4 @@
-# Builds the SatPass iOS app and publishes it to the App Store via App Store Connect.
+# Builds the CQSatellites iOS app and publishes it to the App Store via App Store Connect.
 #
 # Versioning strategy:
 #   - Trigger a release by pushing a semver git tag (e.g. git tag v1.2.3 && git push --tags).
@@ -45,11 +45,11 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SCHEME: SatPass
-  BUNDLE_ID: com.satpass.app
-  XCODE_PROJECT: SatPass.xcodeproj
-  ARCHIVE_PATH: ${{ github.workspace }}/build/SatPass.xcarchive
-  EXPORT_PATH: ${{ github.workspace }}/build/SatPassExport
+  SCHEME: CQSatellites
+  BUNDLE_ID: com.digimangos.cqsatellites
+  XCODE_PROJECT: CQSatellites.xcodeproj
+  ARCHIVE_PATH: ${{ github.workspace }}/build/CQSatellites.xcarchive
+  EXPORT_PATH: ${{ github.workspace }}/build/CQSatellitesExport
 
 jobs:
   deploy:
@@ -171,7 +171,7 @@ jobs:
             -destination "generic/platform=iOS" \
             -archivePath "${{ env.ARCHIVE_PATH }}" \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="SatPass App Store" \
+            PROVISIONING_PROFILE_SPECIFIER="CQSatellites App Store" \
             MARKETING_VERSION="${{ steps.version.outputs.marketing_version }}" \
             CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}" \
             | xcpretty
@@ -230,7 +230,7 @@ jobs:
           fi
 
           gh release create "$TAG" \
-            --title "SatPass $MARKETING (build $BUILD)" \
+            --title "CQSatellites $MARKETING (build $BUILD)" \
             --generate-notes \
             "${{ env.EXPORT_PATH }}"/*.ipa
 
