@@ -54,7 +54,7 @@ env:
 jobs:
   deploy:
     name: Build & Upload to App Store
-    runs-on: macos-26
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
