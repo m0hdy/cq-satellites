@@ -578,7 +578,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
-				PROVISIONING_PROFILE_SPECIFIER = "CQ Satellites";
+				PROVISIONING_PROFILE_SPECIFIER = "CQ Satellites v1";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CQ Satellites v1";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

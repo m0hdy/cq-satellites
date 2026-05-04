@@ -13,7 +13,7 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.digimangos.cqsatellites</key>
-        <string>CQ Satellites</string>
+        <string>CQ Satellites v1</string>
     </dict>
 </dict>
 </plist>
