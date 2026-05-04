@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SatPass",
+    name: "CQSatellites",
     platforms: [
         .iOS(.v17),
         .macOS(.v14)
@@ -13,14 +13,17 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "SatPass",
+            name: "CQSatellites",
             dependencies: ["SatelliteKit"],
-            path: "SatPass"
+            path: "CQSatellites",
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
-            name: "SatPassTests",
-            dependencies: ["SatPass"],
-            path: "SatPassTests"
+            name: "CQSatellitesTests",
+            dependencies: ["CQSatellites"],
+            path: "CQSatellitesTests"
         ),
     ]
 )

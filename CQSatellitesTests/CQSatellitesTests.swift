@@ -1,7 +1,7 @@
 import Testing
 import Foundation
 import CoreLocation
-@testable import SatPass
+@testable import CQSatellites
 
 // MARK: - Test Fixtures
 

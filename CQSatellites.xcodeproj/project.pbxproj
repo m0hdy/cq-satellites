@@ -1,0 +1,639 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		027FDF2130FD95C71D58BB14 /* SatelliteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A36D35FF7F36CCD64E1A4F /* SatelliteStore.swift */; };
+		0C1A28976221881C27A76164 /* FrequencyDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF66A2C4CAC78494D624ACC0 /* FrequencyDatabase.swift */; };
+		1D26CE97AA4255BC8F5B00FC /* CQSatellitesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA483CAACA6EA95B33C79E4 /* CQSatellitesApp.swift */; };
+		28E98D0A5184B1FEA9C34AF5 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE2FE4A1A1048AE71C668DE /* Formatters.swift */; };
+		344CA004F4F1323C496D1F92 /* SatellitePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A89AD189FC93405CA1C81A /* SatellitePass.swift */; };
+		377311F976785BA02A76ECFD /* PassListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADBE36DAC32B7C356321EA7 /* PassListView.swift */; };
+		42DA0AE6342115C1673A0870 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173DEB576C41E6B9D901ABF8 /* Constants.swift */; };
+		4E363B1D0C7D535CBACC79EE /* GroundStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2ADC952CABC89DEA0CAAF /* GroundStation.swift */; };
+		51F24C6326DF58C681427C15 /* PassListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09A25AC867376C8CF299A36 /* PassListViewModel.swift */; };
+		585BD6C6DF934BA7B51E8E6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1B668A7842B91B833ACD26A /* Assets.xcassets */; };
+		59662298B444FB85EAE28BF1 /* AMSATStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D81F0E2B5320B75AE5ABC2E /* AMSATStatusService.swift */; };
+		5D92D0153DE3F00526EC4839 /* SatelliteARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55042480B9E111FDE3B44F37 /* SatelliteARView.swift */; };
+		5F1D5B615D04EDC35D516081 /* PassRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E001C152708BE802E41EA20A /* PassRowView.swift */; };
+		6F956BA7A746AB7880016A0D /* PassDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413E783A156F246A90B2B27B /* PassDetailView.swift */; };
+		7231A0099382DE09B01F3504 /* iss_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ABC693F598537A4E72C6E52F /* iss_icon.png */; };
+		74AEF3B79130F9D684BDC678 /* SatellitePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEBE4BAD566BAC3AAE74650 /* SatellitePosition.swift */; };
+		828F4E0962B04473EB83CC67 /* SatelliteFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */; };
+		89B641CBB6A5E5C360AA3F89 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9943E8D738B84F1762AAA99 /* LoadingView.swift */; };
+		9B9FBA00461613B8872BAEEC /* AMSATStatusReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238CFF3FD061B2DFCBD8000 /* AMSATStatusReport.swift */; };
+		A403572A42F153DE8DE18F82 /* TLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E51647FFBEDB477E9E53CB /* TLEService.swift */; };
+		AE098F586C04FDD862D4C6C2 /* SatelliteARViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5265340C23120715BDE24B42 /* SatelliteARViewModel.swift */; };
+		AE158E308D8E5634674B3911 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD711A66A9113DB0BB46A7F3 /* LocationService.swift */; };
+		B12CEF54C8322468752CC533 /* SatelliteKit in Frameworks */ = {isa = PBXBuildFile; productRef = DF352CF0555CB9D46E74BBD4 /* SatelliteKit */; };
+		B6FE7BB0CD988BD3C46E84C2 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF8C4C7CCC80356E68148BF /* CountdownView.swift */; };
+		DAB4E47F1CC30A22480D0D36 /* Satellite.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74EDDE2739901053D00A2EF /* Satellite.swift */; };
+		DDA83A026C359BC621BCF0C2 /* SatelliteTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */; };
+		E4C4DC968147B069F884AA84 /* AzimuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77008E5629A868B679F82942 /* AzimuthView.swift */; };
+		E75484A6614D12CD86139A05 /* HeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AA059F64B1CD56BA815CF5 /* HeadingService.swift */; };
+		E99FD6FBDE7975DFDACD17B9 /* PassPredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD008A80CF03A7D653B359F /* PassPredictionService.swift */; };
+		F656D0B29C0D3CF36F9CED79 /* CQSatellitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C489F75B8837C86866438F64 /* CQSatellitesTests.swift */; };
+		FF1D1829914EA84F5124A71A /* PassDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D245E73F4EC3A7D2EA86C278 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 622F2A306FF3E3A2502DF4CD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 396F4F45DD0D3B7210516988;
+			remoteInfo = CQSatellites;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		173DEB576C41E6B9D901ABF8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CQSatellites.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteTracker.swift; sourceTree = "<group>"; };
+		23D2ADC952CABC89DEA0CAAF /* GroundStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundStation.swift; sourceTree = "<group>"; };
+		3FA483CAACA6EA95B33C79E4 /* CQSatellitesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CQSatellitesApp.swift; sourceTree = "<group>"; };
+		413E783A156F246A90B2B27B /* PassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailView.swift; sourceTree = "<group>"; };
+		4BF8C4C7CCC80356E68148BF /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		4D81F0E2B5320B75AE5ABC2E /* AMSATStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMSATStatusService.swift; sourceTree = "<group>"; };
+		5265340C23120715BDE24B42 /* SatelliteARViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARViewModel.swift; sourceTree = "<group>"; };
+		53A36D35FF7F36CCD64E1A4F /* SatelliteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteStore.swift; sourceTree = "<group>"; };
+		55042480B9E111FDE3B44F37 /* SatelliteARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteARView.swift; sourceTree = "<group>"; };
+		6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteFrequency.swift; sourceTree = "<group>"; };
+		77008E5629A868B679F82942 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
+		77AA059F64B1CD56BA815CF5 /* HeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingService.swift; sourceTree = "<group>"; };
+		8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
+		ABC693F598537A4E72C6E52F /* iss_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iss_icon.png; sourceTree = "<group>"; };
+		B09A25AC867376C8CF299A36 /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
+		B8A89AD189FC93405CA1C81A /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
+		C489F75B8837C86866438F64 /* CQSatellitesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CQSatellitesTests.swift; sourceTree = "<group>"; };
+		CADBE36DAC32B7C356321EA7 /* PassListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListView.swift; sourceTree = "<group>"; };
+		D9943E8D738B84F1762AAA99 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		DAD008A80CF03A7D653B359F /* PassPredictionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPredictionService.swift; sourceTree = "<group>"; };
+		DF66A2C4CAC78494D624ACC0 /* FrequencyDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyDatabase.swift; sourceTree = "<group>"; };
+		E001C152708BE802E41EA20A /* PassRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassRowView.swift; sourceTree = "<group>"; };
+		E74EDDE2739901053D00A2EF /* Satellite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satellite.swift; sourceTree = "<group>"; };
+		EEE2FE4A1A1048AE71C668DE /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		EFEBE4BAD566BAC3AAE74650 /* SatellitePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePosition.swift; sourceTree = "<group>"; };
+		F1B668A7842B91B833ACD26A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F238CFF3FD061B2DFCBD8000 /* AMSATStatusReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMSATStatusReport.swift; sourceTree = "<group>"; };
+		F5E51647FFBEDB477E9E53CB /* TLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLEService.swift; sourceTree = "<group>"; };
+		FD711A66A9113DB0BB46A7F3 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		FF6CA2E23586635DAC90AA27 /* CQSatellitesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CQSatellitesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DA10F2521E6C93EE3461A1F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B12CEF54C8322468752CC533 /* SatelliteKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03442D8F735B4155C49EB9A0 /* CQSatellitesTests */ = {
+			isa = PBXGroup;
+			children = (
+				C489F75B8837C86866438F64 /* CQSatellitesTests.swift */,
+			);
+			path = CQSatellitesTests;
+			sourceTree = "<group>";
+		};
+		09E1FFE7EFA7E2000E1B8BCD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F1B668A7842B91B833ACD26A /* Assets.xcassets */,
+				ABC693F598537A4E72C6E52F /* iss_icon.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4E381DD96AE4CEE6AB16A4A7 = {
+			isa = PBXGroup;
+			children = (
+				FD4849EB92FBD538B8CB816E /* CQSatellites */,
+				03442D8F735B4155C49EB9A0 /* CQSatellitesTests */,
+				FF48801FECB49FD1A300CA09 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		52D3E4CC5A0E404D8B29241B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F238CFF3FD061B2DFCBD8000 /* AMSATStatusReport.swift */,
+				23D2ADC952CABC89DEA0CAAF /* GroundStation.swift */,
+				E74EDDE2739901053D00A2EF /* Satellite.swift */,
+				6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */,
+				B8A89AD189FC93405CA1C81A /* SatellitePass.swift */,
+				EFEBE4BAD566BAC3AAE74650 /* SatellitePosition.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6AEF0A09DE8D2FAF1CE5B24C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				413E783A156F246A90B2B27B /* PassDetailView.swift */,
+				CADBE36DAC32B7C356321EA7 /* PassListView.swift */,
+				75B81AEFA05534884EDDB949 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		75B81AEFA05534884EDDB949 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				77008E5629A868B679F82942 /* AzimuthView.swift */,
+				4BF8C4C7CCC80356E68148BF /* CountdownView.swift */,
+				D9943E8D738B84F1762AAA99 /* LoadingView.swift */,
+				E001C152708BE802E41EA20A /* PassRowView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		83538A5A77B4AA2BA53EB327 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3FA483CAACA6EA95B33C79E4 /* CQSatellitesApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		999827E3C95CAFB16BBD12A0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				173DEB576C41E6B9D901ABF8 /* Constants.swift */,
+				EEE2FE4A1A1048AE71C668DE /* Formatters.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C87277DCAE74D4EC1FF0CBA9 /* AR */ = {
+			isa = PBXGroup;
+			children = (
+				55042480B9E111FDE3B44F37 /* SatelliteARView.swift */,
+				5265340C23120715BDE24B42 /* SatelliteARViewModel.swift */,
+			);
+			path = AR;
+			sourceTree = "<group>";
+		};
+		F2812B5BABE6FA7BD85A03AB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4D81F0E2B5320B75AE5ABC2E /* AMSATStatusService.swift */,
+				DF66A2C4CAC78494D624ACC0 /* FrequencyDatabase.swift */,
+				77AA059F64B1CD56BA815CF5 /* HeadingService.swift */,
+				FD711A66A9113DB0BB46A7F3 /* LocationService.swift */,
+				DAD008A80CF03A7D653B359F /* PassPredictionService.swift */,
+				53A36D35FF7F36CCD64E1A4F /* SatelliteStore.swift */,
+				22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */,
+				F5E51647FFBEDB477E9E53CB /* TLEService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FC120E5569DE744C56EB0FA9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */,
+				B09A25AC867376C8CF299A36 /* PassListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		FD4849EB92FBD538B8CB816E /* CQSatellites */ = {
+			isa = PBXGroup;
+			children = (
+				83538A5A77B4AA2BA53EB327 /* App */,
+				C87277DCAE74D4EC1FF0CBA9 /* AR */,
+				52D3E4CC5A0E404D8B29241B /* Models */,
+				09E1FFE7EFA7E2000E1B8BCD /* Resources */,
+				F2812B5BABE6FA7BD85A03AB /* Services */,
+				999827E3C95CAFB16BBD12A0 /* Utilities */,
+				FC120E5569DE744C56EB0FA9 /* ViewModels */,
+				6AEF0A09DE8D2FAF1CE5B24C /* Views */,
+			);
+			path = CQSatellites;
+			sourceTree = "<group>";
+		};
+		FF48801FECB49FD1A300CA09 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */,
+				FF6CA2E23586635DAC90AA27 /* CQSatellitesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		396F4F45DD0D3B7210516988 /* CQSatellites */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2857A8E997E9B0226CFA8626 /* Build configuration list for PBXNativeTarget "CQSatellites" */;
+			buildPhases = (
+				B92FC97DEE568F9C38AD386F /* Sources */,
+				D2E6FA4FAFB9C452B4F4A48B /* Resources */,
+				DA10F2521E6C93EE3461A1F9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CQSatellites;
+			packageProductDependencies = (
+				DF352CF0555CB9D46E74BBD4 /* SatelliteKit */,
+			);
+			productName = CQSatellites;
+			productReference = 1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CC04530058BDF91446DC6B97 /* CQSatellitesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A065F05FBDF753046F869AB /* Build configuration list for PBXNativeTarget "CQSatellitesTests" */;
+			buildPhases = (
+				F680ABC3D01B46E8BA6CAD3A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F970CF385252E736A4E5103F /* PBXTargetDependency */,
+			);
+			name = CQSatellitesTests;
+			packageProductDependencies = (
+			);
+			productName = CQSatellitesTests;
+			productReference = FF6CA2E23586635DAC90AA27 /* CQSatellitesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		622F2A306FF3E3A2502DF4CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					396F4F45DD0D3B7210516988 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = FB680473F39AAFE186E637EB /* Build configuration list for PBXProject "CQSatellites" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4E381DD96AE4CEE6AB16A4A7;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				65578246C96B2DBB399D53C2 /* XCRemoteSwiftPackageReference "SatelliteKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FF48801FECB49FD1A300CA09 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				396F4F45DD0D3B7210516988 /* CQSatellites */,
+				CC04530058BDF91446DC6B97 /* CQSatellitesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D2E6FA4FAFB9C452B4F4A48B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				585BD6C6DF934BA7B51E8E6A /* Assets.xcassets in Resources */,
+				7231A0099382DE09B01F3504 /* iss_icon.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B92FC97DEE568F9C38AD386F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B9FBA00461613B8872BAEEC /* AMSATStatusReport.swift in Sources */,
+				59662298B444FB85EAE28BF1 /* AMSATStatusService.swift in Sources */,
+				E4C4DC968147B069F884AA84 /* AzimuthView.swift in Sources */,
+				1D26CE97AA4255BC8F5B00FC /* CQSatellitesApp.swift in Sources */,
+				42DA0AE6342115C1673A0870 /* Constants.swift in Sources */,
+				B6FE7BB0CD988BD3C46E84C2 /* CountdownView.swift in Sources */,
+				28E98D0A5184B1FEA9C34AF5 /* Formatters.swift in Sources */,
+				0C1A28976221881C27A76164 /* FrequencyDatabase.swift in Sources */,
+				4E363B1D0C7D535CBACC79EE /* GroundStation.swift in Sources */,
+				E75484A6614D12CD86139A05 /* HeadingService.swift in Sources */,
+				89B641CBB6A5E5C360AA3F89 /* LoadingView.swift in Sources */,
+				AE158E308D8E5634674B3911 /* LocationService.swift in Sources */,
+				6F956BA7A746AB7880016A0D /* PassDetailView.swift in Sources */,
+				FF1D1829914EA84F5124A71A /* PassDetailViewModel.swift in Sources */,
+				377311F976785BA02A76ECFD /* PassListView.swift in Sources */,
+				51F24C6326DF58C681427C15 /* PassListViewModel.swift in Sources */,
+				E99FD6FBDE7975DFDACD17B9 /* PassPredictionService.swift in Sources */,
+				5F1D5B615D04EDC35D516081 /* PassRowView.swift in Sources */,
+				DAB4E47F1CC30A22480D0D36 /* Satellite.swift in Sources */,
+				5D92D0153DE3F00526EC4839 /* SatelliteARView.swift in Sources */,
+				AE098F586C04FDD862D4C6C2 /* SatelliteARViewModel.swift in Sources */,
+				828F4E0962B04473EB83CC67 /* SatelliteFrequency.swift in Sources */,
+				344CA004F4F1323C496D1F92 /* SatellitePass.swift in Sources */,
+				74AEF3B79130F9D684BDC678 /* SatellitePosition.swift in Sources */,
+				027FDF2130FD95C71D58BB14 /* SatelliteStore.swift in Sources */,
+				DDA83A026C359BC621BCF0C2 /* SatelliteTracker.swift in Sources */,
+				A403572A42F153DE8DE18F82 /* TLEService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F680ABC3D01B46E8BA6CAD3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F656D0B29C0D3CF36F9CED79 /* CQSatellitesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F970CF385252E736A4E5103F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 396F4F45DD0D3B7210516988 /* CQSatellites */;
+			targetProxy = D245E73F4EC3A7D2EA86C278 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		01959B5D7227F91BD5677EDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.CQSatellitesTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CQSatellites.app/CQSatellites";
+			};
+			name = Debug;
+		};
+		2C2E7C48327E2C8A94484D67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		37E00FC449B74B40482B9A56 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		56095EDA6080415DFBB8147F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4AF64C8LK4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C07BE23AC314AE017C473DE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.CQSatellitesTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CQSatellites.app/CQSatellites";
+			};
+			name = Release;
+		};
+		D97C5B0E58D55A8ED88866FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4AF64C8LK4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2857A8E997E9B0226CFA8626 /* Build configuration list for PBXNativeTarget "CQSatellites" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56095EDA6080415DFBB8147F /* Debug */,
+				D97C5B0E58D55A8ED88866FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7A065F05FBDF753046F869AB /* Build configuration list for PBXNativeTarget "CQSatellitesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01959B5D7227F91BD5677EDD /* Debug */,
+				C07BE23AC314AE017C473DE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FB680473F39AAFE186E637EB /* Build configuration list for PBXProject "CQSatellites" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C2E7C48327E2C8A94484D67 /* Debug */,
+				37E00FC449B74B40482B9A56 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		65578246C96B2DBB399D53C2 /* XCRemoteSwiftPackageReference "SatelliteKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gavineadie/SatelliteKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DF352CF0555CB9D46E74BBD4 /* SatelliteKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65578246C96B2DBB399D53C2 /* XCRemoteSwiftPackageReference "SatelliteKit" */;
+			productName = SatelliteKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 622F2A306FF3E3A2502DF4CD /* Project object */;
+}

@@ -11,7 +11,7 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleDisplayName</key>
-	<string>SatPass</string>
+	<string>CQ Satellites</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,6 +25,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>SatPass needs your location to calculate satellite pass times for your area.</string>
+	<string>CQ Satellites needs your location to calculate satellite pass times for your area.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>CQ Satellites uses the camera to show satellite positions in augmented reality.</string>
 </dict>
 </plist>

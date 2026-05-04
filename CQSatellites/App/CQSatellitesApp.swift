@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SatPassApp: App {
+struct CQSatellitesApp: App {
     @State private var store = SatelliteStore()
 
     var body: some Scene {

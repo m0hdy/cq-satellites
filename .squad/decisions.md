@@ -244,6 +244,139 @@ enum LoadingPhase: Sendable, Equatable {
 
 ## Governance
 
+## View Implementation Decisions (Dallas) — Part 2
+
+### ADR-012: Landscape Orientation Support
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-23  
+
+**Context:** Damien requested landscape support. The app was portrait-locked.
+
+**Decision:** Enabled landscape left + right orientations with `@Environment(\.verticalSizeClass)` layouts.
+
+**Responsive Sizing:** `verticalSizeClass == .compact` for landscape. Compass 200pt→150pt, countdown 56pt→40pt, LoadingView VStack→HStack, filter sheet .medium detent.
+
+**Rationale:** Standard Apple approach. Portrait untouched, landscape additive.
+
+**Consequences:** App rotates to landscape. Smoother AR transition (ADR-006).
+
+## AR Implementation Decisions (Dallas)
+
+### ADR-013: ARKit World Alignment
+
+**Status:** Implemented  
+**Decision:** `worldAlignment = .gravityAndHeading`. RealityKit: X=east, Y=up, Z=south, magnetic north aligned.
+
+### ADR-014: Entity Hierarchy per Satellite
+
+**Status:** Implemented  
+**Decision:** Three-level hierarchy: Parent (positioned at `arDirection * markerDistance`), Sphere child, Label parent→Text child (billboarded separately).
+
+### ADR-015: Text Mesh Update Throttling
+
+**Status:** Implemented  
+**Decision:** Regenerate text mesh only when rounded elevation changes, not at 10 Hz. Reduces from 10×/sec to ~1×/sec.
+
+### ADR-016: Platform Guards for AR
+
+**Status:** Implemented  
+**Decision:** AR wrapped in `#if os(iOS)` with `ContentUnavailableView` fallback. Maintains `swift build` compatibility.
+
+## Backend Integration Decisions (Parker) — Part 2
+
+### ADR-017: SatelliteTracker as Stateless Struct
+
+**Status:** Implemented  
+**Decision:** `SatelliteTracker` is a stateless `Sendable` struct (not actor). Synchronous position calculation. Caller owns timer and state.
+
+**Rationale:** No I/O, no caching, no shared state. Matches `PassPredictionService` pattern. 10 Hz update loop stays simple.
+
+## Governance
+
 - All meaningful changes require team consensus
 - Document architectural decisions here
 - Keep history focused on work, decisions focused on direction
+
+### ADR-018: Landscape Rotation Triggers AR View
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-23  
+
+**Context:** Previously, AR was launched via a toolbar button in PassDetailView. Damien requested that rotating the phone to landscape automatically shows the AR view, and rotating back to portrait dismisses it.
+
+**Decision:** AR is now triggered by `@Environment(\.verticalSizeClass) == .compact` (landscape) in both PassListView and PassDetailView. No toolbar button, no fullScreenCover, no dismiss button.
+
+**Two AR modes:**
+1. **From list view (landscape at root):** Shows next 5 upcoming satellites as targets (all green markers). Uses `.overlay` on NavigationStack, gated by `navigationPath.isEmpty` to avoid conflicting with detail-level AR.
+2. **From detail view (landscape while viewing a satellite):** Shows only that satellite as target. Uses `if/else` body swap with `.toolbar(.hidden, for: .navigationBar)`.
+
+**Multi-target support:**
+- `SatelliteARViewModel` now accepts `targetPasses: [SatellitePass]` array
+- All targets rendered as green markers; other visible satellites stay blue
+- `TargetInfoPanel` adapts: single target = full telemetry, multi-target = compact elevation list
+
+**Rationale:**
+- `verticalSizeClass` is the SwiftUI-native way to detect orientation — no NotificationCenter or UIDevice observation needed
+- If the user has orientation lock on, `verticalSizeClass` stays `.regular` and AR never activates (correct behavior)
+- Rotation-to-dismiss is zero-friction — no button to find, just rotate back
+
+**Impact:**
+- **SatelliteARView API changed:** `passes: [SatellitePass]` instead of `pass: SatellitePass`
+- **PassDetailView:** No more AR toolbar button — any code referencing `showARView` is gone
+- **PassListView:** Now uses `NavigationPath` for path tracking
+- **Constants:** New `Constants.AR.maxListTargets = 5`
+
+### ADR-019: AR Marker Sizing Constants & ISS Custom Icon
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-24  
+
+**Context:** AR satellite markers were unreadable at 50m distance. Hardcoded sizes scattered through SatelliteARView.swift. ISS (the most popular satellite) had no special visual treatment.
+
+**Decision:**
+1. All AR marker sizes (sphere radii, label fonts, label offsets) are now named constants in `Constants.AR`.
+2. ISS (NORAD 25544) renders as a textured plane with its actual silhouette instead of a generic sphere.
+3. ISS icon is white-on-transparent PNG, tinted green/blue via `UnlitMaterial` color multiplication.
+4. Falls back to regular sphere if texture load fails.
+
+**Size changes:** Target sphere 0.3→0.9, non-target 0.15→0.5. Labels ~3× larger. Offsets increased proportionally.
+
+**Impact:**
+- Any future AR marker work should use `Constants.AR` sizes, not hardcoded values.
+- ISS icon PNG lives at `CQSatellites/Resources/iss_icon.png` — to update, replace the file.
+- Package.swift now has `.process("Resources")` for SPM resource bundling.
+
+### ADR-020: AR Satellite Countdown Timers via Dual-Entity Labels
+
+**Status:** Implemented  
+**Author:** Dallas  
+**Date:** 2026-04-24  
+
+**Context:** AR labels only showed satellite name + elevation. Users couldn't see when a pass starts (AOS) or ends (LOS) without leaving AR. Real-time countdown timers are essential for amateur radio operators planning QSO windows.
+
+**Decision:** Each satellite gets two text mesh entities:
+1. **Primary label** (name + elevation, color = target green / non-target blue)
+2. **Secondary label** (countdown timer, color = red pre-AOS / green in-pass / gray post-LOS)
+
+Positioned vertically via Y offset (countdown below name). Pass data threaded through `SatelliteARViewModel.startTracking(allPasses:)`.
+
+**Implementation:**
+- `SatelliteARViewModel.findRelevantPass(forNoradID:in:)` — static helper that selects active pass (if in-window) or next upcoming pass by NORAD ID
+- Countdown formats: `"T— mm:ss"` (red, pre-AOS), `"↓ mm:ss"` (green, in-pass), `"— —:—"` (gray, post-LOS)
+- Mesh throttling: regenerate countdown text mesh only when formatted string changes (1-second granularity), not every frame — same pattern as elevation text
+- `monospacedDigitSystemFont` to prevent digit-width jitter during countdown
+- Four new `Constants.AR` entries: `targetCountdownFontSize`, `nonTargetCountdownFontSize`, `targetCountdownOffset`, `nonTargetCountdownOffset`
+
+**Rationale:**
+- **RealityKit limitation:** `MeshResource.generateText()` only supports one color per mesh. Dual entities work around this cleanly without complex material layering.
+- **Throttling:** Mesh regeneration is the performance bottleneck, not frame updates. Only regenerate when display string changes (once per second) not ten times per second.
+- **Pass lookup:** Static helper avoids circular dependency between ViewModel and View. Caller owns the all-passes array.
+
+**Impact:**
+- AR labels now carry real-time timing info — users see exact countdown to AOS/LOS without leaving AR
+- `SatelliteARViewModel.startTracking(allPasses:)` API changed — callers must pass full pass array
+- Any future AR countdown work should use the dual-entity + throttling pattern documented here
