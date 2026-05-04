@@ -164,6 +164,7 @@ jobs:
 
       - name: Build and archive
         run: |
+          set -o pipefail
           xcodebuild archive \
             -project "$XCODE_PROJECT" \
             -scheme "$SCHEME" \
