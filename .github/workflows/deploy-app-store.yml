@@ -51,6 +51,9 @@ env:
   ARCHIVE_PATH: ${{ github.workspace }}/build/CQSatellites.xcarchive
   EXPORT_PATH: ${{ github.workspace }}/build/CQSatellitesExport
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     name: Build & Upload to App Store
