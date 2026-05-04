@@ -1,5 +1,13 @@
 # Builds the SatPass iOS app and publishes it to the App Store via App Store Connect.
 #
+# Versioning strategy:
+#   - Trigger a release by pushing a semver git tag (e.g. git tag v1.2.3 && git push --tags).
+#   - CFBundleShortVersionString (marketing version) is derived from the tag (strips leading "v").
+#   - CFBundleVersion (build number) is set to the monotonically increasing github.run_number.
+#   - A GitHub Release is created automatically after a successful upload, with auto-generated
+#     release notes based on commits since the previous tag.
+#   - workflow_dispatch allows manual deploys with an explicit version override.
+#
 # Required repository secrets:
 #   CERTIFICATES_P12            – Base64-encoded Apple Distribution certificate (.p12)
 #   CERTIFICATES_P12_PASSWORD   – Password protecting the .p12 file
@@ -18,10 +26,14 @@ name: Deploy to App Store
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
   workflow_dispatch:
     inputs:
+      version:
+        description: "Marketing version to deploy (e.g. 1.2.3). Defaults to latest git tag."
+        required: false
+        default: ""
       skip_tests:
         description: "Skip running tests before archiving"
         required: false
@@ -47,6 +59,35 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Version numbers ────────────────────────────────────────────────────────
+
+      - name: Compute version numbers
+        id: version
+        run: |
+          # Marketing version: prefer manual input, then derive from the pushed tag,
+          # then fall back to the most recent semver tag on the branch.
+          if [[ -n "${{ github.event.inputs.version }}" ]]; then
+            MARKETING="${{ github.event.inputs.version }}"
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
+            MARKETING="${{ github.ref_name }}"
+            MARKETING="${MARKETING#v}"           # strip leading "v"
+          else
+            LATEST_TAG=$(git describe --tags --match "v[0-9]*.[0-9]*.[0-9]*" \
+              --abbrev=0 2>/dev/null || echo "v1.0.0")
+            MARKETING="${LATEST_TAG#v}"
+          fi
+
+          BUILD="${{ github.run_number }}"
+
+          echo "marketing_version=$MARKETING" >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD"          >> "$GITHUB_OUTPUT"
+          echo "tag=v$MARKETING"              >> "$GITHUB_OUTPUT"
+
+          echo "Marketing version : $MARKETING"
+          echo "Build number      : $BUILD"
 
       # ── Code signing ───────────────────────────────────────────────────────────
 
@@ -131,6 +172,8 @@ jobs:
             -archivePath "${{ env.ARCHIVE_PATH }}" \
             CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE_SPECIFIER="SatPass App Store" \
+            MARKETING_VERSION="${{ steps.version.outputs.marketing_version }}" \
+            CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}" \
             | xcpretty
 
       # ── Export IPA ─────────────────────────────────────────────────────────────
@@ -169,6 +212,27 @@ jobs:
             --file "$IPA_PATH" \
             --apiKey "$API_KEY_ID" \
             --apiIssuer "$API_ISSUER_ID"
+
+      # ── GitHub Release ─────────────────────────────────────────────────────────
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          MARKETING="${{ steps.version.outputs.marketing_version }}"
+          BUILD="${{ steps.version.outputs.build_number }}"
+
+          # Create the tag if it doesn't exist yet (manual workflow_dispatch case)
+          if ! git rev-parse "$TAG" >/dev/null 2>&1; then
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
+
+          gh release create "$TAG" \
+            --title "SatPass $MARKETING (build $BUILD)" \
+            --generate-notes \
+            "${{ env.EXPORT_PATH }}"/*.ipa
 
       # ── Clean up keychain ──────────────────────────────────────────────────────
 
