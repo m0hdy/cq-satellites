@@ -62,11 +62,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select Xcode 26
+      - name: Select Xcode
         run: |
-          # List available Xcode versions and select Xcode 26
           ls /Applications/ | grep Xcode
-          sudo xcode-select -s /Applications/Xcode_26.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
           xcodebuild -version
 
       # ── Version numbers ────────────────────────────────────────────────────────
