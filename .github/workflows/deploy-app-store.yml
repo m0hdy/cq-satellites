@@ -172,7 +172,7 @@ jobs:
             -archivePath "${{ env.ARCHIVE_PATH }}" \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Distribution" \
-            PROVISIONING_PROFILE_SPECIFIER="CQSatellites App Store" \
+            PROVISIONING_PROFILE_SPECIFIER="CQ Satellites" \
             DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
             MARKETING_VERSION="${{ steps.version.outputs.marketing_version }}" \
             CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}"

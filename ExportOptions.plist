@@ -13,7 +13,7 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.digimangos.cqsatellites</key>
-        <string>CQSatellites App Store</string>
+        <string>CQ Satellites</string>
     </dict>
 </dict>
 </plist>
