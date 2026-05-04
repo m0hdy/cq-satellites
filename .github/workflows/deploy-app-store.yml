@@ -62,10 +62,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select Xcode
+      - name: Select Xcode 26
         run: |
           ls /Applications/ | grep Xcode
-          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE_PATH" ]; then
+            echo "Error: No Xcode 26 found"
+            exit 1
+          fi
+          echo "Selecting: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
           xcodebuild -version
 
       # ── Version numbers ────────────────────────────────────────────────────────
