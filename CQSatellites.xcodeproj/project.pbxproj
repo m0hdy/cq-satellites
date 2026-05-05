@@ -33,6 +33,7 @@
 		B6FE7BB0CD988BD3C46E84C2 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF8C4C7CCC80356E68148BF /* CountdownView.swift */; };
 		DAB4E47F1CC30A22480D0D36 /* Satellite.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74EDDE2739901053D00A2EF /* Satellite.swift */; };
 		DDA83A026C359BC621BCF0C2 /* SatelliteTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */; };
+		DFE9B8ADF010FCE75027EAC1 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12BE629A5A76071572FB466 /* SplashView.swift */; };
 		E4C4DC968147B069F884AA84 /* AzimuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77008E5629A868B679F82942 /* AzimuthView.swift */; };
 		E75484A6614D12CD86139A05 /* HeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AA059F64B1CD56BA815CF5 /* HeadingService.swift */; };
 		E99FD6FBDE7975DFDACD17B9 /* PassPredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD008A80CF03A7D653B359F /* PassPredictionService.swift */; };
@@ -66,6 +67,7 @@
 		77008E5629A868B679F82942 /* AzimuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzimuthView.swift; sourceTree = "<group>"; };
 		77AA059F64B1CD56BA815CF5 /* HeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingService.swift; sourceTree = "<group>"; };
 		8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
+		A12BE629A5A76071572FB466 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		ABC693F598537A4E72C6E52F /* iss_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iss_icon.png; sourceTree = "<group>"; };
 		B09A25AC867376C8CF299A36 /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
 		B8A89AD189FC93405CA1C81A /* SatellitePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatellitePass.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				4BF8C4C7CCC80356E68148BF /* CountdownView.swift */,
 				D9943E8D738B84F1762AAA99 /* LoadingView.swift */,
 				E001C152708BE802E41EA20A /* PassRowView.swift */,
+				A12BE629A5A76071572FB466 /* SplashView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				74AEF3B79130F9D684BDC678 /* SatellitePosition.swift in Sources */,
 				027FDF2130FD95C71D58BB14 /* SatelliteStore.swift in Sources */,
 				DDA83A026C359BC621BCF0C2 /* SatelliteTracker.swift in Sources */,
+				DFE9B8ADF010FCE75027EAC1 /* SplashView.swift in Sources */,
 				A403572A42F153DE8DE18F82 /* TLEService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,6 +400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -462,6 +467,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -526,17 +532,16 @@
 				DEVELOPMENT_TEAM = 4AF64C8LK4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -563,26 +568,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4AF64C8LK4;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4AF64C8LK4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "CQ Satellites";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.digimangos.cqsatellites;
-				PROVISIONING_PROFILE_SPECIFIER = "CQ Satellites v1";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CQ Satellites v1";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

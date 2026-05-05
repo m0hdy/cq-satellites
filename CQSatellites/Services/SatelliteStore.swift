@@ -64,14 +64,20 @@ final class SatelliteStore {
         return Date.now.timeIntervalSince(last) > Constants.Timing.tleRefreshInterval
     }
 
-    /// Process satellites one at a time, reporting progress after each.
+    /// Process satellites one at a time, reporting progress at throttled intervals.
     private func computePassesWithProgress(for satellites: [Satellite], from station: GroundStation) async -> [SatellitePass] {
         let service = self.predictionService
         let total = satellites.count
         var allPasses: [SatellitePass] = []
+        var lastReportedIndex = -1
+        // Report progress at most every 2% of total, minimum every satellite if total is small.
+        let reportInterval = max(1, total / 50)
 
         for (index, satellite) in satellites.enumerated() {
-            loadingPhase = .predicting(current: index + 1, total: total)
+            if index - lastReportedIndex >= reportInterval || index == total - 1 {
+                loadingPhase = .predicting(current: index + 1, total: total)
+                lastReportedIndex = index
+            }
 
             let satellitePasses = await Task.detached(priority: .userInitiated) {
                 service.predictPasses(for: satellite, from: station)

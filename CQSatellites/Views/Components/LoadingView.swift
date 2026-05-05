@@ -59,9 +59,10 @@ struct LoadingView: View {
                 .stroke(Color.secondary.opacity(0.15), lineWidth: 1.5)
                 .frame(width: 120, height: 120)
 
-            Image(systemName: "globe.americas.fill")
-                .font(.system(size: 36))
-                .foregroundStyle(.blue.opacity(0.5))
+            Image("ISSIcon")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 64, height: 64)
                 .scaleEffect(pulseScale)
 
             Image(systemName: phaseIcon)
