@@ -1,9 +1,12 @@
 # Builds the CQSatellites iOS app and publishes it to the App Store via App Store Connect.
 #
 # Versioning strategy:
-#   - Trigger a release by pushing a semver git tag (e.g. git tag v1.2.3 && git push --tags).
-#   - CFBundleShortVersionString (marketing version) is derived from the tag (strips leading "v").
-#   - CFBundleVersion (build number) is set to the monotonically increasing github.run_number.
+#   - Version format: MAJOR.MINOR.BUILD_NUMBER (e.g. 1.0.19)
+#   - MAJOR and MINOR are read from the latest git tag (e.g. v1.0.x → MAJOR=1, MINOR=0).
+#   - BUILD_NUMBER is github.run_number, providing a monotonically increasing build counter.
+#   - CFBundleShortVersionString (marketing version) = MAJOR.MINOR.BUILD_NUMBER.
+#   - CFBundleVersion (build number) = github.run_number.
+#   - Trigger a release by pushing a semver git tag to bump MAJOR or MINOR (e.g. v1.1.0, v2.0.0).
 #   - A GitHub Release is created automatically after a successful upload, with auto-generated
 #     release notes based on commits since the previous tag.
 #   - workflow_dispatch allows manual deploys with an explicit version override.
@@ -82,24 +85,20 @@ jobs:
       - name: Compute version numbers
         id: version
         run: |
-          # Marketing version: prefer manual input, then derive from the pushed tag,
-          # then auto-increment patch from the most recent semver tag.
+          BUILD="${{ github.run_number }}"
+
+          # Marketing version: MAJOR.MINOR.BUILD_NUMBER
+          # Manual override takes priority, otherwise derive MAJOR.MINOR from latest tag.
           if [[ -n "${{ github.event.inputs.version }}" ]]; then
             MARKETING="${{ github.event.inputs.version }}"
-          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
-            MARKETING="${{ github.ref_name }}"
-            MARKETING="${MARKETING#v}"           # strip leading "v"
           else
+            # Get MAJOR.MINOR from the latest semver tag (tag used to bump major/minor)
             LATEST_TAG=$(git describe --tags --match "v[0-9]*.[0-9]*.[0-9]*" \
-              --abbrev=0 2>/dev/null || echo "v0.0.0")
+              --abbrev=0 2>/dev/null || echo "v1.0.0")
             LATEST="${LATEST_TAG#v}"
-            # Auto-increment patch version for workflow_dispatch without explicit version
-            IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST"
-            PATCH=$((PATCH + 1))
-            MARKETING="${MAJOR}.${MINOR}.${PATCH}"
+            IFS='.' read -r MAJOR MINOR _PATCH <<< "$LATEST"
+            MARKETING="${MAJOR}.${MINOR}.${BUILD}"
           fi
-
-          BUILD="${{ github.run_number }}"
 
           echo "marketing_version=$MARKETING" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD"          >> "$GITHUB_OUTPUT"
