@@ -83,7 +83,7 @@ jobs:
         id: version
         run: |
           # Marketing version: prefer manual input, then derive from the pushed tag,
-          # then fall back to the most recent semver tag on the branch.
+          # then auto-increment patch from the most recent semver tag.
           if [[ -n "${{ github.event.inputs.version }}" ]]; then
             MARKETING="${{ github.event.inputs.version }}"
           elif [[ "${{ github.ref_type }}" == "tag" ]]; then
@@ -91,8 +91,12 @@ jobs:
             MARKETING="${MARKETING#v}"           # strip leading "v"
           else
             LATEST_TAG=$(git describe --tags --match "v[0-9]*.[0-9]*.[0-9]*" \
-              --abbrev=0 2>/dev/null || echo "v1.0.0")
-            MARKETING="${LATEST_TAG#v}"
+              --abbrev=0 2>/dev/null || echo "v0.0.0")
+            LATEST="${LATEST_TAG#v}"
+            # Auto-increment patch version for workflow_dispatch without explicit version
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST"
+            PATCH=$((PATCH + 1))
+            MARKETING="${MAJOR}.${MINOR}.${PATCH}"
           fi
 
           BUILD="${{ github.run_number }}"
@@ -244,6 +248,9 @@ jobs:
             git tag "$TAG"
             git push origin "$TAG"
           fi
+
+          # Delete existing release if present (re-deploy of same version)
+          gh release delete "$TAG" --yes 2>/dev/null || true
 
           gh release create "$TAG" \
             --title "CQSatellites $MARKETING (build $BUILD)" \
