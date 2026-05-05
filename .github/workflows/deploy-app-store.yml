@@ -227,11 +227,16 @@ jobs:
         run: |
           IPA_PATH=$(find "${{ env.EXPORT_PATH }}" -name "*.ipa" | head -1)
           echo "Uploading: $IPA_PATH"
-          xcrun altool --upload-app \
+          OUTPUT=$(xcrun altool --upload-app \
             --type ios \
             --file "$IPA_PATH" \
             --apiKey "$API_KEY_ID" \
-            --apiIssuer "$API_ISSUER_ID"
+            --apiIssuer "$API_ISSUER_ID" 2>&1) || true
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -q "UPLOAD FAILED"; then
+            echo "::error::App Store upload failed"
+            exit 1
+          fi
 
       # ── GitHub Release ─────────────────────────────────────────────────────────
 
