@@ -380,3 +380,23 @@ Positioned vertically via Y offset (countdown below name). Pass data threaded th
 - AR labels now carry real-time timing info — users see exact countdown to AOS/LOS without leaving AR
 - `SatelliteARViewModel.startTracking(allPasses:)` API changed — callers must pass full pass array
 - Any future AR countdown work should use the dual-entity + throttling pattern documented here
+
+## Project Directives
+
+### 2026-06-22T07:10:00Z: iOS-Only Platform Constraint
+
+**By:** Damien Hardy  
+**Status:** Active  
+**Scope:** Copilot instructions, package/project regeneration
+
+**What**  
+This repository is an iOS app. Include in Copilot instructions that regenerated package targets must be verified against the iOS-only platform constraint.
+
+**Why**  
+Current state: `Package.swift` incorrectly declares both iOS and macOS platforms, causing `swift test` to fail when the build attempts to compile iOS-only UI code for macOS. This is a source of contributor confusion and CI fragility. When regenerating package/project files (e.g., with `xcodegen`, `swift package init`), the iOS-only constraint must be explicitly stated in the regeneration prompt to prevent the platform declaration from reverting.
+
+**Implications**  
+- Platform targets should default to iOS 17.0+ only
+- README and ARCHITECTURE.md must explicitly state "iOS only"
+- CI workflows should use `xcodebuild` (not `swift test`) as the canonical path
+- Any automated regeneration of Package.swift or project files must be preceded by a directive reaffirming the iOS-only constraint
