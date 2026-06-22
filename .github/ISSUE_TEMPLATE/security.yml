@@ -1,0 +1,63 @@
+name: Security Vulnerability
+description: Report a security vulnerability responsibly
+labels: ["security"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Please do not disclose security vulnerabilities publicly on GitHub issues.**
+        
+        Instead, please email the maintainers or use GitHub's Security Advisory feature to report the vulnerability privately.
+        
+        This template is provided for reference only. For actual security reports, please contact the maintainers privately.
+
+  - type: input
+    id: title
+    attributes:
+      label: Vulnerability Title
+      description: A clear title describing the security vulnerability
+      placeholder: "e.g., SQL injection in user input validation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A detailed description of the vulnerability
+      placeholder: "Describe the security issue..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: What is the potential impact of this vulnerability?
+      placeholder: "Describe the potential impact and severity..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can the vulnerability be reproduced?
+      placeholder: "Provide clear steps to reproduce the issue..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Suggested Fix
+      description: Do you have suggestions for fixing this vulnerability?
+      placeholder: "Suggest a fix if you have one..."
+
+  - type: textarea
+    id: disclosure
+    attributes:
+      label: Disclosure Timeline
+      description: When do you plan to disclose this vulnerability publicly?
+      placeholder: "e.g., 90 days from now, after patch release, etc."

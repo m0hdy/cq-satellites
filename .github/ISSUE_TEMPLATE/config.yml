@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/m0hdy/cq-satellites/blob/main/README.md
+    about: Check the README for getting started and general information
+  - name: Security Policy
+    url: https://github.com/m0hdy/cq-satellites/security/policy
+    about: View our security policy for reporting vulnerabilities
+  - name: Discussions
+    url: https://github.com/m0hdy/cq-satellites/discussions
+    about: Join our discussions for questions and general feedback

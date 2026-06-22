@@ -1,0 +1,52 @@
+name: Documentation Issue
+description: Report a problem with documentation or request clarification
+labels: ["documentation"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us improve our documentation! Please describe the issue below.
+
+  - type: input
+    id: title
+    attributes:
+      label: Documentation Issue
+      description: A clear title describing the documentation issue
+      placeholder: "e.g., README instructions are unclear for simulator setup"
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location in Documentation
+      description: Where in the documentation is the issue?
+      placeholder: "e.g., README.md, CONTRIBUTING.md, docs/getting-started.md, etc."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is unclear, incorrect, or missing?
+      placeholder: "Describe the documentation issue..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How could we improve the documentation?
+      placeholder: "Suggest how to fix or improve the documentation..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other relevant information
+      placeholder: "Any additional context or links..."

@@ -1,0 +1,41 @@
+name: Question or Discussion
+description: Ask a question or start a discussion about CQ Satellites
+labels: ["question"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question or want to discuss something about CQ Satellites? We'd love to help!
+
+  - type: input
+    id: title
+    attributes:
+      label: Question/Discussion Title
+      description: A clear title for your question or discussion
+      placeholder: "e.g., How do I integrate with custom TLE data?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question or Discussion
+      description: Ask your question or start your discussion
+      placeholder: "What would you like to know or discuss?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context or background information
+      placeholder: "What have you already tried? Any relevant details?"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Add any screenshots, code snippets, or other relevant information
+      placeholder: "Share any relevant code, configs, or examples..."

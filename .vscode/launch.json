@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:cq-satellites}",
+            "name": "Debug CQSatellites",
+            "target": "CQSatellites",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug CQSatellites"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:cq-satellites}",
+            "name": "Release CQSatellites",
+            "target": "CQSatellites",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release CQSatellites"
+        }
+    ]
+}
