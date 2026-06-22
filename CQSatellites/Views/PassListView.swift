@@ -10,6 +10,7 @@ struct PassListView: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var viewModel = PassListViewModel()
     @State private var showFilterSheet = false
+    @State private var showAbout = false
     @State private var navigationPath = NavigationPath()
 
     /// The next N upcoming passes to show as AR targets from the list view.
@@ -59,10 +60,20 @@ struct PassListView: View {
                         Label("Filters", systemImage: "line.3.horizontal.decrease.circle")
                     }
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showAbout.toggle()
+                    } label: {
+                        Label("About", systemImage: "info.circle")
+                    }
+                }
             }
             .sheet(isPresented: $showFilterSheet) {
                 FilterSheet(viewModel: viewModel)
                     .presentationDetents([.medium, .height(380)])
+            }
+            .sheet(isPresented: $showAbout) {
+                AboutView()
             }
             .safeAreaInset(edge: .bottom) {
                 bottomBar
