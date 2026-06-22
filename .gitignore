@@ -32,3 +32,6 @@ Package.resolved
 .DS_Store
 *.swp
 *~
+
+# Playwright MCP snapshots
+.playwright-mcp/
