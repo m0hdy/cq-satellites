@@ -40,7 +40,7 @@ let date = Date(julianDate: jd)   // Julian Days → Date
 ```
 
 ## Examples
-See `SatPass/Services/PassPredictionService.swift` for the full pass prediction pipeline.
+See `CQSatellites/Services/PassPredictionService.swift` for the full pass prediction pipeline.
 
 ## Anti-Patterns
 - ❌ `SatelliteKit.Satellite(elements:)` — compile error due to module/struct name collision

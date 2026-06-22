@@ -1,0 +1,19 @@
+# Default reviewers
+* @m0hdy
+
+# Core project metadata and automation
+/.github/ @m0hdy
+/project.yml @m0hdy
+/Package.swift @m0hdy
+
+# App and tests
+/CQSatellites/ @m0hdy
+/CQSatellitesTests/ @m0hdy
+
+# Documentation
+/docs/ @m0hdy
+/README.md @m0hdy
+/CONTRIBUTING.md @m0hdy
+/SECURITY.md @m0hdy
+/SUPPORT.md @m0hdy
+/CHANGELOG.md @m0hdy

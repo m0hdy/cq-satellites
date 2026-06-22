@@ -16,6 +16,17 @@
         "tester": "Lambert"
       },
       "created_at": "2026-03-31T14:00:00Z"
+    },
+    "satpass-2026-06-22-open-source-expansion": {
+      "universe": "Alien",
+      "agents": {
+        "lead": "Ripley",
+        "ios-dev": "Dallas",
+        "backend-dev": "Parker",
+        "tester": "Lambert",
+        "open-source-maintainer": "Ash"
+      },
+      "created_at": "2026-06-22T08:16:15+01:00"
     }
   }
 }

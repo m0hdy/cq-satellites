@@ -1,6 +1,6 @@
 ---
 name: "test-discipline"
-description: "Swift Testing patterns for SatPass: fixtures, actor testing, orbital validation"
+description: "Swift Testing patterns for CQ Satellites: fixtures, actor testing, orbital validation"
 domain: "testing"
 confidence: "high"
 source: "earned"

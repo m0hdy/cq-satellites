@@ -2,10 +2,13 @@ blank_issues_enabled: false
 contact_links:
   - name: Documentation
     url: https://github.com/m0hdy/cq-satellites/blob/main/README.md
-    about: Check the README for getting started and general information
+    about: Check the README for setup, testing, and project information
+  - name: Support
+    url: https://github.com/m0hdy/cq-satellites/blob/main/SUPPORT.md
+    about: Find the right place for questions, bug reports, and general support
   - name: Security Policy
-    url: https://github.com/m0hdy/cq-satellites/security/policy
-    about: View our security policy for reporting vulnerabilities
+    url: https://github.com/m0hdy/cq-satellites/blob/main/SECURITY.md
+    about: Read how to report vulnerabilities privately and what response to expect
   - name: Discussions
     url: https://github.com/m0hdy/cq-satellites/discussions
-    about: Join our discussions for questions and general feedback
+    about: Use Discussions for questions and community feedback when available

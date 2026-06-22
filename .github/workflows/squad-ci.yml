@@ -1,5 +1,4 @@
 name: Squad CI
-# Project type was not detected — configure build/test commands below
 
 on:
   pull_request:
@@ -7,22 +6,34 @@ on:
     types: [opened, synchronize, reopened]
   push:
     branches: [dev, insider]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and test
+      - name: Verify iOS-only project metadata
         run: |
-          # TODO: Project type was not detected — add your build/test commands here
-          # Go:            go test ./...
-          # Python:        pip install -r requirements.txt && pytest
-          # .NET:          dotnet test
-          # Java (Maven):  mvn test
-          # Java (Gradle): ./gradlew test
-          echo "No build commands configured — update squad-ci.yml"
+          grep -q '\.iOS(\.v17)' Package.swift
+          ! grep -q '\.macOS' Package.swift
+          grep -q 'platform: iOS' project.yml
+          grep -q 'iOS: "17.0"' project.yml
+
+      - name: Resolve Swift package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project CQSatellites.xcodeproj \
+            -scheme CQSatellites
+
+      - name: Run unit tests
+        run: |
+          xcodebuild test \
+            -project CQSatellites.xcodeproj \
+            -scheme CQSatellites \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            CODE_SIGNING_ALLOWED=NO

@@ -68,12 +68,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select Xcode 26
+      - name: Select latest available Xcode
         run: |
           ls /Applications/ | grep Xcode
-          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          XCODE_PATH=$(find /Applications -maxdepth 1 -name 'Xcode*.app' -print | sort -V | tail -1)
           if [ -z "$XCODE_PATH" ]; then
-            echo "Error: No Xcode 26 found"
+            echo "Error: No Xcode installation found"
             exit 1
           fi
           echo "Selecting: $XCODE_PATH"
@@ -166,17 +166,15 @@ jobs:
 
       # ── Test ───────────────────────────────────────────────────────────────────
 
-      # - name: Run tests
-      #   if: ${{ github.event.inputs.skip_tests != 'true' }}
-      #   run: |
-      #     xcodebuild test \
-      #       -project "$XCODE_PROJECT" \
-      #       -scheme "$SCHEME" \
-      #       -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
-      #       -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
-      #       CODE_SIGN_IDENTITY="" \
-      #       CODE_SIGNING_REQUIRED=NO \
-      #       | xcpretty || true
+      - name: Run tests
+        if: ${{ github.event.inputs.skip_tests != 'true' }}
+        run: |
+          xcodebuild test \
+            -project "$XCODE_PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
+            CODE_SIGNING_ALLOWED=NO
 
       # ── Archive ────────────────────────────────────────────────────────────────
 

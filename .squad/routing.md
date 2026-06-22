@@ -16,7 +16,10 @@ How to decide who handles what.
 | Data layer & caching | Parker | Satellite data storage, refresh logic, offline support |
 | Testing | Lambert | Write tests, find edge cases, verify orbital math |
 | Test validation | Lambert | Compare predictions against reference data |
+| Open source readiness | Ash | README, CONTRIBUTING, governance, contributor workflow clarity |
+| Governance & community | Ash | CODEOWNERS, PR template, changelog policy, support/security surfaces |
 | Scope & priorities | Ripley | What to build next, trade-offs, decisions |
+| RAI review | Rai | Content safety, privacy/bias review, credential scanning |
 | Session logging | Scribe | Automatic — never needs routing |
 
 ## Issue Routing

@@ -1,9 +1,20 @@
-# SatPass — Architecture
+# CQ Satellites — Architecture
 
 > Satellite pass prediction for amateur radio operators.
-> Lean utility app. Ship a solid foundation, not a feature-complete mess.
+> Lean iOS utility app. Clear contributor workflow, predictable build surface, and no platform ambiguity.
 
-## Architecture Pattern
+## Platform contract
+
+CQ Satellites is an **iOS-only** application.
+
+- **Supported platform:** iOS
+- **Minimum deployment target:** iOS 17.0
+- **Toolchain:** Swift 6, Xcode 16+
+- **Unsupported targets:** macOS, tvOS, watchOS
+
+For contributors, the canonical validation surface is `CQSatellites.xcodeproj` via `xcodebuild test`. Root-level `swift test` is not the supported app validation path.
+
+## Architecture pattern
 
 **MVVM with SwiftUI + Swift Concurrency (async/await)**
 
@@ -15,175 +26,121 @@
 Why not Combine? Swift concurrency is the modern path. Combine is maintenance-mode.
 Why not TCA/Redux? This is a focused utility app. MVVM is the right weight class.
 
-## Deployment Target
+## Repository and project surfaces
 
-**iOS 17.0+**
+- **`CQSatellites.xcodeproj`** — checked-in project used for app builds and test runs
+- **`project.yml`** — XcodeGen source of truth for target/configuration changes
+- **`Package.swift`** — package metadata and dependency definition; not the canonical contributor test entry point
 
-Rationale:
-- `@Observable` macro (eliminates `ObservableObject`/`@Published` boilerplate)
-- Modern SwiftUI APIs (`ContentUnavailableView`, improved `NavigationStack`)
-- `SwiftData` available if we need local persistence later
-- ARKit improvements for stretch goal
-- iOS 17 adoption is high enough for a new app launching now
+After regenerating project artifacts, verify that:
 
-## Module Structure
+1. The repo remains **iOS-only**
+2. The deployment target is still **iOS 17.0**
+3. `Package.swift`, `project.yml`, and the generated project stay aligned
+4. The documented `xcodebuild test` command still passes
+
+## Module structure
 
 ```
-SatPass/
+CQSatellites/
 ├── App/                        # App entry point, root navigation
-│   └── SatPassApp.swift
+│   └── CQSatellitesApp.swift
 ├── Models/                     # Data types — plain structs
 │   ├── Satellite.swift         # Satellite identity + TLE data
 │   ├── SatellitePass.swift     # Computed pass (AOS, LOS, TCA, elevations, azimuths)
-│   └── GroundStation.swift     # Observer location
+│   ├── GroundStation.swift     # Observer location
+│   └── AMSATStatusReport.swift # Community-reported satellite health entries
 ├── Services/                   # Business logic, I/O, computation
-│   ├── TLEService.swift        # Fetch + parse TLE from CelesTrak
+│   ├── TLEService.swift        # Fetch + parse TLE data from CelesTrak
+│   ├── AMSATStatusService.swift# Fetch AMSAT status reports
 │   ├── LocationService.swift   # CoreLocation wrapper
+│   ├── HeadingService.swift    # Heading/compass integration for AR and UI
 │   ├── PassPredictionService.swift  # Orchestrates SGP4 → pass computation
-│   └── SatelliteStore.swift    # In-memory cache of satellites + passes
+│   └── SatelliteStore.swift    # In-memory satellite + pass state
 ├── ViewModels/                 # Presentation logic, @Observable
 │   ├── PassListViewModel.swift
 │   └── PassDetailViewModel.swift
 ├── Views/                      # SwiftUI views
 │   ├── PassListView.swift      # Main screen — upcoming passes
 │   ├── PassDetailView.swift    # Single pass detail with countdown + azimuth
+│   ├── AboutView.swift         # Project/about metadata
 │   └── Components/             # Reusable view components
-│       ├── PassRowView.swift   # List row for a pass
-│       ├── CountdownView.swift # Countdown timer display
-│       └── AzimuthView.swift   # Compass-style azimuth indicator
-├── AR/                         # Stretch goal — ARKit overlay
-│   ├── SatelliteARView.swift
-│   └── SatelliteARViewModel.swift
-├── Utilities/                  # Shared helpers
-│   ├── Constants.swift         # API URLs, refresh intervals, etc.
-│   └── Formatters.swift        # Degree, time, coordinate formatting
-└── Resources/
-    └── Assets.xcassets
+├── AR/                         # ARKit/RealityKit visualization
+├── Utilities/                  # Shared helpers and constants
+└── Resources/                  # Bundled assets
 ```
 
-## Data Flow
+## Data flow
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌──────────────────────┐
-│  CelesTrak   │────▶│  TLEService  │────▶│  [Satellite] models  │
-│  (HTTP GET)  │     │  fetch+parse │     │  (name + TLE lines)  │
-└─────────────┘     └──────────────┘     └──────────┬───────────┘
-                                                     │
-┌─────────────┐     ┌────────────────┐              │
-│ CoreLocation │────▶│LocationService │──┐           │
-│   (GPS)      │     │  (lat/lon/alt) │  │           │
-└─────────────┘     └────────────────┘  │           │
-                                         ▼           ▼
-                                  ┌──────────────────────────┐
-                                  │  PassPredictionService    │
-                                  │  SatelliteKit (SGP4)      │
-                                  │  → compute AOS/LOS/TCA    │
-                                  │  → max elevation           │
-                                  │  → azimuth from/to        │
-                                  └────────────┬─────────────┘
-                                               │
-                                               ▼
-                                  ┌──────────────────────────┐
-                                  │  SatelliteStore (cache)   │
-                                  │  sorted passes by time    │
-                                  └────────────┬─────────────┘
-                                               │
-                              ┌────────────────┼────────────────┐
-                              ▼                ▼                ▼
-                      ┌─────────────┐  ┌─────────────┐  ┌───────────┐
-                      │ PassListView │  │PassDetailView│  │  AR View  │
-                      │ (upcoming)   │  │ (countdown,  │  │ (stretch) │
-                      │              │  │  azimuth)    │  │           │
-                      └─────────────┘  └─────────────┘  └───────────┘
+CelesTrak TLEs ──▶ TLEService ──▶ Satellite models ──┐
+                                                      │
+AMSAT status API ─▶ AMSATStatusService ───────────────┤
+                                                      ▼
+CoreLocation ────▶ LocationService ───────────▶ PassPredictionService
+                                                      ▼
+                                              SatelliteStore / ViewModels
+                                                      ▼
+                                         Pass list / pass detail / AR views
 ```
 
-### Refresh Strategy
+## Refresh and state strategy
 
-1. **On launch:** Fetch TLEs from CelesTrak, compute passes for next 24 hours
-2. **Background refresh:** Re-fetch TLEs every 12 hours (TLE data drifts over days, not hours)
-3. **Location updates:** Significant-change monitoring. Re-compute passes on meaningful position change (>1 km)
-4. **Pass list:** Re-sort/filter on a 1-minute timer. Countdown timers update on a 1-second timer.
-5. **Cache:** Keep TLE data in memory. Persist to `UserDefaults` or file for offline launch. No database needed — the dataset is small.
+1. **On launch:** fetch current TLE data and compute upcoming passes
+2. **Network refresh:** CelesTrak and AMSAT data are fetched when needed for current views/workflows
+3. **Location updates:** request a current fix and use location services to support live pass prediction
+4. **UI state:** filters such as minimum elevation and frequency-only mode are stored in `UserDefaults`
+5. **Computed pass state:** held in memory and refreshed when inputs change
 
-## Key Technical Decisions
+## External data sources
 
-### SGP4: SatelliteKit
+### CelesTrak
 
-**Decision:** Use [SatelliteKit](https://github.com/gavineadie/SatelliteKit) (gavineadie/SatelliteKit)
+Primary source for orbital elements used in pass prediction:
 
-- Pure Swift, zero external dependencies
-- Implements SGP4/SDP4 per SpaceTrack Report #3 (Vallado refinements)
-- Swift 6 tools-version, actively maintained through 2025
-- MIT license
-- Supports all Apple platforms (iOS 12+, but we target 17+)
+- `https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=TLE`
+- `https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=TLE`
 
-**Rejected alternatives:**
-- SGPKit (csanfilippo/swift-sgp4) — wraps C++ via Swift-C++ interop. Unnecessary complexity for our use case.
-- Roll our own — SGP4 is well-specified but fiddly. No reason to reimplement.
+### AMSAT
 
-### TLE Data Source
+Satellite health/status information for supported satellites:
 
-**Primary:** CelesTrak GP API
-- `https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=TLE` — amateur radio sats
-- `https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=TLE` — ISS, etc.
-- JSON format available (`FORMAT=JSON`) if we want structured data later
-- Free, no API key required, reliable
+- API base: `https://amsat.org/status/api/v1/sat_info.php`
+- Website: `https://www.amsat.org/status/`
 
-**Refresh:** Every 12 hours. TLEs are valid for days; more frequent is wasteful.
+## Key technical decisions
 
-### Location Services
+### SGP4 propagation: SatelliteKit
 
-- `CLLocationManager` wrapped in an actor-isolated `LocationService`
-- Request "When In Use" authorization (no background location needed)
-- Use `startMonitoringSignificantLocationChanges()` for passive updates
-- Request one accurate fix on launch, then rely on significant-change
-- Fallback: last known location from cache
+**Decision:** use [SatelliteKit](https://github.com/gavineadie/SatelliteKit)
 
-### Pass Prediction
+- Pure Swift
+- Appropriate for Swift 6 codebases
+- Avoids introducing extra service infrastructure
+- Keeps prediction logic local to the device
 
-The core computation loop:
-1. For each satellite, propagate position at 1-minute intervals over next 24h
-2. Compute topocentric coordinates (azimuth, elevation) from observer position
-3. A "pass" starts when elevation > 0° (AOS) and ends when it drops below 0° (LOS)
-4. TCA = time of closest approach (max elevation during pass)
-5. Record: AOS time, LOS time, TCA time, max elevation, AOS azimuth, LOS azimuth
+### Location behavior
 
-This is CPU-intensive for many satellites. Mitigations:
-- Run on a background thread (Swift concurrency task)
-- Pre-filter: skip satellites with very low inclination from high-latitude observers (they'll never pass overhead)
-- Cache results; only recompute on TLE refresh or location change
+- Uses `CLLocationManager`
+- Requests **When In Use** authorization
+- Calculates passes for the current user location when available
+- Falls back to a default location in some flows if GPS access is unavailable
 
-### AR Overlay (Stretch Goal)
+### AR behavior
 
-- ARKit + RealityKit in landscape mode
-- Continuous SGP4 propagation to get real-time satellite ECEF position
-- Convert to local horizon coordinates (az/el) relative to device
-- Render as labeled dot/icon in AR space
-- Use device compass + gyroscope (ARKit handles this) to anchor positions
-- Separate `AR/` module, lazy-loaded, behind a feature flag
+- Uses **ARKit** and **RealityKit** on supported iOS devices
+- Requires camera access to render the live AR experience
+- Remains an iOS-specific feature and should not drive cross-platform project assumptions
 
-## Dependencies
+## Testing strategy
 
-| Package | Purpose | URL |
-|---------|---------|-----|
-| SatelliteKit | SGP4/SDP4 propagation, TLE parsing | `https://github.com/gavineadie/SatelliteKit` |
+- **Primary contributor validation:** `xcodebuild test -project CQSatellites.xcodeproj -scheme CQSatellites -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'`
+- **Unit/integration coverage:** model logic, parsing, pass prediction, formatting, and service behavior
+- **Documentation alignment:** contributor docs should always describe the same build/test path CI enforces
 
-That's it. One dependency. Everything else is Apple frameworks:
-- **SwiftUI** — UI
-- **CoreLocation** — GPS
-- **ARKit + RealityKit** — AR overlay (stretch)
-- **Foundation** — Networking (`URLSession`), date math, etc.
+## What we are intentionally not doing
 
-## Testing Strategy
-
-- **Unit tests:** Pass prediction math, TLE parsing, model logic
-- **Service tests:** Mock `URLSession` for TLE fetch, mock `CLLocationManager` for location
-- **UI tests:** Deferred until UI stabilizes. SwiftUI previews serve as visual tests early on.
-
-## What We're NOT Doing
-
-- No SwiftData/CoreData — dataset is tiny, in-memory + file cache is enough
-- No Combine — async/await is cleaner for this use case
-- No third-party UI libraries — SwiftUI is sufficient
-- No server component — everything runs on-device
-- No user accounts — this is a local utility
+- No server-side account system
+- No analytics stack in the repository
+- No non-iOS platform targets
+- No extra app-framework abstraction layers that would complicate a small utility app

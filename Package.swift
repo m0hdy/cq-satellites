@@ -5,8 +5,7 @@ import PackageDescription
 let package = Package(
     name: "CQSatellites",
     platforms: [
-        .iOS(.v17),
-        .macOS(.v14)
+        .iOS(.v17)
     ],
     dependencies: [
         .package(url: "https://github.com/gavineadie/SatelliteKit", from: "2.0.0"),

@@ -11,7 +11,7 @@
 
 ## Project Context
 
-- **Project:** SatPass — iPhone app for amateur radio satellite pass tracking
+- **Project:** CQ Satellites — iPhone app for amateur radio satellite pass tracking
 - **Stack:** Swift, SwiftUI, CoreLocation, ARKit, iOS
 - **User:** Damien
 

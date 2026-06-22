@@ -1,78 +1,111 @@
 # Contributing to CQ Satellites
 
-We're excited that you're interested in contributing to CQ Satellites! This document provides guidelines and instructions for contributing to the project.
+Thanks for your interest in improving CQ Satellites.
 
-## How to Contribute
+This repository is maintained as an **iOS-only** app. The canonical contributor workflow uses the checked-in Xcode project and `xcodebuild`, not root-level `swift test`.
 
-### Reporting Bugs
+## Prerequisites
 
-Before opening a bug report, please check the [issues](https://github.com/m0hdy/cq-satellites/issues) to see if it's already been reported.
+- macOS with **Xcode 16 or newer**
+- iOS Simulator runtime available locally
+- Swift 6 toolchain (bundled with supported Xcode versions)
+- Optional: [XcodeGen](https://github.com/yonaskolb/XcodeGen) if you need to regenerate the project from `project.yml`
 
-When reporting a bug, please include:
-- A clear description of the issue
-- Steps to reproduce the problem
-- Expected behavior vs actual behavior
-- Your environment (iOS version, device type, Xcode version)
-- Screenshots or logs if applicable
+## Getting set up
 
-### Suggesting Enhancements
+```bash
+git clone https://github.com/m0hdy/cq-satellites.git
+cd cq-satellites
+open CQSatellites.xcodeproj
+```
 
-Enhancement suggestions are welcome! Please:
-- Use a clear, descriptive title
-- Provide a detailed description of the suggested enhancement
-- Explain why this enhancement would be useful
-- List similar features in other applications if relevant
+## Canonical test command
 
-### Pull Requests
+Run this before opening a pull request:
 
-1. **Fork the repository** and create your feature branch from `main`:
+```bash
+xcodebuild test \
+  -project CQSatellites.xcodeproj \
+  -scheme CQSatellites \
+  -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
+```
+
+This is the same workflow contributors should expect CI to validate.
+
+## What is authoritative?
+
+- **`CQSatellites.xcodeproj`** is the normal app build/test entry point
+- **`project.yml`** is the project-definition source of truth when targets/settings change
+- **`Package.swift`** defines dependency/package metadata, but **`swift test` is not the supported contributor validation path**
+
+## Regenerating the Xcode project
+
+If you change project structure, target settings, or package wiring:
+
+1. Edit `project.yml`
+2. Regenerate the project:
    ```bash
-   git checkout -b feature/your-feature-name
+   xcodegen generate
    ```
+3. Verify all of the following before committing:
+   - The project is still **iOS-only**
+   - The deployment target is still **iOS 17.0**
+   - `Package.swift` does not reintroduce macOS support
+   - The canonical `xcodebuild test` command still passes
 
-2. **Commit your changes** with clear, descriptive messages:
-   ```bash
-   git commit -m "Add description of changes"
-   ```
+## Common failure modes
 
-3. **Push to your fork**:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+### `swift test` fails from the repository root
 
-4. **Open a Pull Request** with:
-   - A clear title and description
-   - Reference to any related issues (e.g., "Closes #123")
-   - Screenshots of visual changes if applicable
-   - A summary of the changes made
+This is expected for the app surface and is not the contributor gate. Use the documented `xcodebuild test` command instead.
 
-## Development Guidelines
+### Simulator name or runtime does not exist
 
-### Code Style
+List local simulators with:
 
-- Follow Swift style conventions
-- Use meaningful variable and function names
-- Write comments for complex logic
-- Keep functions focused and modular
+```bash
+xcrun simctl list devices available
+```
 
-### Testing
+Then substitute a compatible iPhone simulator in the `xcodebuild test` command.
 
-- Add tests for new functionality
-- Ensure existing tests continue to pass
-- Test on multiple iOS versions if possible
+### Swift package dependency resolution fails in Xcode
 
-### Documentation
+Try either of these:
 
-- Update README.md if adding new features
-- Add inline documentation for complex code
-- Keep comments clear and concise
+- Xcode → **File → Packages → Reset Package Caches**
+- Re-run package resolution from the command line:
+  ```bash
+  xcodebuild -resolvePackageDependencies \
+    -project CQSatellites.xcodeproj \
+    -scheme CQSatellites
+  ```
 
-## Code of Conduct
+## Reporting bugs and requesting features
 
-Please be respectful and constructive in all interactions. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for more details.
+- Bugs: use the bug issue template and include iOS version, device, repro steps, and logs/screenshots when possible
+- Documentation issues: use the documentation issue template
+- Feature requests: use the feature request template and explain the operator use case
+- Questions: prefer GitHub Discussions if enabled, otherwise use the question template
+- Security issues: follow [SECURITY.md](SECURITY.md) and do **not** post vulnerabilities publicly
 
-## Questions?
+## Pull request expectations
 
-Feel free to open an issue or discussion for any questions you have about contributing.
+Open pull requests from a focused branch and include:
 
-Thank you for contributing to CQ Satellites! 🚀
+- A short summary of the change
+- Linked issue(s), if any
+- Testing evidence (`xcodebuild test`, manual device/simulator validation, or both)
+- Screenshots or screen recordings for UI changes
+- Notes about project regeneration if `project.yml` or project settings changed
+
+## Code and documentation guidelines
+
+- Follow Swift naming and style conventions already used in the repo
+- Keep views thin and push logic into models/view models/services where appropriate
+- Add or update tests when behavior changes
+- Keep README, CONTRIBUTING, workflow docs, and architecture docs in sync with any contributor-facing workflow changes
+
+## Code of conduct
+
+Please be respectful and constructive in all interactions. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
