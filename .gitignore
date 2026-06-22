@@ -35,3 +35,4 @@ Package.resolved
 
 # Playwright MCP snapshots
 .playwright-mcp/
+.squad/.cache/
