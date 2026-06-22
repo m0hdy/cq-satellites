@@ -15,18 +15,49 @@
 
 ## Validation expectations
 
-After changing project metadata, dependencies, or generated project files:
+After changing project metadata, dependencies, generated project files, or contributor-facing documentation:
 
 1. Confirm `project.yml` still declares `platform: iOS`
-2. Confirm `Package.swift` still declares only `.iOS(.v17)`
-3. Confirm regeneration did not introduce non-iOS targets
-4. Run the canonical validation command:
+2. Confirm `project.yml` still declares `deploymentTarget.iOS: "17.0"`
+3. Confirm `project.yml` still declares `SWIFT_VERSION: "6.0"`
+4. Confirm `Package.swift` still declares only `.iOS(.v17)`
+5. Confirm regeneration did not introduce macOS, tvOS, watchOS, or Catalyst targets
+6. Confirm `README.md`, `CONTRIBUTING.md`, workflows, and other contributor-facing docs still describe the same iOS 17+ / Swift 6 / Xcode-based workflow
+7. Run the canonical validation command:
    ```bash
    xcodebuild test \
      -project CQSatellites.xcodeproj \
      -scheme CQSatellites \
      -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
    ```
+
+## Pull request review guardrails
+
+When reviewing a pull request, pay extra attention to changes in:
+
+- `project.yml`
+- `Package.swift`
+- `CQSatellites.xcodeproj`
+- `.github/workflows/`
+- `README.md`
+- `CONTRIBUTING.md`
+- `docs/ARCHITECTURE.md`
+- `.github/copilot-instructions.md`
+
+For any pull request that touches those files, reviewers should explicitly verify all of the following:
+
+1. The repository is still templated for **iOS only**
+2. No unsupported platform target has been added back anywhere
+3. The minimum supported OS is still **iOS 17+** unless a maintainer intentionally changes the platform contract
+4. Swift/toolchain expectations remain aligned with **Swift 6** and the documented Xcode workflow
+5. Contributor instructions, CI, and project metadata all still agree with one another
+6. Any regeneration or template change did not silently reintroduce cross-platform drift
+
+If a pull request changes the platform contract intentionally, the reviewer should expect the PR description to explain:
+
+- why the platform/version change is needed
+- which files were updated to keep the contract aligned
+- what validation was run to confirm the new contract
 
 ## Contributor workflow reminders
 
