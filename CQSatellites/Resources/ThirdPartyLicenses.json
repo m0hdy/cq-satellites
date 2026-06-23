@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-06-23T06:49:33+01:00",
+  "libraries": [
+    {
+      "packageIdentity": "satellitekit",
+      "name": "SatelliteKit",
+      "license": "MIT",
+      "repositoryURL": "https://github.com/gavineadie/SatelliteKit",
+      "licenseURL": "https://raw.githubusercontent.com/gavineadie/SatelliteKit/main/LICENSE",
+      "summary": "SGP4/SDP4 propagation and TLE parsing."
+    }
+  ]
+}

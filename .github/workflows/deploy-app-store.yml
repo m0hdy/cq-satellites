@@ -164,6 +164,9 @@ jobs:
             -project "$XCODE_PROJECT" \
             -scheme "$SCHEME"
 
+      - name: Verify third-party license inventory
+        run: swift Scripts/verify-third-party-licenses.swift
+
       # ── Test ───────────────────────────────────────────────────────────────────
 
       - name: Run tests

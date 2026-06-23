@@ -26,7 +26,9 @@
 		828F4E0962B04473EB83CC67 /* SatelliteFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */; };
 		89B641CBB6A5E5C360AA3F89 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9943E8D738B84F1762AAA99 /* LoadingView.swift */; };
 		9B9FBA00461613B8872BAEEC /* AMSATStatusReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238CFF3FD061B2DFCBD8000 /* AMSATStatusReport.swift */; };
+		A0C266DDD5491439D8EDA00C /* ThirdPartyLibraryLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850C97DDCAA48113BD4DE759 /* ThirdPartyLibraryLicense.swift */; };
 		A403572A42F153DE8DE18F82 /* TLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E51647FFBEDB477E9E53CB /* TLEService.swift */; };
+		AD284517CE5707DB950E9A69 /* ThirdPartyLicenseCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29634C7F1A01896CDCA94D2E /* ThirdPartyLicenseCatalog.swift */; };
 		AE098F586C04FDD862D4C6C2 /* SatelliteARViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5265340C23120715BDE24B42 /* SatelliteARViewModel.swift */; };
 		AE158E308D8E5634674B3911 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD711A66A9113DB0BB46A7F3 /* LocationService.swift */; };
 		B12CEF54C8322468752CC533 /* SatelliteKit in Frameworks */ = {isa = PBXBuildFile; productRef = DF352CF0555CB9D46E74BBD4 /* SatelliteKit */; };
@@ -39,6 +41,7 @@
 		E75484A6614D12CD86139A05 /* HeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AA059F64B1CD56BA815CF5 /* HeadingService.swift */; };
 		E99FD6FBDE7975DFDACD17B9 /* PassPredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD008A80CF03A7D653B359F /* PassPredictionService.swift */; };
 		F656D0B29C0D3CF36F9CED79 /* CQSatellitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C489F75B8837C86866438F64 /* CQSatellitesTests.swift */; };
+		F927F3E1C67DA7AB4A2E128D /* ThirdPartyLicenses.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F53F374D429F0BEF09D6C6D /* ThirdPartyLicenses.json */; };
 		FF1D1829914EA84F5124A71A /* PassDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +60,8 @@
 		1ACF59A0F49DDDE92C576BC6 /* CQSatellites.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CQSatellites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatelliteTracker.swift; sourceTree = "<group>"; };
 		23D2ADC952CABC89DEA0CAAF /* GroundStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundStation.swift; sourceTree = "<group>"; };
+		29634C7F1A01896CDCA94D2E /* ThirdPartyLicenseCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPartyLicenseCatalog.swift; sourceTree = "<group>"; };
+		2F53F374D429F0BEF09D6C6D /* ThirdPartyLicenses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ThirdPartyLicenses.json; sourceTree = "<group>"; };
 		3FA483CAACA6EA95B33C79E4 /* CQSatellitesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CQSatellitesApp.swift; sourceTree = "<group>"; };
 		413E783A156F246A90B2B27B /* PassDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailView.swift; sourceTree = "<group>"; };
 		4BF8C4C7CCC80356E68148BF /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
@@ -69,6 +74,7 @@
 		77AA059F64B1CD56BA815CF5 /* HeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingService.swift; sourceTree = "<group>"; };
 		8231214F0B7852BE583FB75F /* PassDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassDetailViewModel.swift; sourceTree = "<group>"; };
 		841CB4C4357FDB489D9BD2A8 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		850C97DDCAA48113BD4DE759 /* ThirdPartyLibraryLicense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPartyLibraryLicense.swift; sourceTree = "<group>"; };
 		A12BE629A5A76071572FB466 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		ABC693F598537A4E72C6E52F /* iss_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iss_icon.png; sourceTree = "<group>"; };
 		B09A25AC867376C8CF299A36 /* PassListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassListViewModel.swift; sourceTree = "<group>"; };
@@ -114,6 +120,7 @@
 			children = (
 				F1B668A7842B91B833ACD26A /* Assets.xcassets */,
 				ABC693F598537A4E72C6E52F /* iss_icon.png */,
+				2F53F374D429F0BEF09D6C6D /* ThirdPartyLicenses.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -136,6 +143,7 @@
 				6788FFC24062C375DED47E7F /* SatelliteFrequency.swift */,
 				B8A89AD189FC93405CA1C81A /* SatellitePass.swift */,
 				EFEBE4BAD566BAC3AAE74650 /* SatellitePosition.swift */,
+				850C97DDCAA48113BD4DE759 /* ThirdPartyLibraryLicense.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +207,7 @@
 				DAD008A80CF03A7D653B359F /* PassPredictionService.swift */,
 				53A36D35FF7F36CCD64E1A4F /* SatelliteStore.swift */,
 				22F1F541D6F83FE9BAE9BF7A /* SatelliteTracker.swift */,
+				29634C7F1A01896CDCA94D2E /* ThirdPartyLicenseCatalog.swift */,
 				F5E51647FFBEDB477E9E53CB /* TLEService.swift */,
 			);
 			path = Services;
@@ -322,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				585BD6C6DF934BA7B51E8E6A /* Assets.xcassets in Resources */,
+				F927F3E1C67DA7AB4A2E128D /* ThirdPartyLicenses.json in Resources */,
 				7231A0099382DE09B01F3504 /* iss_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,6 +372,8 @@
 				DDA83A026C359BC621BCF0C2 /* SatelliteTracker.swift in Sources */,
 				DFE9B8ADF010FCE75027EAC1 /* SplashView.swift in Sources */,
 				A403572A42F153DE8DE18F82 /* TLEService.swift in Sources */,
+				A0C266DDD5491439D8EDA00C /* ThirdPartyLibraryLicense.swift in Sources */,
+				AD284517CE5707DB950E9A69 /* ThirdPartyLicenseCatalog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

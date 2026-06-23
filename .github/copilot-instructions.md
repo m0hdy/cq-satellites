@@ -31,6 +31,16 @@ After changing project metadata, dependencies, generated project files, or contr
      -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
    ```
 
+## Dependency and license inventory workflow
+
+If a change touches `Package.swift`, `Package.resolved`, `project.yml`, or dependency-related workflow wiring:
+
+1. Read `.copilot/skills/third-party-license-inventory/SKILL.md` before making changes.
+2. Update `CQSatellites/Resources/ThirdPartyLicenses.json` to match the resolved dependency set.
+3. Run `swift Scripts/verify-third-party-licenses.swift`.
+4. Confirm the About screen still renders the inventory from the bundled manifest.
+5. Treat a stale or missing inventory entry as a review blocker for dependency PRs.
+
 ## Pull request review guardrails
 
 When reviewing a pull request, pay extra attention to changes in:
@@ -43,6 +53,8 @@ When reviewing a pull request, pay extra attention to changes in:
 - `CONTRIBUTING.md`
 - `docs/ARCHITECTURE.md`
 - `.github/copilot-instructions.md`
+- `CQSatellites/Resources/ThirdPartyLicenses.json`
+- `Scripts/verify-third-party-licenses.swift`
 
 For any pull request that touches those files, reviewers should explicitly verify all of the following:
 
@@ -52,6 +64,7 @@ For any pull request that touches those files, reviewers should explicitly verif
 4. Swift/toolchain expectations remain aligned with **Swift 6** and the documented Xcode workflow
 5. Contributor instructions, CI, and project metadata all still agree with one another
 6. Any regeneration or template change did not silently reintroduce cross-platform drift
+7. Dependency changes kept the third-party license inventory and verification script in sync
 
 If a pull request changes the platform contract intentionally, the reviewer should expect the PR description to explain:
 

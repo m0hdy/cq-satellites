@@ -30,6 +30,9 @@ jobs:
             -project CQSatellites.xcodeproj \
             -scheme CQSatellites
 
+      - name: Verify third-party license inventory
+        run: swift Scripts/verify-third-party-licenses.swift
+
       - name: Run unit tests
         run: |
           set -o pipefail

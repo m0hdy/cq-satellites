@@ -106,6 +106,18 @@ Open pull requests from a focused branch and include:
 - Add or update tests when behavior changes
 - Keep README, CONTRIBUTING, workflow docs, and architecture docs in sync with any contributor-facing workflow changes
 
+## Third-party license inventory
+
+If you add, remove, or upgrade a Swift package dependency:
+
+1. Update `CQSatellites/Resources/ThirdPartyLicenses.json`
+2. Verify the entry includes the correct package identity, repository URL, and license URL
+3. Run the inventory check script:
+   ```bash
+   swift Scripts/verify-third-party-licenses.swift
+   ```
+4. Confirm the About screen still renders the full list without errors
+
 ## Code of conduct
 
 Please be respectful and constructive in all interactions. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
