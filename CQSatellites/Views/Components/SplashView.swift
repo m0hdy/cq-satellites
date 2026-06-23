@@ -12,10 +12,12 @@ struct SplashView: View {
         VStack(spacing: 16) {
             Image("ISSIcon")
                 .resizable()
+                .renderingMode(.template)
                 .scaledToFit()
                 .frame(width: 120, height: 120)
                 .opacity(logoOpacity)
                 .scaleEffect(logoScale)
+                .foregroundStyle(.blue)
 
             Text("CQ Satellites")
                 .font(.title)

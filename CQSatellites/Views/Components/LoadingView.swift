@@ -61,9 +61,11 @@ struct LoadingView: View {
 
             Image("ISSIcon")
                 .resizable()
+                .renderingMode(.template)
                 .scaledToFit()
                 .frame(width: 64, height: 64)
                 .scaleEffect(pulseScale)
+                .foregroundStyle(.blue)
 
             Image(systemName: phaseIcon)
                 .font(.system(size: 20))

@@ -25,8 +25,10 @@ struct AboutView: View {
                     VStack(spacing: 12) {
                         Image("ISSIcon")
                             .resizable()
+                            .renderingMode(.template)
                             .scaledToFit()
                             .frame(width: 100, height: 100)
+                            .foregroundStyle(.blue)
 
                         Text("CQ Satellites")
                             .font(.title)
