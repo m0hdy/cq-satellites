@@ -80,6 +80,13 @@ jobs:
           sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
           xcodebuild -version
 
+      # ── Generate Xcode project ──────────────────────────────────────────────
+
+      - name: Install XcodeGen and generate project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
       # ── Version numbers ────────────────────────────────────────────────────────
 
       - name: Compute version numbers
@@ -285,21 +292,15 @@ jobs:
           fi
 
           echo "Uploading: $IPA_PATH"
-          file "$IPA_PATH"
-          unzip -t "$IPA_PATH" >/dev/null
-
-          if xcrun upload-tool --help >/dev/null 2>&1; then
-            xcrun upload-tool \
-              --apiKey "$API_KEY_ID" \
-              --apiIssuer "$API_ISSUER_ID" \
-              --file "$IPA_PATH"
-          else
-            echo "::warning::upload-tool not found; falling back to altool"
-            xcrun altool --upload-app \
-              --type ios \
-              --file "$IPA_PATH" \
-              --apiKey "$API_KEY_ID" \
-              --apiIssuer "$API_ISSUER_ID"
+          OUTPUT=$(xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$API_KEY_ID" \
+            --apiIssuer "$API_ISSUER_ID" 2>&1) || true
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -q "UPLOAD FAILED"; then
+            echo "::error::App Store upload failed"
+            exit 1
           fi
 
       # ── GitHub Release ─────────────────────────────────────────────────────────
