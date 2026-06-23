@@ -32,8 +32,60 @@ jobs:
 
       - name: Run unit tests
         run: |
+          set -o pipefail
+          DESTINATIONS_OUTPUT=$(xcodebuild -project CQSatellites.xcodeproj -scheme CQSatellites -showdestinations 2>/dev/null || true)
+          IOS_SIM_DESTINATION_ID=$(printf '%s\n' "$DESTINATIONS_OUTPUT" \
+            | awk -F'id:' '/platform:iOS Simulator/ && $0 !~ /dvtdevice-/ {
+                split($2, parts, ",");
+                gsub(/[[:space:]}]/, "", parts[1]);
+                destinationId = parts[1];
+                if ($0 ~ /name:iPhone/ && firstIPhone == "") {
+                  firstIPhone = destinationId;
+                }
+                if (firstAny == "") {
+                  firstAny = destinationId;
+                }
+              }
+              END {
+                if (firstIPhone != "") {
+                  print firstIPhone;
+                } else if (firstAny != "") {
+                  print firstAny;
+                }
+              }')
+          if [ -n "$IOS_SIM_DESTINATION_ID" ]; then
+            TEST_DESTINATION="id=$IOS_SIM_DESTINATION_ID"
+            echo "Using iOS Simulator destination: $TEST_DESTINATION"
+          else
+            SIMCTL_DEVICE_ID=$(xcrun simctl list devices available \
+              | awk -F '[()]' '/iPhone|iPad/ {
+                  if ($0 ~ /iPhone/ && firstIPhone == "") {
+                    firstIPhone = $2;
+                  }
+                  if (firstAny == "") {
+                    firstAny = $2;
+                  }
+                }
+                END {
+                  if (firstIPhone != "") {
+                    print firstIPhone;
+                  } else if (firstAny != "") {
+                    print firstAny;
+                  }
+                }')
+            if [ -n "$SIMCTL_DEVICE_ID" ]; then
+              TEST_DESTINATION="id=$SIMCTL_DEVICE_ID"
+              echo "Using iOS Simulator device from simctl: $TEST_DESTINATION"
+            else
+              echo "::error::No concrete iOS Simulator destination found for scheme 'CQSatellites'."
+              printf '%s\n' "$DESTINATIONS_OUTPUT"
+              xcrun simctl list devices || true
+              xcrun simctl list runtimes || true
+              exit 70
+            fi
+          fi
           xcodebuild test \
             -project CQSatellites.xcodeproj \
             -scheme CQSatellites \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination "$TEST_DESTINATION" \
             CODE_SIGNING_ALLOWED=NO
