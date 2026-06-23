@@ -288,12 +288,19 @@ jobs:
           file "$IPA_PATH"
           unzip -t "$IPA_PATH" >/dev/null
 
-          xcrun iTMSTransporter \
-            -m upload \
-            -assetFile "$IPA_PATH" \
-            -apiKey "$API_KEY_ID" \
-            -apiIssuer "$API_ISSUER_ID" \
-            -v informational
+          if xcrun upload-tool --help >/dev/null 2>&1; then
+            xcrun upload-tool \
+              --apiKey "$API_KEY_ID" \
+              --apiIssuer "$API_ISSUER_ID" \
+              --file "$IPA_PATH"
+          else
+            echo "::warning::upload-tool not found; falling back to altool"
+            xcrun altool --upload-app \
+              --type ios \
+              --file "$IPA_PATH" \
+              --apiKey "$API_KEY_ID" \
+              --apiIssuer "$API_ISSUER_ID"
+          fi
 
       # ── GitHub Release ─────────────────────────────────────────────────────────
 
