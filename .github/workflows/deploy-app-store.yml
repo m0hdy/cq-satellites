@@ -284,6 +284,7 @@ jobs:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
         run: |
+          set -o pipefail
           IPA_PATH=$(find "${{ env.EXPORT_PATH }}" -name "*.ipa" | head -1)
           if [ -z "$IPA_PATH" ]; then
             echo "::error::No IPA found in ${{ env.EXPORT_PATH }}"
@@ -292,14 +293,18 @@ jobs:
           fi
 
           echo "Uploading: $IPA_PATH"
-          OUTPUT=$(xcrun altool --upload-app \
+          OUTPUT_LOG="$RUNNER_TEMP/altool-upload.log"
+          if ! xcrun altool --upload-app \
             --type ios \
             --file "$IPA_PATH" \
             --apiKey "$API_KEY_ID" \
-            --apiIssuer "$API_ISSUER_ID" 2>&1) || true
-          echo "$OUTPUT"
-          if echo "$OUTPUT" | grep -q "UPLOAD FAILED"; then
+            --apiIssuer "$API_ISSUER_ID" \
+            --verbose \
+            --output-format json 2>&1 | tee "$OUTPUT_LOG"; then
             echo "::error::App Store upload failed"
+            echo "::group::altool output"
+            cat "$OUTPUT_LOG"
+            echo "::endgroup::"
             exit 1
           fi
 
