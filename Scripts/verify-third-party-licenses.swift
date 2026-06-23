@@ -25,11 +25,14 @@ struct ManifestFile: Decodable {
 }
 
 enum ScriptError: Error, CustomStringConvertible {
+    case missingResolvedFile([String])
     case missingFile(String)
     case mismatch(missing: [String], stale: [String])
 
     var description: String {
         switch self {
+        case .missingResolvedFile(let candidates):
+            return "Missing Package.resolved. Searched: \(candidates.joined(separator: ", "))"
         case .missingFile(let path):
             return "Missing required file: \(path)"
         case .mismatch(let missing, let stale):
@@ -50,13 +53,24 @@ func load<T: Decodable>(_ type: T.Type, from url: URL) throws -> T {
     return try JSONDecoder().decode(T.self, from: data)
 }
 
+func firstExistingURL(_ candidates: [URL]) -> URL? {
+    for url in candidates where FileManager.default.fileExists(atPath: url.path) {
+        return url
+    }
+    return nil
+}
+
 let fileManager = FileManager.default
 let root = URL(fileURLWithPath: fileManager.currentDirectoryPath)
-let resolvedURL = root.appendingPathComponent("Package.resolved")
+let resolvedCandidates = [
+    root.appendingPathComponent("Package.resolved"),
+    root.appendingPathComponent("CQSatellites.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"),
+    root.appendingPathComponent("CQSatellites.xcodeproj/project.xcworkspace/xcshareddata/Package.resolved"),
+]
 let manifestURL = root.appendingPathComponent("CQSatellites/Resources/ThirdPartyLicenses.json")
 
-guard fileManager.fileExists(atPath: resolvedURL.path) else {
-    throw ScriptError.missingFile(resolvedURL.path)
+guard let resolvedURL = firstExistingURL(resolvedCandidates) else {
+    throw ScriptError.missingResolvedFile(resolvedCandidates.map { $0.path })
 }
 
 guard fileManager.fileExists(atPath: manifestURL.path) else {
