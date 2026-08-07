@@ -30,6 +30,10 @@ enum Constants {
         static let defaultValue = true
     }
 
+    enum OperatingModeFilter {
+        static let userDefaultsKey = "selectedOperatingModes"
+    }
+
     /// Default fallback values when GPS is unavailable.
     enum Defaults {
         static let londonLatitude = 51.5074
