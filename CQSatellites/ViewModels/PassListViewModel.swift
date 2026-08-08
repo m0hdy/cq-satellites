@@ -19,6 +19,7 @@ enum LocationSource: Equatable {
 @MainActor @Observable
 final class PassListViewModel {
     private let locationService = LocationService()
+    private let userDefaults: UserDefaults
     private var hasLoaded = false
 
     private(set) var currentStation: GroundStation?
@@ -27,14 +28,21 @@ final class PassListViewModel {
     /// Minimum max-elevation threshold for displayed passes (persisted in UserDefaults).
     var minimumElevation: Double {
         didSet {
-            UserDefaults.standard.set(minimumElevation, forKey: Constants.ElevationFilter.userDefaultsKey)
+            userDefaults.set(minimumElevation, forKey: Constants.ElevationFilter.userDefaultsKey)
         }
     }
 
     /// When true, only show passes for satellites with known amateur radio frequencies.
     var showOnlyWithFrequencies: Bool {
         didSet {
-            UserDefaults.standard.set(showOnlyWithFrequencies, forKey: Constants.FrequencyFilter.userDefaultsKey)
+            userDefaults.set(showOnlyWithFrequencies, forKey: Constants.FrequencyFilter.userDefaultsKey)
+        }
+    }
+
+    /// Operating modes used to filter the pass list. An empty set includes all modes.
+    var selectedOperatingModes: Set<OperatingMode> {
+        didSet {
+            userDefaults.set(selectedOperatingModes.map(\.rawValue), forKey: Constants.OperatingModeFilter.userDefaultsKey)
         }
     }
 
@@ -48,15 +56,21 @@ final class PassListViewModel {
         return String(format: "📍 %.2f°%@, %.2f°%@ (%@)", lat, latDir, lon, lonDir, source.label)
     }
 
-    init() {
-        let storedElevation = UserDefaults.standard.object(forKey: Constants.ElevationFilter.userDefaultsKey) as? Double
+    init(userDefaults: UserDefaults = .standard) {
+        self.userDefaults = userDefaults
+        let storedElevation = userDefaults.object(forKey: Constants.ElevationFilter.userDefaultsKey) as? Double
         self.minimumElevation = storedElevation ?? Constants.ElevationFilter.defaultMinimum
 
-        if UserDefaults.standard.object(forKey: Constants.FrequencyFilter.userDefaultsKey) != nil {
-            self.showOnlyWithFrequencies = UserDefaults.standard.bool(forKey: Constants.FrequencyFilter.userDefaultsKey)
+        if userDefaults.object(forKey: Constants.FrequencyFilter.userDefaultsKey) != nil {
+            self.showOnlyWithFrequencies = userDefaults.bool(forKey: Constants.FrequencyFilter.userDefaultsKey)
         } else {
             self.showOnlyWithFrequencies = Constants.FrequencyFilter.defaultValue
         }
+
+        self.selectedOperatingModes = Set(
+            (userDefaults.stringArray(forKey: Constants.OperatingModeFilter.userDefaultsKey) ?? [])
+                .compactMap(OperatingMode.init(rawValue:))
+        )
     }
 
     /// Label for the current elevation filter (e.g. "Min: 10°" or "All").
@@ -69,6 +83,13 @@ final class PassListViewModel {
         showOnlyWithFrequencies ? "Amateur radio" : "All satellites"
     }
 
+    /// Label for the operating-mode filter.
+    var operatingModeFilterLabel: String {
+        selectedOperatingModes.isEmpty
+            ? "All modes"
+            : selectedOperatingModes.map(\.rawValue).sorted().joined(separator: ", ")
+    }
+
     /// Filter passes to only upcoming + active that meet the minimum elevation
     /// and optionally only those with known amateur radio frequencies.
     func filteredPasses(from passes: [SatellitePass]) -> [SatellitePass] {
@@ -77,6 +98,9 @@ final class PassListViewModel {
             (pass.isActive(at: now) || pass.isUpcoming(at: now))
                 && pass.maxElevation >= minimumElevation
                 && (!showOnlyWithFrequencies || FrequencyDatabase.hasFrequencies(for: pass.noradID))
+                && (selectedOperatingModes.isEmpty
+                    || !FrequencyDatabase.operatingModes(for: pass.noradID)
+                        .isDisjoint(with: selectedOperatingModes))
         }
     }
 

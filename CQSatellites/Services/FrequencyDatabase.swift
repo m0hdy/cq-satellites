@@ -20,6 +20,11 @@ enum FrequencyDatabase {
         !(database[noradID] ?? []).isEmpty
     }
 
+    /// Standard operating modes supported by the satellite's known frequencies.
+    static func operatingModes(for noradID: String) -> Set<OperatingMode> {
+        Set(frequencies(for: noradID).flatMap(\.operatingModes))
+    }
+
     // MARK: - Database
 
     private static let database: [String: [SatelliteFrequency]] = {

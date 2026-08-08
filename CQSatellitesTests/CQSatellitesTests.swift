@@ -66,6 +66,86 @@ enum TestFixtures {
     }
 }
 
+// MARK: - Operating Mode Filter Tests
+
+@Suite("Operating Mode Filter Tests")
+struct OperatingModeFilterTests {
+
+    @Test("Mode metadata classifies linear transponders as SSB and CW")
+    func classifiesLinearTransponderModes() {
+        #expect(FrequencyDatabase.operatingModes(for: "44909") == [.ssb, .cw])
+    }
+
+    @Test("Mode metadata classifies APRS as FM and Digital")
+    func classifiesAprsModes() {
+        #expect(FrequencyDatabase.operatingModes(for: "25544").isSuperset(of: [.fm, .digital]))
+    }
+
+    @Test("Selected modes include passes matching any mode")
+    @MainActor
+    func filtersUsingAnySelectedMode() {
+        let defaults = UserDefaults(suiteName: "OperatingModeFilterTests-\(UUID().uuidString)")!
+        let viewModel = PassListViewModel(userDefaults: defaults)
+        viewModel.minimumElevation = 0
+        viewModel.showOnlyWithFrequencies = false
+        viewModel.selectedOperatingModes = [.fm, .ssb]
+        let now = Date.now
+        let passes = [
+            TestFixtures.makePass(noradID: "25544", aosOffset: 60, losOffset: 600, tcaOffset: 300, relativeTo: now),
+            TestFixtures.makePass(noradID: "44909", aosOffset: 60, losOffset: 600, tcaOffset: 300, relativeTo: now),
+            TestFixtures.makePass(noradID: "25338", aosOffset: 60, losOffset: 600, tcaOffset: 300, relativeTo: now),
+        ]
+
+        let filtered = viewModel.filteredPasses(from: passes)
+
+        #expect(filtered.map(\.noradID) == ["25544", "44909"])
+    }
+
+    @Test("Clearing selected modes restores all passes")
+    @MainActor
+    func clearingModesRestoresAllPasses() {
+        let defaults = UserDefaults(suiteName: "OperatingModeFilterTests-\(UUID().uuidString)")!
+        let viewModel = PassListViewModel(userDefaults: defaults)
+        viewModel.minimumElevation = 0
+        viewModel.showOnlyWithFrequencies = false
+        let now = Date.now
+        let passes = [
+            TestFixtures.makePass(noradID: "25544", aosOffset: 60, losOffset: 600, tcaOffset: 300, relativeTo: now),
+            TestFixtures.makePass(noradID: "44909", aosOffset: 60, losOffset: 600, tcaOffset: 300, relativeTo: now),
+        ]
+
+        viewModel.selectedOperatingModes = [.fm]
+        #expect(viewModel.filteredPasses(from: passes).count == 1)
+
+        viewModel.selectedOperatingModes = []
+        #expect(viewModel.filteredPasses(from: passes).count == passes.count)
+    }
+
+    @Test("Selected modes persist in the view model's defaults")
+    @MainActor
+    func persistsSelectedModes() {
+        let defaults = UserDefaults(suiteName: "OperatingModeFilterTests-\(UUID().uuidString)")!
+        let viewModel = PassListViewModel(userDefaults: defaults)
+        viewModel.selectedOperatingModes = [.cw, .digital]
+
+        let restoredViewModel = PassListViewModel(userDefaults: defaults)
+
+        #expect(restoredViewModel.selectedOperatingModes == [.cw, .digital])
+    }
+
+    @Test("Minimum elevation persists in the view model's defaults")
+    @MainActor
+    func persistsMinimumElevation() {
+        let defaults = UserDefaults(suiteName: "OperatingModeFilterTests-\(UUID().uuidString)")!
+        let viewModel = PassListViewModel(userDefaults: defaults)
+        viewModel.minimumElevation = 20
+
+        let restoredViewModel = PassListViewModel(userDefaults: defaults)
+
+        #expect(restoredViewModel.minimumElevation == 20)
+    }
+}
+
 // MARK: - SatellitePass Model Tests
 
 @Suite("SatellitePass Model Tests")

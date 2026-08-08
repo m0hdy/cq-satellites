@@ -13,12 +13,10 @@ struct PassListView: View {
     @State private var showAbout = false
     @State private var navigationPath = NavigationPath()
 
-    /// The next N upcoming passes to show as AR targets from the list view.
-    private var arPasses: [SatellitePass] {
-        Array(viewModel.filteredPasses(from: store.passes).prefix(Constants.AR.maxListTargets))
-    }
-
     var body: some View {
+        let filteredPasses = viewModel.filteredPasses(from: store.passes)
+        let arPasses = Array(filteredPasses.prefix(Constants.AR.maxListTargets))
+
         NavigationStack(path: $navigationPath) {
             Group {
                 if case .error(let message) = store.loadingPhase, store.passes.isEmpty {
@@ -40,8 +38,14 @@ struct PassListView: View {
                         systemImage: "antenna.radiowaves.left.and.right",
                         description: Text("No satellite passes found for your location.")
                     )
+                } else if filteredPasses.isEmpty {
+                    ContentUnavailableView(
+                        "No Matching Passes",
+                        systemImage: "line.3.horizontal.decrease.circle",
+                        description: Text("Try adjusting your filters to see more satellite passes.")
+                    )
                 } else {
-                    List(viewModel.filteredPasses(from: store.passes)) { pass in
+                    List(filteredPasses) { pass in
                         NavigationLink(value: pass.id) {
                             PassRowView(pass: pass)
                         }
@@ -70,7 +74,7 @@ struct PassListView: View {
             }
             .sheet(isPresented: $showFilterSheet) {
                 FilterSheet(viewModel: viewModel)
-                    .presentationDetents([.medium, .height(380)])
+                    .presentationDetents([.medium, .height(500), .large])
             }
             .sheet(isPresented: $showAbout) {
                 AboutView()
@@ -106,7 +110,7 @@ struct PassListView: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Text("\(viewModel.satelliteFilterLabel) · \(viewModel.elevationFilterLabel)")
+            Text("\(viewModel.satelliteFilterLabel) · \(viewModel.operatingModeFilterLabel) · \(viewModel.elevationFilterLabel)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -124,7 +128,7 @@ private struct FilterSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 // Satellite filter
                 VStack(spacing: 8) {
                     Text("Satellites")
@@ -141,6 +145,46 @@ private struct FilterSheet: View {
                         Text("Show All").tag(false)
                     }
                     .pickerStyle(.segmented)
+                    .padding(.horizontal)
+                }
+
+                Divider()
+
+                // Operating mode filter
+                VStack(spacing: 8) {
+                    Text("Operating Modes")
+                        .font(.headline)
+
+                    Text("Show satellites that support any selected mode.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    HStack {
+                        Button("Clear") {
+                            viewModel.selectedOperatingModes.removeAll()
+                        }
+                        .disabled(viewModel.selectedOperatingModes.isEmpty)
+
+                        Spacer()
+
+                        Text(viewModel.operatingModeFilterLabel)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal)
+
+                    ForEach(OperatingMode.allCases) { mode in
+                        Toggle(mode.rawValue, isOn: Binding(
+                            get: { viewModel.selectedOperatingModes.contains(mode) },
+                            set: { isSelected in
+                                if isSelected {
+                                    viewModel.selectedOperatingModes.insert(mode)
+                                } else {
+                                    viewModel.selectedOperatingModes.remove(mode)
+                                }
+                            }
+                        ))
+                    }
                     .padding(.horizontal)
                 }
 
