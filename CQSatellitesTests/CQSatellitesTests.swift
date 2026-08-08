@@ -132,6 +132,18 @@ struct OperatingModeFilterTests {
 
         #expect(restoredViewModel.selectedOperatingModes == [.cw, .digital])
     }
+
+    @Test("Minimum elevation persists in the view model's defaults")
+    @MainActor
+    func persistsMinimumElevation() {
+        let defaults = UserDefaults(suiteName: "OperatingModeFilterTests-\(UUID().uuidString)")!
+        let viewModel = PassListViewModel(userDefaults: defaults)
+        viewModel.minimumElevation = 20
+
+        let restoredViewModel = PassListViewModel(userDefaults: defaults)
+
+        #expect(restoredViewModel.minimumElevation == 20)
+    }
 }
 
 // MARK: - SatellitePass Model Tests

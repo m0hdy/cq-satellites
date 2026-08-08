@@ -13,16 +13,10 @@ struct PassListView: View {
     @State private var showAbout = false
     @State private var navigationPath = NavigationPath()
 
-    /// The next N upcoming passes to show as AR targets from the list view.
-    private var arPasses: [SatellitePass] {
-        Array(viewModel.filteredPasses(from: store.passes).prefix(Constants.AR.maxListTargets))
-    }
-
-    private var filteredPasses: [SatellitePass] {
-        viewModel.filteredPasses(from: store.passes)
-    }
-
     var body: some View {
+        let filteredPasses = viewModel.filteredPasses(from: store.passes)
+        let arPasses = Array(filteredPasses.prefix(Constants.AR.maxListTargets))
+
         NavigationStack(path: $navigationPath) {
             Group {
                 if case .error(let message) = store.loadingPhase, store.passes.isEmpty {
@@ -80,7 +74,7 @@ struct PassListView: View {
             }
             .sheet(isPresented: $showFilterSheet) {
                 FilterSheet(viewModel: viewModel)
-                    .presentationDetents([.medium, .height(500)])
+                    .presentationDetents([.medium, .height(500), .large])
             }
             .sheet(isPresented: $showAbout) {
                 AboutView()

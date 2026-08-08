@@ -28,7 +28,7 @@ final class PassListViewModel {
     /// Minimum max-elevation threshold for displayed passes (persisted in UserDefaults).
     var minimumElevation: Double {
         didSet {
-            UserDefaults.standard.set(minimumElevation, forKey: Constants.ElevationFilter.userDefaultsKey)
+            userDefaults.set(minimumElevation, forKey: Constants.ElevationFilter.userDefaultsKey)
         }
     }
 
